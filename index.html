@@ -272,8 +272,83 @@
     </table>
   </div>
 
+  <div class="summary">
+    <h2>Glossary 前處理測試</h2>
+    <p style="margin-bottom:1rem;font-size:0.9rem;">針對仍然錯誤的 th/vi 筆數，在翻譯前替換專有名詞（เกาสง→高雄、Cao Hùng→高雄、chạm→trạm），再送 Madlad 翻譯。</p>
+    <table style="box-shadow:none;margin:0;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>語言</th>
+          <th>直翻（before）</th>
+          <th>Glossary 替換後</th>
+          <th>正確？</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>TH</td>
+          <td class="result-before">嘉善火車站有公車車牌嗎？</td>
+          <td class="result-after"><strong>高雄</strong>火車站有公車車牌嗎？</td>
+          <td class="status-improved">✅</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>TH</td>
+          <td class="result-before">開山火車站的公車車在哪裡？</td>
+          <td class="result-after"><strong>高雄</strong>火車站的巴士司機在哪裡？</td>
+          <td class="status-warning">⚠️ 高雄對了</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>VI</td>
+          <td class="result-before">高雄有<strong>撞</strong>公車嗎?</td>
+          <td class="result-after">高雄有<strong>巴士站</strong>嗎?</td>
+          <td class="status-improved">✅</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>VI</td>
+          <td class="result-before">高雄車站<strong>撞上巴士</strong>了嗎?</td>
+          <td class="result-after">高雄車站有<strong>巴士站</strong>嗎?</td>
+          <td class="status-improved">✅</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem;font-size:0.85rem;color:#16a34a;font-weight:bold;">Glossary 前處理可行 — 4 筆中 3 筆完全正確，1 筆地名正確但語義有小偏差。</p>
+  </div>
+
+  <div class="summary">
+    <h2>建議實作</h2>
+    <table style="box-shadow:none;margin:0;">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>措施</th>
+          <th>改動</th>
+          <th>預估正確率</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>ASR initial_prompt — 注入站台名稱</td>
+          <td>ai.service.js 加一行參數</td>
+          <td>14% → 64%</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Glossary th/vi — 新增專有名詞對照表</td>
+          <td>新增 CSV + ProperNounDetector 加 th/vi</td>
+          <td>64% → 86%+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <footer>
-    小鎮智能股份有限公司 — ASR Quality Report — Generated 2026-04-02
+    小鎮智能股份有限公司 — ASR Quality Report — Updated 2026-04-05
   </footer>
 </body>
 </html>
