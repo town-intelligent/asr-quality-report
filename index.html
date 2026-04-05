@@ -45,7 +45,7 @@
 </head>
 <body>
   <h1>ASR 翻譯品質改善報告</h1>
-  <p class="subtitle">站台：高雄車站（onesmart15） ｜ 改善方式：Whisper initial_prompt ｜ 測試日期：2026-04-02</p>
+  <p class="subtitle">站台：高雄車站（onesmart15） ｜ 改善方式：ASR initial_prompt + Glossary 前處理 ｜ 測試日期：2026-04-02 ~ 04-05</p>
 
   <div class="summary">
     <h2>改善摘要</h2>
@@ -56,11 +56,11 @@
       </div>
       <div class="stat" style="display:flex;align-items:center;font-size:2rem;color:#9ca3af;">→</div>
       <div class="stat improved">
-        <div class="number">64%</div>
-        <div class="label">改善後正確率<br>(9/14)</div>
+        <div class="number">86%</div>
+        <div class="label">改善後正確率<br>(12/14)</div>
       </div>
       <div class="stat" style="margin-left:2rem;">
-        <div class="number" style="color:#16a34a;">7</div>
+        <div class="number" style="color:#16a34a;">10</div>
         <div class="label">✅ 改善</div>
       </div>
       <div class="stat">
@@ -68,12 +68,12 @@
         <div class="label">— 原本正確</div>
       </div>
       <div class="stat">
-        <div class="number" style="color:#dc2626;">3</div>
-        <div class="label">❌ 翻譯錯誤</div>
+        <div class="number" style="color:#dc2626;">1</div>
+        <div class="label">❌ 本地 ASR</div>
       </div>
       <div class="stat">
-        <div class="number" style="color:#f59e0b;">2</div>
-        <div class="label">⚠️ 超出能力</div>
+        <div class="number" style="color:#f59e0b;">1</div>
+        <div class="label">⚠️ 語義偏差</div>
       </div>
     </div>
     <p class="legend">
@@ -101,9 +101,9 @@
         <td><audio controls preload="none"><source src="audio/original/01_th.wav" type="audio/wav"></audio></td>
         <td><audio controls preload="none"><source src="audio/tts/01_th_tts.wav" type="audio/wav"></audio></td>
         <td class="result-before">เกาสง <span class="arrow">→</span> 嘉善火車站有公車車牌嗎？</td>
-        <td class="result-same">เกาสง <span class="arrow">→</span> 嘉善火車站有公車車牌嗎？</td>
-        <td class="status-warning">⚠️</td>
-        <td class="note">此音檔 OpenAI Whisper 線上版本亦無法正確辨識</td>
+        <td class="result-after">เกาสง <span class="arrow">→</span> <strong>高雄火車站有公車車牌嗎？</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（เกาสง→高雄）</td>
       </tr>
       <tr>
         <td>2</td>
@@ -111,9 +111,9 @@
         <td><audio controls preload="none"><source src="audio/original/02_th.wav" type="audio/wav"></audio></td>
         <td><audio controls preload="none"><source src="audio/tts/02_th_tts.wav" type="audio/wav"></audio></td>
         <td class="result-before">เกาสง <span class="arrow">→</span> 京阪火車站的雲列車在哪裡</td>
-        <td class="result-same">เกาสง <span class="arrow">→</span> 開山火車站的公車車在哪裡？</td>
-        <td class="status-warning">⚠️</td>
-        <td class="note">此音檔 OpenAI Whisper 線上版本亦無法正確辨識</td>
+        <td class="result-after">เกาสง <span class="arrow">→</span> <strong>高雄火車站的巴士司機在哪裡？</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（เกาสง→高雄）；語義有小偏差</td>
       </tr>
       <tr>
         <td>3</td>
@@ -151,9 +151,9 @@
         <td><audio controls preload="none"><source src="audio/original/06_vi.wav" type="audio/wav"></audio></td>
         <td><audio controls preload="none"><source src="audio/tts/06_vi_tts.wav" type="audio/wav"></audio></td>
         <td class="result-before">Cao Hùng <span class="arrow">→</span> 高雄有撞公車嗎?</td>
-        <td class="result-same">Cao Hùng <span class="arrow">→</span> 高雄有撞公車嗎?</td>
-        <td class="status-error">❌</td>
-        <td class="note">翻譯錯誤（chạm=站 翻成「撞」）</td>
+        <td class="result-after">高雄 <span class="arrow">→</span> <strong>高雄有巴士站嗎?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（Cao Hùng→高雄、chạm→trạm）</td>
       </tr>
       <tr>
         <td>7</td>
@@ -161,9 +161,9 @@
         <td><audio controls preload="none"><source src="audio/original/07_vi.wav" type="audio/wav"></audio></td>
         <td><audio controls preload="none"><source src="audio/tts/07_vi_tts.wav" type="audio/wav"></audio></td>
         <td class="result-before">Gà tàu Cao Hùng <span class="arrow">→</span> 高雄捷運的巴士路線</td>
-        <td class="result-same">Ga tàu Cao Hùng <span class="arrow">→</span> 高雄車站撞上巴士了嗎?</td>
-        <td class="status-error">❌</td>
-        <td class="note">ASR 改善但翻譯仍錯</td>
+        <td class="result-after">高雄車站 <span class="arrow">→</span> <strong>高雄車站有巴士站嗎?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（Ga tàu Cao Hùng→高雄車站、chạm→trạm）</td>
       </tr>
       <tr>
         <td>8</td>
