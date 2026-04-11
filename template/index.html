@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASR 品質測試報告 — 模板</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.1rem; margin-bottom: 1rem; margin-top: 1.5rem; }
+    .subtitle { color: #666; margin-bottom: 2rem; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    th { background: #1e293b; color: #fff; padding: 0.75rem; text-align: left; font-size: 0.85rem; }
+    td { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.8rem; }
+    pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; margin: 1rem 0; }
+    audio { width: 100%; min-width: 150px; height: 32px; }
+    .placeholder { color: #9ca3af; font-style: italic; }
+    .status-improved { color: #16a34a; font-weight: bold; }
+    .status-correct { color: #6b7280; }
+    .status-error { color: #dc2626; font-weight: bold; }
+    .arrow { color: #9ca3af; margin: 0 0.25rem; }
+    .note { font-size: 0.8rem; color: #6b7280; }
+    footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: #6b7280; text-decoration: none; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="back"><a href="../">← 回索引</a></div>
+  <h1>ASR 品質測試報告 — 模板</h1>
+  <p class="subtitle">複製此資料夾，命名為 <code>{vm_name}-{yy}-{mm}-{dd}</code>，填入測試數據</p>
+
+  <!-- ===== 測試環境 ===== -->
+  <div class="card">
+    <h2>測試環境</h2>
+    <table>
+      <thead><tr><th>項目</th><th>值</th></tr></thead>
+      <tbody>
+        <tr><td>測試機器</td><td class="placeholder">jtb-tech-tran-stage / onesmart15 / ...</td></tr>
+        <tr><td>測試日期</td><td class="placeholder">2026-XX-XX</td></tr>
+        <tr><td>2way-api-server</td><td><code class="placeholder">yillkid/2way-api:xxxxxxx</code></td></tr>
+        <tr><td>frontend</td><td><code class="placeholder">yillkid/tmls-demo-kit-frontend:xxxxxxx</code></td></tr>
+        <tr><td>whisper-asr</td><td><code class="placeholder">yillkid/whisper-asr-webservice:xxxxxxx</code></td></tr>
+        <tr><td>madlad (MT)</td><td><code class="placeholder">yillkid/madlad-fastapi:xxxxxxx</code></td></tr>
+        <tr><td>STATION_PROMPT</td><td class="placeholder">填入 env var 值</td></tr>
+      </tbody>
+    </table>
+    <p class="note">查詢指令：<code>kubectl -n llm get deployment {name} -o jsonpath='{.spec.template.spec.containers[0].image}'</code></p>
+  </div>
+
+  <!-- ===== 改善摘要 ===== -->
+  <div class="card">
+    <h2>改善摘要</h2>
+    <table>
+      <thead><tr><th>項目</th><th>數值</th></tr></thead>
+      <tbody>
+        <tr><td>改善前正確率</td><td class="placeholder">XX% (X/N)</td></tr>
+        <tr><td>改善後正確率</td><td class="placeholder">XX% (X/N)</td></tr>
+        <tr><td>測試句數</td><td class="placeholder">N</td></tr>
+        <tr><td>語系數</td><td class="placeholder">X（TH VI EN JA KO ID ZH）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== 測試結果表 ===== -->
+  <div class="card">
+    <h2>測試結果</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>語言</th>
+          <th>原始音檔</th>
+          <th>TTS 音檔</th>
+          <th>改善前（ASR → 翻譯）</th>
+          <th>改善後（ASR → 翻譯）</th>
+          <th>狀態</th>
+          <th>備註</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td class="placeholder">TH</td>
+          <td><audio controls preload="none"><source src="audio/original/01_xx.wav" type="audio/wav"></audio></td>
+          <td><audio controls preload="none"><source src="audio/tts/01_xx_tts.wav" type="audio/wav"></audio></td>
+          <td class="placeholder">ASR 原文 <span class="arrow">→</span> 翻譯結果</td>
+          <td class="placeholder">ASR 原文 <span class="arrow">→</span> 翻譯結果</td>
+          <td class="status-improved">✅</td>
+          <td class="note placeholder">備註</td>
+        </tr>
+        <!-- 複製上方 <tr> 區塊，每句一列 -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== Golden Background 背景音標準 ===== -->
+  <div class="card">
+    <h2>Golden Background — 車站背景音標準</h2>
+    <p style="margin-bottom:1rem;">用於 TTS 測試的標準背景噪音，模擬高雄車站現場環境。所有 TTS 測試音檔應混合此背景音後再送 ASR。</p>
+
+    <h3 style="font-size:0.95rem;margin:1rem 0 0.5rem;">試聽</h3>
+    <table>
+      <thead><tr><th>檔案</th><th>說明</th><th>播放</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>golden_sample_en.mp3</code></td>
+          <td>完整範例（英文 TTS + 背景音）</td>
+          <td><audio controls preload="none"><source src="audio/golden-background/golden_sample_en.mp3" type="audio/mpeg"></audio></td>
+        </tr>
+        <tr>
+          <td><code>golden_background.wav</code></td>
+          <td>純背景音軌（用於混合）</td>
+          <td><audio controls preload="none"><source src="audio/golden-background/golden_background.wav" type="audio/wav"></audio></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:0.95rem;margin:1rem 0 0.5rem;">背景人聲素材（中文）</h3>
+    <table>
+      <thead><tr><th>檔案</th><th>內容</th><th>播放</th></tr></thead>
+      <tbody>
+        <tr><td><code>bg_zh_0.mp3</code></td><td>請問售票處在哪裡，我要買兩張到台北的票</td><td><audio controls preload="none"><source src="audio/golden-background/bg_zh_0.mp3" type="audio/mpeg"></audio></td></tr>
+        <tr><td><code>bg_zh_1.mp3</code></td><td>媽媽你看，那個火車好大喔</td><td><audio controls preload="none"><source src="audio/golden-background/bg_zh_1.mp3" type="audio/mpeg"></audio></td></tr>
+        <tr><td><code>bg_zh_2.mp3</code></td><td>下一班自強號幾點發車啊</td><td><audio controls preload="none"><source src="audio/golden-background/bg_zh_2.mp3" type="audio/mpeg"></audio></td></tr>
+        <tr><td><code>bg_zh_3.mp3</code></td><td>欸欸等一下，我手機忘了拿</td><td><audio controls preload="none"><source src="audio/golden-background/bg_zh_3.mp3" type="audio/mpeg"></audio></td></tr>
+        <tr><td><code>bg_zh_4.mp3</code></td><td>高雄到台北要多久，大概四個小時吧</td><td><audio controls preload="none"><source src="audio/golden-background/bg_zh_4.mp3" type="audio/mpeg"></audio></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:0.95rem;margin:1rem 0 0.5rem;">混音參數</h3>
+    <table>
+      <thead><tr><th>參數</th><th>值</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td>背景人聲音量</td><td><code>0.08</code></td><td>ASR 測試通過的最大值；超過 0.15 會導致 Kaohsiung 被誤辨識為關山</td></tr>
+        <tr><td>白噪音 (white)</td><td><code>a=0.03</code></td><td>模擬冷氣、電子設備底噪</td></tr>
+        <tr><td>粉紅噪音 (pink)</td><td><code>a=0.02</code></td><td>模擬遠處人群嘈雜</td></tr>
+        <tr><td>回音 (echo)</td><td><code>aecho=0.8:0.4:40|80:0.15|0.1</code></td><td>模擬車站大廳空間</td></tr>
+        <tr><td>低通濾波</td><td><code>lowpass=5000Hz</code></td><td>去除不自然的高頻</td></tr>
+        <tr><td>高通濾波</td><td><code>highpass=150Hz</code></td><td>去除低頻隆隆聲</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:0.95rem;margin:1rem 0 0.5rem;">混音指令</h3>
+    <pre>
+# 方法 A：使用預先混合好的背景音軌
+ffmpeg -y -i &lt;TTS_INPUT&gt;.mp3 -i golden_background.wav \
+  -filter_complex "[0:a][1:a]amix=inputs=2:duration=first:dropout_transition=0" \
+  output.mp3
+
+# 方法 B：從素材重新混合（可調整參數）
+ffmpeg -y \
+  -i &lt;TTS_INPUT&gt;.mp3 \
+  -i bg_zh_0.mp3 -i bg_zh_1.mp3 -i bg_zh_2.mp3 -i bg_zh_3.mp3 -i bg_zh_4.mp3 \
+  -filter_complex "
+    [1:a]volume=0.08,adelay=100|100[bg0];
+    [2:a]volume=0.08,adelay=700|700[bg1];
+    [3:a]volume=0.08,adelay=300|300[bg2];
+    [4:a]volume=0.08,adelay=1100|1100[bg3];
+    [5:a]volume=0.08,adelay=500|500[bg4];
+    anoisesrc=d=8:c=white:a=0.03[noise];
+    anoisesrc=d=8:c=pink:a=0.02[crowd];
+    [0:a][bg0][bg1][bg2][bg3][bg4][noise][crowd]amix=inputs=8:duration=first:dropout_transition=0,
+    aecho=0.8:0.4:40|80:0.15|0.1,
+    lowpass=f=5000,highpass=f=150
+  " \
+  output.mp3</pre>
+
+    <h3 style="font-size:0.95rem;margin:1rem 0 0.5rem;">量化標準</h3>
+    <table>
+      <thead><tr><th>等級</th><th>背景人聲音量</th><th>ASR 通過？</th><th>適用場景</th></tr></thead>
+      <tbody>
+        <tr><td>Clean</td><td>0（無背景音）</td><td>✅</td><td>基準測試、純 ASR 能力驗證</td></tr>
+        <tr><td>Noise Only</td><td>0（僅環境噪音，無人聲）</td><td>✅</td><td>夜間/冷門時段</td></tr>
+        <tr><td>Light</td><td>0.04</td><td>✅</td><td>一般時段</td></tr>
+        <tr><td><strong>Standard (Golden)</strong></td><td><strong>0.08</strong></td><td><strong>✅</strong></td><td><strong>尖峰時段（建議預設）</strong></td></tr>
+        <tr><td>Heavy</td><td>0.15+</td><td>❌</td><td>超出 ASR 能力，不作為測試標準</td></tr>
+      </tbody>
+    </table>
+    <p class="note" style="margin-top:0.5rem;">測試日期：2026-04-11 ｜ 測試機器：jtb-tech-tran-stage ｜ whisper-asr:44d9b1a</p>
+  </div>
+
+  <footer>
+    小鎮智能股份有限公司 — ASR Quality Report Template
+  </footer>
+</body>
+</html>

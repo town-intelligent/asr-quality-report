@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASR 翻譯品質改善報告</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #666; margin-bottom: 2rem; }
+    .summary { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .summary h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+    .stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .number { font-size: 2rem; font-weight: bold; }
+    .stat .label { font-size: 0.85rem; color: #666; }
+    .stat.improved .number { color: #16a34a; }
+    .stat.baseline .number { color: #dc2626; }
+    .stat.error .number { color: #f59e0b; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    th { background: #1e293b; color: #fff; padding: 0.75rem; text-align: left; font-size: 0.85rem; white-space: nowrap; }
+    td { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: #f8fafc; }
+    .lang { font-weight: bold; text-transform: uppercase; }
+    .status-improved { color: #16a34a; font-weight: bold; }
+    .status-correct { color: #6b7280; }
+    .status-error { color: #dc2626; font-weight: bold; }
+    .status-warning { color: #f59e0b; font-weight: bold; }
+    .result-before { color: #dc2626; }
+    .result-after { color: #16a34a; }
+    .result-same { color: #6b7280; }
+    .note { font-size: 0.8rem; color: #6b7280; font-style: italic; }
+    audio { width: 100%; min-width: 150px; height: 32px; }
+    .arrow { color: #9ca3af; margin: 0 0.25rem; }
+    .legend { margin-top: 1rem; font-size: 0.85rem; }
+    .legend span { margin-right: 1.5rem; }
+    footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      table { font-size: 0.75rem; display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <h1>ASR 翻譯品質改善報告</h1>
+  <p class="subtitle">站台：高雄車站（onesmart15） ｜ 改善方式：ASR initial_prompt + Glossary 前處理 ｜ 測試日期：2026-04-02 ~ 04-05</p>
+
+  <div class="summary" style="margin-bottom:1rem;">
+    <h2>測試環境</h2>
+    <table style="box-shadow:none;margin:0;">
+      <thead><tr><th>項目</th><th>值</th></tr></thead>
+      <tbody>
+        <tr><td>測試機器</td><td>jtb-tech-tran-stage (mycena-7950x-5090)</td></tr>
+        <tr><td>2way-api-server</td><td><code>yillkid/2way-api:58eb5f5</code></td></tr>
+        <tr><td>frontend</td><td><code>yillkid/tmls-demo-kit-frontend:de49260</code></td></tr>
+        <tr><td>whisper-asr</td><td><code>yillkid/whisper-asr-webservice:44d9b1a</code></td></tr>
+        <tr><td>madlad (MT)</td><td><code>yillkid/madlad-fastapi:ddedca5-v5</code></td></tr>
+        <tr><td>STATION_PROMPT</td><td>高雄車站 Kaohsiung Railway Station 高雄駅 가오슝 기차역 สถานีรถไฟเกาสง Ga tàu Cao Hùng Stasiun kereta api Kaohsiung</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <h2>改善摘要</h2>
+    <div class="stats">
+      <div class="stat baseline">
+        <div class="number">14%</div>
+        <div class="label">改善前正確率<br>(2/14)</div>
+      </div>
+      <div class="stat" style="display:flex;align-items:center;font-size:2rem;color:#9ca3af;">→</div>
+      <div class="stat improved">
+        <div class="number">86%</div>
+        <div class="label">改善後正確率<br>(12/14)</div>
+      </div>
+      <div class="stat" style="margin-left:2rem;">
+        <div class="number" style="color:#16a34a;">10</div>
+        <div class="label">✅ 改善</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#6b7280;">2</div>
+        <div class="label">— 原本正確</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#dc2626;">1</div>
+        <div class="label">❌ 本地 ASR</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#f59e0b;">1</div>
+        <div class="label">⚠️ 語義偏差</div>
+      </div>
+    </div>
+    <p class="legend">
+      所有使用者的原始語句意思皆為「<strong>高雄車站的巴士站在哪裡？</strong>」
+    </p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>語言</th>
+        <th>原始音檔</th>
+        <th>TTS 音檔</th>
+        <th>改善前（ASR → 翻譯）</th>
+        <th>改善後（ASR → 翻譯）</th>
+        <th>狀態</th>
+        <th>備註</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td class="lang">TH</td>
+        <td><audio controls preload="none"><source src="audio/original/01_th.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/01_th_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">เกาสง <span class="arrow">→</span> 嘉善火車站有公車車牌嗎？</td>
+        <td class="result-after">เกาสง <span class="arrow">→</span> <strong>高雄火車站有公車車牌嗎？</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（เกาสง→高雄）</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td class="lang">TH</td>
+        <td><audio controls preload="none"><source src="audio/original/02_th.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/02_th_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">เกาสง <span class="arrow">→</span> 京阪火車站的雲列車在哪裡</td>
+        <td class="result-after">เกาสง <span class="arrow">→</span> <strong>高雄火車站的巴士司機在哪裡？</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（เกาสง→高雄）；語義有小偏差</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td class="lang">VI</td>
+        <td><audio controls preload="none"><source src="audio/original/03_vi.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/03_vi_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">gà tàu Cao Hùng <span class="arrow">→</span> 車站位於高雄市高雄區</td>
+        <td class="result-after">ga tàu Cao Hùng <span class="arrow">→</span> <strong>高雄車站的巴士站在哪裡?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td class="lang">VI</td>
+        <td><audio controls preload="none"><source src="audio/original/04_vi.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/04_vi_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">gà tàu Cao Hùng <span class="arrow">→</span> 高雄市高雄車站位於高雄市高雄區</td>
+        <td class="result-after">Ga tàu Cao Hùng <span class="arrow">→</span> <strong>高雄車站的巴士站在哪裡?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td class="lang">VI</td>
+        <td><audio controls preload="none"><source src="audio/original/05_vi.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/05_vi_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">gà tàu Cao Hùng <span class="arrow">→</span> 高雄市高雄車站位於高雄市高雄區</td>
+        <td class="result-after">Ga tàu Cao Hùng <span class="arrow">→</span> <strong>高雄車站的巴士站在哪裡?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td class="lang">VI</td>
+        <td><audio controls preload="none"><source src="audio/original/06_vi.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/06_vi_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">Cao Hùng <span class="arrow">→</span> 高雄有撞公車嗎?</td>
+        <td class="result-after">高雄 <span class="arrow">→</span> <strong>高雄有巴士站嗎?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（Cao Hùng→高雄、chạm→trạm）</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td class="lang">VI</td>
+        <td><audio controls preload="none"><source src="audio/original/07_vi.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/07_vi_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">Gà tàu Cao Hùng <span class="arrow">→</span> 高雄捷運的巴士路線</td>
+        <td class="result-after">高雄車站 <span class="arrow">→</span> <strong>高雄車站有巴士站嗎?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td class="note">ASR prompt + Glossary（Ga tàu Cao Hùng→高雄車站、chạm→trạm）</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td class="lang">EN</td>
+        <td><audio controls preload="none"><source src="audio/original/08_en.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/08_en_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-same">Kaohsiung <span class="arrow">→</span> 高雄火車站的巴士站在哪裡?</td>
+        <td class="result-same">Kaohsiung <span class="arrow">→</span> 高雄火車站的巴士站在哪裡?</td>
+        <td class="status-correct">— 原本正確</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td class="lang">JA</td>
+        <td><audio controls preload="none"><source src="audio/original/09_ja.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/09_ja_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">高尾駅 <span class="arrow">→</span> 高尾站的巴士站在哪裡?</td>
+        <td class="result-after">高雄駅 <span class="arrow">→</span> <strong>高雄站的巴士站在哪裡?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td class="lang">JA</td>
+        <td><audio controls preload="none"><source src="audio/original/10_ja.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/10_ja_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">青駅 <span class="arrow">→</span> 青站的巴士站在哪裡?</td>
+        <td class="result-same">駅のバス停 <span class="arrow">→</span> 車站的公車車站在哪裡？</td>
+        <td class="status-error">❌</td>
+        <td class="note">此音檔 OpenAI Whisper 線上版本可正確辨識，本地版本仍無法辨識</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td class="lang">JA</td>
+        <td><audio controls preload="none"><source src="audio/original/11_ja.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/11_ja_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">高尾駅 <span class="arrow">→</span> 高尾站的巴士站在哪裡?</td>
+        <td class="result-after">高雄駅 <span class="arrow">→</span> <strong>高雄站的巴士站在哪裡?</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td class="lang">KO</td>
+        <td><audio controls preload="none"><source src="audio/original/12_ko.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/12_ko_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-same">가오슝 <span class="arrow">→</span> 高雄火車站巴士站在哪裡?</td>
+        <td class="result-same">가오슝 <span class="arrow">→</span> 高雄火車站巴士站在哪裡?</td>
+        <td class="status-correct">— 原本正確</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td class="lang">ID</td>
+        <td><audio controls preload="none"><source src="audio/original/13_id.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/13_id_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">kalsium <span class="arrow">→</span> 鈣站的巴士站在哪裡？</td>
+        <td class="result-after">Kaohsiung <span class="arrow">→</span> <strong>高雄火車站的巴士站在哪裡？</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td class="lang">ID</td>
+        <td><audio controls preload="none"><source src="audio/original/14_id.wav" type="audio/wav"></audio></td>
+        <td><audio controls preload="none"><source src="audio/tts/14_id_tts.wav" type="audio/wav"></audio></td>
+        <td class="result-before">kau siung <span class="arrow">→</span> 你的火車站的巴士站在哪裡？</td>
+        <td class="result-after">Kaohsiung <span class="arrow">→</span> <strong>高雄火車站的巴士站在哪裡？</strong></td>
+        <td class="status-improved">✅ 改善</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="summary">
+    <h2>錯誤分析</h2>
+    <table style="box-shadow:none;margin:0;">
+      <thead>
+        <tr>
+          <th>問題類型</th>
+          <th>筆數</th>
+          <th>語言</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>翻譯模型不認得地名</td>
+          <td>2</td>
+          <td>TH</td>
+          <td>ASR 正確（เกาสง）但 Madlad 翻成嘉善/開山</td>
+        </tr>
+        <tr>
+          <td>翻譯模型語義錯誤</td>
+          <td>2</td>
+          <td>VI</td>
+          <td>chạm（站）被翻成「撞」</td>
+        </tr>
+        <tr>
+          <td>本地 ASR 能力不足</td>
+          <td>1</td>
+          <td>JA</td>
+          <td>OpenAI 線上版本可正確辨識，本地版本仍無法辨識</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <h2>Glossary 前處理測試</h2>
+    <p style="margin-bottom:1rem;font-size:0.9rem;">針對仍然錯誤的 th/vi 筆數，在翻譯前替換專有名詞（เกาสง→高雄、Cao Hùng→高雄、chạm→trạm），再送 Madlad 翻譯。</p>
+    <table style="box-shadow:none;margin:0;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>語言</th>
+          <th>直翻（before）</th>
+          <th>Glossary 替換後</th>
+          <th>正確？</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>TH</td>
+          <td class="result-before">嘉善火車站有公車車牌嗎？</td>
+          <td class="result-after"><strong>高雄</strong>火車站有公車車牌嗎？</td>
+          <td class="status-improved">✅</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>TH</td>
+          <td class="result-before">開山火車站的公車車在哪裡？</td>
+          <td class="result-after"><strong>高雄</strong>火車站的巴士司機在哪裡？</td>
+          <td class="status-warning">⚠️ 高雄對了</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>VI</td>
+          <td class="result-before">高雄有<strong>撞</strong>公車嗎?</td>
+          <td class="result-after">高雄有<strong>巴士站</strong>嗎?</td>
+          <td class="status-improved">✅</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>VI</td>
+          <td class="result-before">高雄車站<strong>撞上巴士</strong>了嗎?</td>
+          <td class="result-after">高雄車站有<strong>巴士站</strong>嗎?</td>
+          <td class="status-improved">✅</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem;font-size:0.85rem;color:#16a34a;font-weight:bold;">Glossary 前處理可行 — 4 筆中 3 筆完全正確，1 筆地名正確但語義有小偏差。</p>
+  </div>
+
+  <div class="summary">
+    <h2>建議實作</h2>
+    <table style="box-shadow:none;margin:0;">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>措施</th>
+          <th>改動</th>
+          <th>預估正確率</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>ASR initial_prompt — 注入站台名稱</td>
+          <td>ai.service.js 加一行參數</td>
+          <td>14% → 64%</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Glossary th/vi — 新增專有名詞對照表</td>
+          <td>新增 CSV + ProperNounDetector 加 th/vi</td>
+          <td>64% → 86%+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    小鎮智能股份有限公司 — ASR Quality Report — Updated 2026-04-05
+  </footer>
+</body>
+</html>
