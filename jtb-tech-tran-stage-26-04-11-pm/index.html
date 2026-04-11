@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASR 品質測試報告 — jtb-tech-tran-stage 2026-04-11（PM 實測）</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+    .subtitle { color: #666; margin-bottom: 2rem; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .number { font-size: 2rem; font-weight: bold; }
+    .stat .label { font-size: 0.85rem; color: #666; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    th { background: #1e293b; color: #fff; padding: 0.75rem; text-align: left; font-size: 0.85rem; white-space: nowrap; }
+    td { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: #f8fafc; }
+    code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.8rem; }
+    .lang { font-weight: bold; text-transform: uppercase; }
+    .pass { color: #16a34a; font-weight: bold; }
+    .fail { color: #dc2626; font-weight: bold; }
+    .warn { color: #f59e0b; font-weight: bold; }
+    .note { font-size: 0.8rem; color: #6b7280; font-style: italic; }
+    audio { width: 100%; min-width: 120px; height: 32px; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: #6b7280; text-decoration: none; font-size: 0.9rem; }
+    footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      table { font-size: 0.75rem; display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="back"><a href="../">&larr; 回索引</a></div>
+  <h1>ASR 品質測試報告（PM 實測）</h1>
+  <p class="subtitle">
+    測試機器：jtb-tech-tran-stage ｜ 站台：高雄車站（onesmart15）｜ 測試日期：2026-04-11<br>
+    測試方式：TTS 音檔播放 + 筆電麥克風收音（PM @CHU-YIN 操作）｜ 兩輪共 28 句<br>
+    測試時間：14:00~14:05 台灣時間（06:00~06:05 UTC）
+  </p>
+
+  <!-- 測試環境 -->
+  <div class="card">
+    <h2>測試環境</h2>
+    <table>
+      <thead><tr><th>項目</th><th>值</th></tr></thead>
+      <tbody>
+        <tr><td>測試機器</td><td>jtb-tech-tran-stage (mycena-7950x-5090)</td></tr>
+        <tr><td>測試日期</td><td>2026-04-11 14:00~14:05（台灣時間）</td></tr>
+        <tr><td>測試者</td><td>PM @CHU-YIN（TTS 音檔播放 + 筆電麥克風收音）</td></tr>
+        <tr><td>2way-api-server</td><td><code>yillkid/2way-api:58eb5f5</code></td></tr>
+        <tr><td>frontend</td><td><code>yillkid/tmls-demo-kit-frontend:de49260</code></td></tr>
+        <tr><td>whisper-asr</td><td><code>yillkid/whisper-asr-webservice:44d9b1a</code></td></tr>
+        <tr><td>madlad (MT)</td><td><code>yillkid/madlad-fastapi:ddedca5-v5</code></td></tr>
+        <tr><td>STATION_PROMPT</td><td>高雄車站 Kaohsiung Railway Station 高雄駅 가오슝 기차역 สถานีรถไฟเกาสง Ga tàu Cao Hu&#x0300;ng Stasiun kereta api Kaohsiung</td></tr>
+        <tr><td>Hotwords ConfigMap</td><td>zh / en / ja / ko / th / vi / id（7 語系）</td></tr>
+        <tr><td>Glossary ConfigMap</td><td>zh / en / ja / ko / th / vi / id + EN(Gaosheng/Gaoshan) + JA(高尾)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 測試結果摘要 -->
+  <div class="card">
+    <h2>測試結果摘要</h2>
+    <div class="stats">
+      <div class="stat">
+        <div class="number" style="color:#f59e0b;">~75%</div>
+        <div class="label">正確率<br>(~21/28)</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#16a34a;">21</div>
+        <div class="label">&#x2705; 通過</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#dc2626;">4</div>
+        <div class="label">&#x274C; 失敗</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#f59e0b;">3</div>
+        <div class="label">&#x26A0;&#xFE0F; 語系誤判</div>
+      </div>
+      <div class="stat">
+        <div class="number" style="color:#6b7280;">2</div>
+        <div class="label">輪次</div>
+      </div>
+    </div>
+    <p style="margin-top:1rem;font-size:0.85rem;color:#666;">
+      測試���句：「高雄車站的巴士站在哪裡？」（各語系版本）&times; 2 輪<br>
+      對比：TTS API 測試 100%（14/14） &rarr; <strong>PM 實測 ~75%（真人 TTS 播放 + 麥克風收音）</strong>
+    </p>
+  </div>
+
+  <!-- 第一輪 -->
+  <div class="card">
+    <h2>第一輪（06:00:04 ~ 06:02:53 UTC）</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>語系</th>
+          <th>TTS 參考��檔</th>
+          <th>ASR 偵測語系</th>
+          <th>ASR 輸出</th>
+          <th>高雄</th>
+          <th>備註</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Trạm xe bu&#x0301;yt tại ga ta&#x0300;u Cao Hu&#x0300;ng na&#x0300;m ở đa&#x0302;u.</td>
+          <td class="pass">&#x2705;</td>
+          <td class="note">Cao Hu&#x0300;ng 正確辨識</td>
+        </tr>
+        <tr>
+          <td>2</td><td class="lang">TH</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_th.wav" type="audio/wav"></audio></td>
+          <td class="fail">pt</td>
+          <td>高雄工場��ブリカウ�� Kaohsiung Railway Station</td>
+          <td class="warn">&#x26A0;&#xFE0F;</td>
+          <td class="note">泰語被誤判為葡萄牙語，ASR 輸出混亂但有 Kaohsiung</td>
+        </tr>
+        <tr>
+          <td>3</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Ga ta&#x0300;u Cao Hu&#x0300;ng co&#x0301; trạm xe bu&#x0301;yt kho&#x0302;ng?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>4</td><td class="lang">EN</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_en.wav" type="audio/wav"></audio></td>
+          <td>en</td>
+          <td>Where is the bus stop at Kaohsiung <strong>(高雄)</strong> Railway Station?</td>
+          <td class="pass">&#x2705;</td>
+          <td class="note">Glossary 生��：Kaohsiung (高雄)</td>
+        </tr>
+        <tr>
+          <td>5</td><td class="lang">JA</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_ja.wav" type="audio/wav"></audio></td>
+          <td>ja</td>
+          <td>高雄 <strong>(Kaohsiung)</strong> 駅のバス停はどこですか?</td>
+          <td class="pass">&#x2705;</td>
+          <td class="note">Glossary 生效</td>
+        </tr>
+        <tr>
+          <td>6</td><td class="lang">JA</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_ja.wav" type="audio/wav"></audio></td>
+          <td>ja</td>
+          <td><strong>タゲオウ</strong>駅のステバス停はどこですか?</td>
+          <td class="fail">&#x274C;</td>
+          <td class="note">#10 真人錄音 ASR 能力不足（同 04-05 報告）</td>
+        </tr>
+        <tr>
+          <td>7</td><td class="lang">JA</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_ja.wav" type="audio/wav"></audio></td>
+          <td>ja</td>
+          <td>高雄 <strong>(Kaohsiung)</strong> 駅のバス停はどこですか?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>8</td><td class="lang">KO</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_ko.wav" type="audio/wav"></audio></td>
+          <td>ko</td>
+          <td>가오심 기차역 버스정류장은 어디에 있나요?</td>
+          <td class="pass">&#x2705;</td>
+          <td class="note">가오�� &asymp; 가오슝（高雄）</td>
+        </tr>
+        <tr>
+          <td>9</td><td class="lang">ID</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_id.wav" type="audio/wav"></audio></td>
+          <td class="fail">en</td>
+          <td>Dimash for your health boost, Dimrash for your health</td>
+          <td class="fail">&#x274C;</td>
+          <td class="note">印尼語被誤判為英文，ASR 完全亂碼</td>
+        </tr>
+        <tr>
+          <td>10</td><td class="lang">ID</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_id.wav" type="audio/wav"></audio></td>
+          <td>id</td>
+          <td>dimana halte bus di stasiun kereta api <strong>Kaohsiung</strong></td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>11</td><td class="lang">TH</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_th.wav" type="audio/wav"></audio></td>
+          <td>th</td>
+          <td>มีป้ายรถประจำทางที่สถานีรถไฟเกาสงหรือไม่</td>
+          <td class="pass">&#x2705;</td>
+          <td class="note">เกาสง = 高雄</td>
+        </tr>
+        <tr>
+          <td>12</td><td class="lang">TH</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_th.wav" type="audio/wav"></audio></td>
+          <td>th</td>
+          <td>รถแม่ที่สถานีรถไฟเกาสงอยู่ตรงไหน</td>
+          <td class="pass">&#x2705;</td>
+          <td class="note">เกาสง = 高雄</td>
+        </tr>
+        <tr>
+          <td>13</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_vi.wav" type="audio/wav"></audio></td>
+          <td class="fail">en</td>
+          <td>จัง��สบิต ไก้ก้า ตาวหุ่มน้ำอดาว J&#x0101;ng s&#x00E8;b&#x012B;t...</td>
+          <td class="fail">&#x274C;</td>
+          <td class="note">越南語被誤判為英文，ASR 完全亂碼</td>
+        </tr>
+        <tr>
+          <td>14</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Trạm xe bu&#x0301;yt tại ga ta&#x0300;u Cao Hu&#x0300;ng na&#x0300;m ở đa&#x0302;u.</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.85rem;margin-top:0.5rem;"><strong>第一輪結果：10/14 通過（71%）</strong> &mdash; 3 筆語系誤判、1 筆 JA ASR 能力不足</p>
+  </div>
+
+  <!-- 第二輪 -->
+  <div class="card">
+    <h2>第二輪（06:03:19 ~ 06:04:58 UTC）</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>語系</th>
+          <th>TTS 參考音檔</th>
+          <th>ASR 偵測語系</th>
+          <th>ASR 輸出</th>
+          <th>高雄</th>
+          <th>備註</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Trạm xe bu&#x0301;yt tại ga ta&#x0300;u Cao Hu&#x0300;ng na&#x0300;m ở đa&#x0302;u?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>2</td><td class="lang">TH</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_th.wav" type="audio/wav"></audio></td>
+          <td class="fail">pt</td>
+          <td>高雄駕車站 セブリーカウン Kaohsiung Railway Station</td>
+          <td class="warn">&#x26A0;&#xFE0F;</td>
+          <td class="note">泰語被誤判為葡萄牙語（同第一輪）</td>
+        </tr>
+        <tr>
+          <td>3</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Ga ta&#x0300;u Cao Hu&#x0300;ng co&#x0301; trạm xe bu&#x0301;yt kho&#x0302;ng?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>4</td><td class="lang">EN</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_en.wav" type="audio/wav"></audio></td>
+          <td>en</td>
+          <td>Where is the bus stop at Kaohsiung <strong>(高雄)</strong> Railway Station?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>5</td><td class="lang">JA</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_ja.wav" type="audio/wav"></audio></td>
+          <td>ja</td>
+          <td>高雄 <strong>(Kaohsiung)</strong> 駅のバス停はどこですか?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>6</td><td class="lang">JA</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_ja.wav" type="audio/wav"></audio></td>
+          <td>ja</td>
+          <td><strong>影尾</strong>駅のステバス停はどこですか?</td>
+          <td class="fail">&#x274C;</td>
+          <td class="note">#10 真人錄音 ASR 能力不足（高雄&rarr;影尾）</td>
+        </tr>
+        <tr>
+          <td>7</td><td class="lang">JA</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_ja.wav" type="audio/wav"></audio></td>
+          <td>ja</td>
+          <td>高雄 <strong>(Kaohsiung)</strong> 駅のバス停はどこですか?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>8</td><td class="lang">KO</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_ko.wav" type="audio/wav"></audio></td>
+          <td>ko</td>
+          <td>가오심 기차역 버스정류장은 어디에 있나요?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>9</td><td class="lang">ID</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_id.wav" type="audio/wav"></audio></td>
+          <td class="fail">zh</td>
+          <td>Kaohsiung Kereta</td>
+          <td class="warn">&#x26A0;&#xFE0F;</td>
+          <td class="note">印尼語被誤判為中��，僅剩��段</td>
+        </tr>
+        <tr>
+          <td>10</td><td class="lang">ID</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_id.wav" type="audio/wav"></audio></td>
+          <td>id</td>
+          <td>Dimana Help Bus di Stasiun Kereta Api <strong>Kaohsiung</strong></td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>11</td><td class="lang">TH</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_th.wav" type="audio/wav"></audio></td>
+          <td>th</td>
+          <td>มีป้ายรถประจำทางที่สถานีรถไฟเกาสงหรือไม่</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>12</td><td class="lang">TH</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_th.wav" type="audio/wav"></audio></td>
+          <td>th</td>
+          <td>รถแม่ที่สถานีรถไฟเกาสงอยู่ตรงไหน</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>13</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Trạm xe bu&#x0301;yt tại ga ta&#x0300;u Cao Hu&#x0300;ng na&#x0300;m ở đa&#x0302;u?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>14</td><td class="lang">VI</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_vi.wav" type="audio/wav"></audio></td>
+          <td>vi</td>
+          <td>Ga&#x0300; ta&#x0300;u Cao Hu&#x0300;ng co&#x0301; trạm xe bu&#x0301;yt kho&#x0302;ng?</td>
+          <td class="pass">&#x2705;</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.85rem;margin-top:0.5rem;"><strong>第二輪結果：11/14 通過（79%）</strong> &mdash; 2 筆語系誤判、1 筆 JA ASR 能力不足</p>
+  </div>
+
+  <!-- 各語系統計 -->
+  <div class="card">
+    <h2>各語系統計（兩輪合併）</h2>
+    <table>
+      <thead><tr><th>語系</th><th>測��句數</th><th>通過</th><th>正確率</th><th>問題</th></tr></thead>
+      <tbody>
+        <tr><td>TH（泰語）</td><td>4+2=6</td><td>4</td><td class="warn">67%</td><td>2 筆被誤判為 pt（葡萄牙語），但輸出仍含 Kaohsiung</td></tr>
+        <tr><td>VI（越南語）</td><td>5+5=10</td><td>9</td><td class="pass">90%</td><td>1 筆被誤判為 en，ASR 亂碼</td></tr>
+        <tr><td>EN（英語）</td><td>1+1=2</td><td>2</td><td class="pass">100%</td><td>Glossary Kaohsiung (高雄) ���效</td></tr>
+        <tr><td>JA（日語）</td><td>3+3=6</td><td>4</td><td class="warn">67%</td><td>2 筆 #10 原始錄音 ASR 能力不足（タゲオウ/影尾）</td></tr>
+        <tr><td>KO（韓語）</td><td>1+1=2</td><td>2</td><td class="pass">100%</td><td></td></tr>
+        <tr><td>ID（印尼語）</td><td>2+2=4</td><td>2</td><td class="warn">50%</td><td>2 筆語系誤判（en/zh），TTS 播���收音品質問題</td></tr>
+        <tr style="font-weight:bold;background:#fffbeb;"><td>合計</td><td>28</td><td>21</td><td class="warn">75%</td><td>4 筆語系誤判 + 2 筆 JA ASR 不足 + 1 筆 ID 亂碼</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 與 TTS 測試��較 -->
+  <div class="card">
+    <h2>與 TTS API 測試比較</h2>
+    <table>
+      <thead><tr><th>項目</th><th>TTS API 測試（同日）</th><th>PM 實測（本報告）</th></tr></thead>
+      <tbody>
+        <tr><td>測試���式</td><td>TTS + Golden Background &rarr; Whisper API</td><td>TTS 音檔播放 + 筆電麥克風 &rarr; 前端</td></tr>
+        <tr><td>正確率</td><td class="pass">100%（14/14）</td><td class="warn">75%（21/28）</td></tr>
+        <tr><td>語系誤判</td><td>0</td><td>4 筆（TH&rarr;pt, VI&rarr;en, ID&rarr;en/zh）</td></tr>
+        <tr><td>差異原因</td><td colspan="2">TTS API 直接送音檔給 Whisper，無麥克風失真。PM 實測經過喇叭播放 + 麥克風收音，���質��低導��語系偵測錯誤。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ��現的問題 -->
+  <div class="card">
+    <h2>發現的問題</h2>
+    <table>
+      <thead><tr><th>#</th><th>問題</th><th>嚴重度</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>泰語 TTS 播放被誤判為葡萄牙語</td><td class="warn">Medium</td><td>兩輪都復現，可能是泰語 TTS 的特定發音模式觸發</td></tr>
+        <tr><td>2</td><td>日語 #10 真人錄音持續失敗</td><td class="note">Known</td><td>同 04-05 報告，本地 Whisper 對此音檔能力不足</td></tr>
+        <tr><td>3</td><td>印尼語 TTS 播放��音��穩定</td><td class="warn">Medium</td><td>兩輪各有 1 筆語系誤判，可能與收音環境有關</td></tr>
+        <tr><td>4</td><td>越南語偶爾被誤判為英語</td><td class="note">Low</td><td>第一輪 1 筆，第二輪無，非必現</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    小鎮智能���份有限公司 &mdash; ASR Quality Report &mdash; jtb-tech-tran-stage &mdash; 2026-04-11（PM 實測）
+  </footer>
+</body>
+</html>
