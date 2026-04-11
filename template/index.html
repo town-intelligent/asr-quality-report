@@ -137,8 +137,8 @@
       <thead><tr><th>參數</th><th>值</th><th>說明</th></tr></thead>
       <tbody>
         <tr><td>背景人聲音量</td><td><code>0.08</code></td><td>ASR 測試通過的最大值；超過 0.15 會導致 Kaohsiung 被誤辨識為關山</td></tr>
-        <tr><td>白噪音 (white)</td><td><code>a=0.03</code></td><td>模擬冷氣、電子設備底噪</td></tr>
-        <tr><td>粉紅噪音 (pink)</td><td><code>a=0.02</code></td><td>模擬遠處人群嘈雜</td></tr>
+        <tr><td>白噪音 (white)</td><td><code>a=0.12</code></td><td>模擬冷氣、電子設備底噪</td></tr>
+        <tr><td>粉紅噪音 (pink)</td><td><code>a=0.08</code></td><td>模擬遠處人群嘈雜</td></tr>
         <tr><td>回音 (echo)</td><td><code>aecho=0.8:0.4:40|80:0.15|0.1</code></td><td>模擬車站大廳空間</td></tr>
         <tr><td>低通濾波</td><td><code>lowpass=5000Hz</code></td><td>去除不自然的高頻</td></tr>
         <tr><td>高通濾波</td><td><code>highpass=150Hz</code></td><td>去除低頻隆隆聲</td></tr>
@@ -157,14 +157,15 @@ ffmpeg -y \
   -i &lt;TTS_INPUT&gt;.mp3 \
   -i bg_zh_0.mp3 -i bg_zh_1.mp3 -i bg_zh_2.mp3 -i bg_zh_3.mp3 -i bg_zh_4.mp3 \
   -filter_complex "
-    [1:a]volume=0.08,adelay=100|100[bg0];
-    [2:a]volume=0.08,adelay=700|700[bg1];
-    [3:a]volume=0.08,adelay=300|300[bg2];
-    [4:a]volume=0.08,adelay=1100|1100[bg3];
-    [5:a]volume=0.08,adelay=500|500[bg4];
-    anoisesrc=d=8:c=white:a=0.03[noise];
-    anoisesrc=d=8:c=pink:a=0.02[crowd];
-    [0:a][bg0][bg1][bg2][bg3][bg4][noise][crowd]amix=inputs=8:duration=first:dropout_transition=0,
+    [1:a]volume=0.35,adelay=100|100[bg0];
+    [2:a]volume=0.35,adelay=700|700[bg1];
+    [3:a]volume=0.35,adelay=300|300[bg2];
+    [4:a]volume=0.35,adelay=1100|1100[bg3];
+    [5:a]volume=0.35,adelay=500|500[bg4];
+    anoisesrc=d=8:c=white:a=0.12[noise];
+    anoisesrc=d=8:c=pink:a=0.08[crowd];
+    [0:a]volume=4.0[main];
+    [main][bg0][bg1][bg2][bg3][bg4][noise][crowd]amix=inputs=8:duration=first:dropout_transition=0,
     aecho=0.8:0.4:40|80:0.15|0.1,
     lowpass=f=5000,highpass=f=150
   " \
