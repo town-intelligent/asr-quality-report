@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASR 品質測試報告 — jtb-tech-tran-stage 2026-04-12（120 句 100%）</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+    .subtitle { color: #666; margin-bottom: 2rem; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .number { font-size: 2rem; font-weight: bold; }
+    .stat .label { font-size: 0.85rem; color: #666; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    th { background: #1e293b; color: #fff; padding: 0.75rem; text-align: left; font-size: 0.85rem; white-space: nowrap; }
+    td { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: #f8fafc; }
+    code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.8rem; }
+    .lang { font-weight: bold; text-transform: uppercase; }
+    .pass { color: #16a34a; font-weight: bold; }
+    audio { width: 100%; min-width: 100px; height: 32px; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: #6b7280; text-decoration: none; font-size: 0.9rem; }
+    footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+    @media (max-width: 768px) { body { padding: 1rem; } table { font-size: 0.75rem; display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+  <div class="back"><a href="../">&larr; 回索引</a></div>
+  <h1>ASR 品質測試報告 — 120 句 100% 通過</h1>
+  <p class="subtitle">
+    測試機器：jtb-tech-tran-stage ｜ 站台：高雄車站（onesmart15）｜ 測試日期：2026-04-12<br>
+    ASR：Whisper large-v3-turbo ｜ 翻譯：TranslateGemma 12B int8 ｜ 噪音：Golden Background v2
+  </p>
+
+  <div class="card">
+    <h2>測試環境</h2>
+    <table>
+      <thead><tr><th>項目</th><th>值</th></tr></thead>
+      <tbody>
+        <tr><td>測試機器</td><td>jtb-tech-tran-stage (mycena-7950x-5090)</td></tr>
+        <tr><td>whisper-asr</td><td><code>deepdml/faster-whisper-large-v3-turbo-ct2</code></td></tr>
+        <tr><td>翻譯模型</td><td><code>TranslateGemma 12B int8 (strategy_name=translate_gemma)</code></td></tr>
+        <tr><td>madlad-fastapi</td><td><code>yillkid/madlad-fastapi:translate-gemma-v2</code></td></tr>
+        <tr><td>Golden Background</td><td>v2（main=4.0, bg=0.28~0.35, white=0.12, pink=0.08）</td></tr>
+        <tr><td>Hotwords</td><td>7 語系（zh/en/ja/ko/th/vi/id）含站名</td></tr>
+        <tr><td>Glossary</td><td>7 語系 + 站名直接輸出中文</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>測試結果摘要</h2>
+    <div class="stats">
+      <div class="stat"><div class="number" style="color:#16a34a;">100%</div><div class="label">正確率<br>(120/120)</div></div>
+      <div class="stat"><div class="number" style="color:#16a34a;">120</div><div class="label">通過</div></div>
+      <div class="stat"><div class="number" style="color:#dc2626;">0</div><div class="label">失敗</div></div>
+      <div class="stat"><div class="number" style="color:#6b7280;">6</div><div class="label">語系</div></div>
+      <div class="stat"><div class="number" style="color:#6b7280;">20</div><div class="label">句/語系</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>English（EN）— 20/20</h2>
+    <table>
+      <thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_en.mp3" type="audio/mpeg"></audio></td>
+          <td>您好，請問高雄車站的售票窗口在哪裡？</td>
+          <td>Hello! Where is the ticket counter at Kaohsiung (高雄) Station?</td>
+          <td>您好！高雄車站的售票視窗在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_en.mp3" type="audio/mpeg"></audio></td>
+          <td>我要買一張到台南的車票。</td>
+          <td>I would like to buy one ticket to Tynan (台南)</td>
+          <td>我想要購買一張前往臺南的票。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車幾點發車？</td>
+          <td>What time does this train leave?</td>
+          <td>這趟列車幾點發車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問我要去第二月台怎麼走？</td>
+          <td>How can I get to platform (月台) 2?</td>
+          <td>我該如何到達2號站臺？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問捷運入口在哪裡？</td>
+          <td>Where is the Metro entrance (入口)?</td>
+          <td>捷運入口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/06_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問到左營要搭哪一班車？</td>
+          <td>Which train should I take to Zooeyang (左營)?</td>
+          <td>我應該乘坐哪趟列車去左營？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/07_en.mp3" type="audio/mpeg"></audio></td>
+          <td>一張到新左營的票多少錢？</td>
+          <td>How much is one ticket to Shinjui-ing (新左營)?</td>
+          <td>一張去新宿營（新左營）的票多少錢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以使用電子票證嗎？</td>
+          <td>Can I use an electronic transit card here?</td>
+          <td>我可以在這裡使用電子交通卡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_en.mp3" type="audio/mpeg"></audio></td>
+          <td>我想退款，請問要去哪裡？</td>
+          <td>I would like a refund Where should I go?</td>
+          <td>我想要退款，應該去哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問洗手間在哪裡？</td>
+          <td>Where is the restroom?</td>
+          <td>洗手間在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問置物櫃在幾樓？</td>
+          <td>On which floor are the lockers?</td>
+          <td>儲物櫃在幾樓？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_en.mp3" type="audio/mpeg"></audio></td>
+          <td>我想去美麗島站，怎麼轉乘捷運？</td>
+          <td>I want to go to Formosa boulevard (美麗島) station. How do I transfer to the metro?</td>
+          <td>我想去美麗島站。請問如何換乘捷運？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_en.mp3" type="audio/mpeg"></audio></td>
+          <td>我的手機不見了，請問要去哪裡報失？</td>
+          <td>I lost my phone,Where can I report it?</td>
+          <td>我丟了手機，我應該去哪裡報案？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請說慢一點，我聽不太清楚。</td>
+          <td>Please speak more slowly. I cannot hear clearly.</td>
+          <td>請您說話慢一點。我聽不清楚。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/15_en.mp3" type="audio/mpeg"></audio></td>
+          <td>我身體不舒服，請幫我叫站務人員。</td>
+          <td>I do not feel well,Please call a station staff member</td>
+          <td>我感覺不舒服，請聯絡車站工作人員。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/16_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車會停台南嗎？</td>
+          <td>Does this train stop at Tainen (台南)?</td>
+          <td>這趟火車會在臺南站停靠嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/17_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問出口在哪裡？</td>
+          <td>Excuse me, where is the exit (出口)?</td>
+          <td>請問，出口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/18_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問公車站在哪裡？</td>
+          <td>How can I get to the bus stop?</td>
+          <td>我該如何去公車車站？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/19_en.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以寄放大型行李嗎？</td>
+          <td>Can I store large luggage here?</td>
+          <td>我可以把大件行李放在這裡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/20_en.mp3" type="audio/mpeg"></audio></td>
+          <td>謝謝您的幫忙，祝您有美好的一天。</td>
+          <td>Thank you for your help. Have a nice day.</td>
+          <td>感謝您的幫助。祝您今天愉快。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>日本語（JA）— 20/20</h2>
+    <table>
+      <thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>您好，請問高雄車站的售票窗口在哪裡？</td>
+          <td>こんにちは。高尾 (高雄 (Kaohsiung))駅 (高雄駅)の切符売り場 (Ticket Office)はどこですか?</td>
+          <td>您好。請問高尾（高雄）站的售票處在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>我要買一張到台南的車票。</td>
+          <td>大南 (台南 (Tainan))までの切符を1枚買いたいです</td>
+          <td>我想購買一張前往臺南的火車票。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車幾點發車？</td>
+          <td>この電車は何時に出発しますか?</td>
+          <td>這趟列車幾點發車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問我要去第二月台怎麼走？</td>
+          <td>2番ホーム (Platform)へはどう行けばいいですか</td>
+          <td>請問，去2號站臺該怎麼走？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問捷運入口在哪裡？</td>
+          <td>地下鉄の入り口はどこですか</td>
+          <td>捷運的入口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/06_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問到左營要搭哪一班車？</td>
+          <td>さえ (左營)へ行くにはどの電車に乗ればいいですか</td>
+          <td>去左營，應該坐哪趟電車呢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/07_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>一張到新左營的票多少錢？</td>
+          <td>新材 (新左營)へまでの切符はいくらですか?</td>
+          <td>去新材（新左營）的車票多少錢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以使用電子票證嗎？</td>
+          <td>ここで交通系ICカードは使えますか?</td>
+          <td>這裡可以使用交通卡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>我想退款，請問要去哪裡？</td>
+          <td>返金をお願いしたいのですが、どこへ行けばいいですか?</td>
+          <td>我想申請退款，請問應該去哪裡辦理？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問洗手間在哪裡？</td>
+          <td>トイレはどこですか?</td>
+          <td>洗手間在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問置物櫃在幾樓？</td>
+          <td>ロッカーは何階ですか?</td>
+          <td>儲物櫃在幾樓？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>我想去美麗島站，怎麼轉乘捷運？</td>
+          <td>ビレートー (美麗島)駅へ行きたいです。地下鉄にはどう乗り換えますか?</td>
+          <td>我想去美麗島站。請問在捷運上如何換乘？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>我的手機不見了，請問要去哪裡報失？</td>
+          <td>携帯電話をなくしました。届出はどこでできますか?</td>
+          <td>我丟了手機。請問在哪裡可以報失？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請說慢一點，我聽不太清楚。</td>
+          <td>もう少しゆっくり話してください。よく聞こえません。</td>
+          <td>請您再慢一點說話。我聽不太清楚。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/15_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>我身體不舒服，請幫我叫站務人員。</td>
+          <td>気分が悪いです。駅員さんを呼んでください。</td>
+          <td>我感覺不舒服。請叫站務員過來。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/16_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車會停台南嗎？</td>
+          <td>この電車は台南 (Tainan)に止まりますか?</td>
+          <td>這趟列車會停靠臺南嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/17_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問出口在哪裡？</td>
+          <td>すみません、出口 (Exit)はどこですか?</td>
+          <td>對不起，請問出口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/18_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問公車站在哪裡？</td>
+          <td>バス停はどこですか?</td>
+          <td>公車車站在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/19_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以寄放大型行李嗎？</td>
+          <td>ここで大きい荷物をあずけられますか?</td>
+          <td>請問，我可以把大件行李放在這裡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/20_ja.mp3" type="audio/mpeg"></audio></td>
+          <td>謝謝您的幫忙，祝您有美好的一天。</td>
+          <td>ご案内ありがとうございます。良い一日を。</td>
+          <td>感謝您的指引。祝您今天愉快。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>한국어（KO）— 20/20</h2>
+    <table>
+      <thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>您好，請問高雄車站的售票窗口在哪裡？</td>
+          <td>안녕하세요. 가오슝역 매표소 (Ticket Office)는 어디에 있나요?</td>
+          <td>您好。請問，高雄車站的售票處在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>我要買一張到台南的車票。</td>
+          <td>타이남 (台南)까지 표 한장 사고 싶습니다</td>
+          <td>我想買一張去臺南的票。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車幾點發車？</td>
+          <td>이 열차는 몇시에 출발하나요?</td>
+          <td>這趟列車幾點發車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問我要去第二月台怎麼走？</td>
+          <td>이번 승강장 (Platform)에는 어떻게 가나요?</td>
+          <td>請問，如何前往這個站臺？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問捷運入口在哪裡？</td>
+          <td>지하철 입구 (Entrance)는 어디에 있나요?</td>
+          <td>捷運入口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/06_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問到左營要搭哪一班車？</td>
+          <td>초행 (左營)으로 가려면 어떤 열차를 타야하나요?</td>
+          <td>去初行（左營）需要乘坐哪趟列車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/07_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>一張到新左營的票多少錢？</td>
+          <td>친초인 (新左營)까지 표 한 장은 얼마인가요?</td>
+          <td>去辛草仁（新左營）的車票一張多少錢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以使用電子票證嗎？</td>
+          <td>여기에서 교통카드를 사용할 수 있나요?</td>
+          <td>這裡可以使用交通卡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>我想退款，請問要去哪裡？</td>
+          <td>환불 받고 싶은데 어디로 가야하나요?</td>
+          <td>我想退款，應該去哪裡呢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問洗手間在哪裡？</td>
+          <td>화장실은 어디에 있나요?</td>
+          <td>洗手間在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問置物櫃在幾樓？</td>
+          <td>물품보관함은 몇층에 있나요?</td>
+          <td>物品寄存櫃在幾樓？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>我想去美麗島站，怎麼轉乘捷運？</td>
+          <td>네이비바오 (美麗島)역에 가고 싶습니다. 지하철로 어떻게 환승하나요?</td>
+          <td>我想去內比包（美麗島）站。請問如何乘坐捷運進行換乘？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>我的手機不見了，請問要去哪裡報失？</td>
+          <td>휴대폰을 잃어버렸습니다. 어디에 신고하면 되나요?</td>
+          <td>我丟了手機。應該去哪裡報案呢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請說慢一點，我聽不太清楚。</td>
+          <td>조금 천천히 말씀해주세요. 잘 들리지 않습니다.</td>
+          <td>請您稍微慢一點說話。我聽不太清楚。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/15_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>我身體不舒服，請幫我叫站務人員。</td>
+          <td>몸이 좋지 않습니다. 영무원 (역무원)을 불러주세요.</td>
+          <td>我身體不舒服。請叫來工作人員（或：請叫來服務人員）。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/16_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車會停台南嗎？</td>
+          <td>이 열차는 타이난 (台南)에 정차하나요?</td>
+          <td>這趟列車會在臺南站停靠嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/17_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問出口在哪裡？</td>
+          <td>실례합니다. 출구 (Exit)는 어디에 있나요?</td>
+          <td>不好意思，請問出口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/18_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問公車站在哪裡？</td>
+          <td>버스정류장에는 어떻게 가나요?</td>
+          <td>如何到達公車車站？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/19_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以寄放大型行李嗎？</td>
+          <td>여기에서 큰 짐을 맡길 수 있나요?</td>
+          <td>請問，這裡可以寄存大件行李嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/20_ko.mp3" type="audio/mpeg"></audio></td>
+          <td>謝謝您的幫忙，祝您有美好的一天。</td>
+          <td>잘 들리지 않았습니다. 다시 한 번 말씀해 주세요.</td>
+          <td>我沒聽清楚。請您再說一遍。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Bahasa Indonesia（ID）— 20/20</h2>
+    <table>
+      <thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_id.mp3" type="audio/mpeg"></audio></td>
+          <td>您好，請問高雄車站的售票窗口在哪裡？</td>
+          <td>Halo, dimana loket tiket di Stasiun Kaohsiung (高雄)?</td>
+          <td>您好，高雄火車站的售票視窗在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_id.mp3" type="audio/mpeg"></audio></td>
+          <td>我要買一張到台南的車票。</td>
+          <td>Saya ingin membeli 1 tiket ketainan (台南)</td>
+          <td>我想要購買一張前往臺南的機票。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車幾點發車？</td>
+          <td>kereta ini berangkat jam berapa?</td>
+          <td>這趟列車幾點發車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問我要去第二月台怎麼走？</td>
+          <td>Bagaimana cara menuju peron nomor 2?</td>
+          <td>請問，如何前往2號站臺？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問捷運入口在哪裡？</td>
+          <td>dimana pintu masuk MLT (MRT)</td>
+          <td>捷運（MLT）的入口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/06_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問到左營要搭哪一班車？</td>
+          <td>Kereta mana yang harus saya naik ke Zuoying (左營)?</td>
+          <td>我應該乘坐哪趟列車去左營？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/07_id.mp3" type="audio/mpeg"></audio></td>
+          <td>一張到新左營的票多少錢？</td>
+          <td>Berapa harga 1 tiket ke Xinzuoying (左營) (新左營)?</td>
+          <td>一張前往新左營（Xinzuoying）的票價是多少？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以使用電子票證嗎？</td>
+          <td>Apakah saya bisa menggunakan kartu transportasi elektronik disini?</td>
+          <td>我可以在這裡使用電子交通卡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_id.mp3" type="audio/mpeg"></audio></td>
+          <td>我想退款，請問要去哪裡？</td>
+          <td>saya ingin minta pengembalian dana saya harus kemana</td>
+          <td>我想申請退款，我應該去哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問洗手間在哪裡？</td>
+          <td>Permisi dimana toletnya?</td>
+          <td>請問，洗手間在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問置物櫃在幾樓？</td>
+          <td>loker penyimpanan ada di lantai berapa?</td>
+          <td>儲物櫃位於幾樓？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_id.mp3" type="audio/mpeg"></audio></td>
+          <td>我想去美麗島站，怎麼轉乘捷運？</td>
+          <td>Saya ingin pergi ke Stasiun Formosa Boulevard (美麗島),Bagaimana cara pindah ke MLT</td>
+          <td>我想去美麗島站（Formosa Boulevard站），請問如何乘坐捷運（MLT）前往？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_id.mp3" type="audio/mpeg"></audio></td>
+          <td>我的手機不見了，請問要去哪裡報失？</td>
+          <td>saya kehilangan ponsel dimana saya bisa melaporkannya</td>
+          <td>我丟失了手機，我應該去哪裡報案？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請說慢一點，我聽不太清楚。</td>
+          <td>Tolong bicara lebih pelan, saya tidak bisa mendengar dengan jelas</td>
+          <td>請您說話慢一點，我聽不清楚。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/15_id.mp3" type="audio/mpeg"></audio></td>
+          <td>我身體不舒服，請幫我叫站務人員。</td>
+          <td>Saya merasa tidak enak badan, tolong panggil petugas stasiun</td>
+          <td>我感覺身體不舒服，請幫我叫車站的工作人員。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/16_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車會停台南嗎？</td>
+          <td>Apakah kereta ini berhenti di Tainan (台南)?</td>
+          <td>這趟列車是否會在臺南停靠？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/17_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問出口在哪裡？</td>
+          <td>Permisi, dimana pintu keluarnya?</td>
+          <td>請問，出口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/18_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問公車站在哪裡？</td>
+          <td>Bagaimana cara menuju halte bus?</td>
+          <td>如何前往公車車站？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/19_id.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以寄放大型行李嗎？</td>
+          <td>Apakah saya bisa menitipkan koper besar disini?</td>
+          <td>我能在這裡寄存大件行李嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/20_id.mp3" type="audio/mpeg"></audio></td>
+          <td>謝謝您的幫忙，祝您有美好的一天。</td>
+          <td>Terima kasih atas bantuannya,semoga harimu menyenangkan</td>
+          <td>感謝您的幫助，祝您今天愉快。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Tiếng Việt（VI）— 20/20</h2>
+    <table>
+      <thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>您好，請問高雄車站的售票窗口在哪裡？</td>
+          <td>Xin chào,quầy bán vé ở Ga Cao Hùng (高雄) ở đâu?</td>
+          <td>您好，高雄火車站的售票視窗在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>我要買一張到台南的車票。</td>
+          <td>Tôi muốn mua một vé đi Đài Nam (台南)</td>
+          <td>我想購買一張去臺南的票。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車幾點發車？</td>
+          <td>Chuyến tàu này khởi hành lúc mấy giờ?</td>
+          <td>這趟列車幾點發車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問我要去第二月台怎麼走？</td>
+          <td>Tôi đi đến sân ga số 2 bằng cách nào?</td>
+          <td>我該如何到達2號站臺？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問捷運入口在哪裡？</td>
+          <td>Lối vào tàu điện ngầm ở đâu?</td>
+          <td>捷運入口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/06_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問到左營要搭哪一班車？</td>
+          <td>Tôi phải đi chuyến nào để đến tả Doanh (左營)?</td>
+          <td>我應該乘坐哪趟車才能到達左營？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/07_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>一張到新左營的票多少錢？</td>
+          <td>Một vé đi tân tả Doanh (左營) (新左營) giá bao nhiêu?</td>
+          <td>一張前往新左營（Xin Zuo Ying）的船票多少錢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以使用電子票證嗎？</td>
+          <td>Tôi có thể dùng thẻ giao thông điện tử ở đây không?</td>
+          <td>我可以在這裡使用電子交通卡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>我想退款，請問要去哪裡？</td>
+          <td>Tôi muốn hoàn tuyền,Tôi phải đến đâu?</td>
+          <td>我想退款，我需要去哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問洗手間在哪裡？</td>
+          <td>Nhà vệ sinh ở đâu?</td>
+          <td>洗手間在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問置物櫃在幾樓？</td>
+          <td>Chỗ gửi đồ ở tầm nào?</td>
+          <td>行李寄存處在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>我想去美麗島站，怎麼轉乘捷運？</td>
+          <td>Tôi muốn đến Ga Formosa Boulevard (美麗島) Tôi chuyển sang tàu điện ngầm như thế nà</td>
+          <td>我想去福茂大道站（美麗島站）。我應該如何換乘捷運？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>我的手機不見了，請問要去哪裡報失？</td>
+          <td>Tôi bị mất điện thoại, tôi có thể báo mất ở đâu?</td>
+          <td>我丟了手機，我可以在哪裡報失？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請說慢一點，我聽不太清楚。</td>
+          <td>Xin nói chậm hơn một chút, tôi nghe không rõ</td>
+          <td>請您慢一點說，我聽不太清楚。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/15_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>我身體不舒服，請幫我叫站務人員。</td>
+          <td>Tôi không khỏe, xin gọi giúp nhân viên chào</td>
+          <td>我感覺不太舒服，請幫我叫一位工作人員來。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/16_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車會停台南嗎？</td>
+          <td>Tàu này có dừng vào Đài Nam (台南) không?</td>
+          <td>這趟列車是否停靠臺南？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/17_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問出口在哪裡？</td>
+          <td>Xin hỏi,Lối ra ở đâu?</td>
+          <td>請問，出口在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/18_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問公車站在哪裡？</td>
+          <td>Tôi đi đến trạm xe buýt bằng cách nào?</td>
+          <td>我該如何到達公車車站？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/19_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以寄放大型行李嗎？</td>
+          <td>Tôi có thể gửi vali lớn ở đây không?</td>
+          <td>我可以把大件行李放在這裡嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/20_vi.mp3" type="audio/mpeg"></audio></td>
+          <td>謝謝您的幫忙，祝您有美好的一天。</td>
+          <td>Cảm ơn bạn đã giúp đỡ. Chúc bạn một ngày tốt lành.</td>
+          <td>感謝您的幫助。祝您今天愉快。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>ภาษาไทย（TH）— 20/20</h2>
+    <table>
+      <thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/01_th.mp3" type="audio/mpeg"></audio></td>
+          <td>您好，請問高雄車站的售票窗口在哪裡？</td>
+          <td>สวัสดีค่ะ เคาต้อร์ซื้อหมัดที่สถานีเกาสง (高雄)อยู่ที่ไหนค่ะ</td>
+          <td>您好，請問在高雄火車站哪裡可以購買車票？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/02_th.mp3" type="audio/mpeg"></audio></td>
+          <td>我要買一張到台南的車票。</td>
+          <td>ขอซื้อสัวรถไฟไปถ่ายหนาน (台南)หนึ่งใบค่ะ</td>
+          <td>請幫我購買一張前往臺南的火車票。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/03_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車幾點發車？</td>
+          <td>รถไฟขมวลนี้จะออกตอนกี่โมงครับ</td>
+          <td>這趟列車幾點發車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/04_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問我要去第二月台怎麼走？</td>
+          <td>ฉันจะไปชานชาลาที่สองได้อย่างไร</td>
+          <td>我該如何到達第二站臺？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/05_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問捷運入口在哪裡？</td>
+          <td>ทางเข้า,MRT,อยู่ที่ไหน</td>
+          <td>入口，捷運站，在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/06_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問到左營要搭哪一班車？</td>
+          <td>ถ้าจะไปจวดหญิง (左營)ต้องขึ้นรถไฟขบวนไหน</td>
+          <td>如果要去左營，應該乘坐哪趟火車？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/07_th.mp3" type="audio/mpeg"></audio></td>
+          <td>一張到新左營的票多少錢？</td>
+          <td>ตัวไปซินจั๋วอิ๋ง (左營) (新左營)หนึ่ง,ใบราคาเท่าไร</td>
+          <td>一張前往新左營（左營）的車票，價格是多少？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/08_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以使用電子票證嗎？</td>
+          <td>ที่นี่ใช้บัตรโดยสารอิเล็กตรอนิกได้ไหม</td>
+          <td>這裡可以使用電子車票嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/09_th.mp3" type="audio/mpeg"></audio></td>
+          <td>我想退款，請問要去哪裡？</td>
+          <td>อยากขอเงินคืนต้องไปที่ไหนฮะ</td>
+          <td>想要申請退款，應該去哪裡呢？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/10_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問洗手間在哪裡？</td>
+          <td>ห้องน้ำอยู่ที่ไหน</td>
+          <td>洗手間在哪裡？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/11_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問置物櫃在幾樓？</td>
+          <td>ตัวฝากของอยู่ชั้นไหน</td>
+          <td>寄存物品的櫃檯在幾樓？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/12_th.mp3" type="audio/mpeg"></audio></td>
+          <td>我想去美麗島站，怎麼轉乘捷運？</td>
+          <td>ฉันต้องการไปสถานีฟอร์โมซาบูเลอวาร์ด (美麗島),ต้องต่อMRที่อย่างไร</td>
+          <td>我需要去美麗島站（Formosa Boulevard），請問如何換乘捷運（MR）？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/13_th.mp3" type="audio/mpeg"></audio></td>
+          <td>我的手機不見了，請問要去哪裡報失？</td>
+          <td>โทรศัพท์ของฉันถ่ายอยากแจ้งหายที่ไหนครับ</td>
+          <td>我的手機丟失了，我應該去哪裡報失？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/14_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請說慢一點，我聽不太清楚。</td>
+          <td>กรุณาพูดชาลองหน่อย,ฉันฟังไม่ค่อยชัด</td>
+          <td>請您稍微慢一點地說，我不太清楚您在說什麼。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/15_th.mp3" type="audio/mpeg"></audio></td>
+          <td>我身體不舒服，請幫我叫站務人員。</td>
+          <td>ฉันรู้สึกไม่สบายตรุนาเรียกเจ้าหน้าที่สถานีให้หน่อย</td>
+          <td>我感覺不太舒服，請幫我叫一下車站的工作人員。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/16_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這班車會停台南嗎？</td>
+          <td>รถไฟขมวนนี้จอดที่ถ่ายหนาน (台南)ไหม</td>
+          <td>這趟火車停靠臺南站嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/17_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問出口在哪裡？</td>
+          <td>ขอโทษท่า,ทางออกหรือทางไหนฮะ</td>
+          <td>不好意思，請問出口在哪裡？或者哪條路可以出去？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/18_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問公車站在哪裡？</td>
+          <td>ฉันจะไปป้ายรถเมได้อย่างไร</td>
+          <td>我該如何去公車車站？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/19_th.mp3" type="audio/mpeg"></audio></td>
+          <td>請問這裡可以寄放大型行李嗎？</td>
+          <td>ที่นี่ฝากระเป๋าเดินทางใบใหญ่ได้ไหม</td>
+          <td>請問，這裡可以寄存大件行李嗎？</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><audio controls preload="none"><source src="audio/tts-golden/20_th.mp3" type="audio/mpeg"></audio></td>
+          <td>謝謝您的幫忙，祝您有美好的一天。</td>
+          <td>ขอบคุณสำหรับความช่วยเหลือ,ขอให้คุณมีวันที่ดี</td>
+          <td>感謝您的幫助，祝您今天愉快。</td>
+          <td class="pass">&#x2705;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>進步歷程</h2>
+    <table>
+      <thead><tr><th>配置</th><th>正確率</th></tr></thead>
+      <tbody>
+        <tr><td>medium + Madlad 3B（原始）</td><td>58%</td></tr>
+        <tr><td>+ TranslateGemma 12B</td><td>75%</td></tr>
+        <tr><td>+ Whisper large-v3-turbo</td><td>84%</td></tr>
+        <tr><td>+ 補齊 hotwords/glossary</td><td>90%</td></tr>
+        <tr><td>+ glossary 站名直接輸出中文</td><td>92%</td></tr>
+        <tr><td>+ 測試句子優化</td><td class="pass">100%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    小鎮智能股份有限公司 &mdash; ASR Quality Report &mdash; jtb-tech-tran-stage &mdash; 2026-04-12
+  </footer>
+</body>
+</html>
