@@ -1,0 +1,120 @@
+{"idx": "01", "asr": "您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?", "tgt": "en", "out": "Hello, could you please tell me where the ticket counter is located at the Kaohsiung train station?", "time": 2.84023}
+{"idx": "01", "asr": "您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?", "tgt": "ja", "out": "もしもし、高雄駅の切符売り場はどこですか。", "time": 0.435028}
+{"idx": "01", "asr": "您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?", "tgt": "ko", "out": "안녕하세요, 가오<0xEC><0x8A><0x9D> 역의 티켓 사무소는 어디에 있습니까?", "time": 0.34902}
+{"idx": "01", "asr": "您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?", "tgt": "id", "out": "Halo, bolehkah saya bertanya, di mana loket penjualan tiket di Stasiun Kaohsiung?", "time": 2.703048}
+{"idx": "01", "asr": "您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?", "tgt": "vi", "out": "Xin chào, tôi muốn hỏi, văn phòng bán vé của ga Kaohsiung ở đâu ạ?", "time": 2.673634}
+{"idx": "01", "asr": "您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?", "tgt": "th", "out": "สวัสดีค่ะ/ครับ, รบกวนสอบถามว่า บริเวณสถานีรถไฟเกาสง (Kaohsiung) มีเคาน์เตอร์จำหน่ายตั๋วอยู่ที่ไหนคะ/ครับ?", "time": 5.336666}
+{"idx": "02", "asr": "我要買一張到臺南 (Tainan)的車票", "tgt": "en", "out": "I would like to buy a train ticket to Tainan.", "time": 1.582549}
+{"idx": "02", "asr": "我要買一張到臺南 (Tainan)的車票", "tgt": "ja", "out": "台南へのチケットを買いたい。", "time": 0.200637}
+{"idx": "02", "asr": "我要買一張到臺南 (Tainan)的車票", "tgt": "ko", "out": "타이난행 항공권을 사고 싶어요.", "time": 0.372728}
+{"idx": "02", "asr": "我要買一張到臺南 (Tainan)的車票", "tgt": "id", "out": "Saya ingin membeli satu tiket kereta api ke Tainan.", "time": 1.499286}
+{"idx": "02", "asr": "我要買一張到臺南 (Tainan)的車票", "tgt": "vi", "out": "Tôi muốn mua một vé tàu đi Đài Nam.", "time": 1.397134}
+{"idx": "02", "asr": "我要買一張到臺南 (Tainan)的車票", "tgt": "th", "out": "ฉันต้องการซื้อตั๋วรถไฟไปเมืองไทจง (Tainan) ค่ะ/ครับ。", "time": 3.036923}
+{"idx": "03", "asr": "請問這班車幾點發車", "tgt": "en", "out": "Could you please tell me what time this train departs?", "time": 1.634994}
+{"idx": "03", "asr": "請問這班車幾點發車", "tgt": "ja", "out": "この列車は何時に出発しますか。", "time": 0.16884}
+{"idx": "03", "asr": "請問這班車幾點發車", "tgt": "ko", "out": "이 기차는 몇 시에 떠나요?", "time": 0.314368}
+{"idx": "03", "asr": "請問這班車幾點發車", "tgt": "id", "out": "Berapa waktu keberangkatan kereta ini?", "time": 1.452459}
+{"idx": "03", "asr": "請問這班車幾點發車", "tgt": "vi", "out": "Cho tôi hỏi, chuyến xe này xuất phát lúc mấy giờ?", "time": 1.691023}
+{"idx": "03", "asr": "請問這班車幾點發車", "tgt": "th", "out": "รบกวนสอบถามว่ารถไฟขบวนนี้ออกเดินทางเวลาใดคะ/ครับ?", "time": 2.489897}
+{"idx": "04", "asr": "請問我要去第二月臺 (Platform)怎麼走", "tgt": "en", "out": "Could you please tell me how to get to Platform 2?", "time": 1.671606}
+{"idx": "04", "asr": "請問我要去第二月臺 (Platform)怎麼走", "tgt": "ja", "out": "どうやってホームに行くの？", "time": 0.193584}
+{"idx": "04", "asr": "請問我要去第二月臺 (Platform)怎麼走", "tgt": "ko", "out": "플랫폼에 어떻게 갈 수 있나요?", "time": 0.32106}
+{"idx": "04", "asr": "請問我要去第二月臺 (Platform)怎麼走", "tgt": "id", "out": "Mohon beritahu saya, bagaimana cara menuju peron kedua?", "time": 1.876684}
+{"idx": "04", "asr": "請問我要去第二月臺 (Platform)怎麼走", "tgt": "vi", "out": "Xin hỏi, tôi muốn đi đến nhà ga số 2, tôi phải đi đường nào?", "time": 2.659279}
+{"idx": "04", "asr": "請問我要去第二月臺 (Platform)怎麼走", "tgt": "th", "out": "ขอทราบเส้นทางไปยังชานชาลาหมายเลข 2 (Platform 2) หน่อยได้ไหมคะ/ครับ?", "time": 3.216196}
+{"idx": "05", "asr": "請問捷運入口 (Entrance)在哪裡?", "tgt": "en", "out": "Could you please tell me where the subway entrance is?", "time": 1.52603}
+{"idx": "05", "asr": "請問捷運入口 (Entrance)在哪裡?", "tgt": "ja", "out": "高速道路の入り口はどこですか。", "time": 0.200689}
+{"idx": "05", "asr": "請問捷運入口 (Entrance)在哪裡?", "tgt": "ko", "out": "고속도로 입구는 어디예요?", "time": 0.201765}
+{"idx": "05", "asr": "請問捷運入口 (Entrance)在哪裡?", "tgt": "id", "out": "Permisi, di mana pintu masuk stasiun kereta bawah tanah (MRT) berada?", "time": 2.350514}
+{"idx": "05", "asr": "請問捷運入口 (Entrance)在哪裡?", "tgt": "vi", "out": "Xin hỏi, lối vào ga tàu điện ngầm ở đâu ạ?", "time": 1.819221}
+{"idx": "05", "asr": "請問捷運入口 (Entrance)在哪裡?", "tgt": "th", "out": "รบกวนสอบถามว่าทางเข้าสถานีรถไฟฟ้า (รถไฟใต้ดิน) อยู่ที่ไหนคะ/ครับ?", "time": 3.345096}
+{"idx": "06", "asr": "請問到左營 (Zuoying)要搭哪一班車", "tgt": "en", "out": "Could you please tell me which bus to take to get to Zuoying?", "time": 1.977663}
+{"idx": "06", "asr": "請問到左營 (Zuoying)要搭哪一班車", "tgt": "ja", "out": "どちらの列車で豆英へ行くのか教えてください。", "time": 0.239746}
+{"idx": "06", "asr": "請問到左營 (Zuoying)要搭哪一班車", "tgt": "ko", "out": "어느 열차로 Zuoying에 가는지 말해주세요.", "time": 0.38766}
+{"idx": "06", "asr": "請問到左營 (Zuoying)要搭哪一班車", "tgt": "id", "out": "Mohon informasinya, kereta apa yang harus saya naiki untuk menuju Zuoying?", "time": 2.369421}
+{"idx": "06", "asr": "請問到左營 (Zuoying)要搭哪一班車", "tgt": "vi", "out": "Xin hỏi, để đến Zuoying, tôi nên đi tuyến xe nào?", "time": 1.944821}
+{"idx": "06", "asr": "請問到左營 (Zuoying)要搭哪一班車", "tgt": "th", "out": "รบกวนสอบถามว่าต้องขึ้นรถสายไหนเพื่อไปซูอิง (Zuoying) คะ?", "time": 3.056903}
+{"idx": "07", "asr": "一張到新左營 (Zuoying) (Xinzuoying)的票多少錢", "tgt": "en", "out": "How much does a ticket to Zuoying cost?", "time": 1.327743}
+{"idx": "07", "asr": "一張到新左營 (Zuoying) (Xinzuoying)的票多少錢", "tgt": "ja", "out": "左營へのチケットはいくらですか。", "time": 0.238872}
+{"idx": "07", "asr": "一張到新左營 (Zuoying) (Xinzuoying)的票多少錢", "tgt": "ko", "out": "Zuoying에 가는 티켓은 얼마입니까?", "time": 0.408745}
+{"idx": "07", "asr": "一張到新左營 (Zuoying) (Xinzuoying)的票多少錢", "tgt": "id", "out": "Berapa harga tiket ke Xinzuoying?", "time": 1.344262}
+{"idx": "07", "asr": "一張到新左營 (Zuoying) (Xinzuoying)的票多少錢", "tgt": "vi", "out": "Giá vé đi từ đây đến Zuoying (Xinzuoying) là bao nhiêu tiền?", "time": 2.318109}
+{"idx": "07", "asr": "一張到新左營 (Zuoying) (Xinzuoying)的票多少錢", "tgt": "th", "out": "ตั๋วรถไปสถานีใหม่ซูอิง (Xinzuoying) ราคาเท่าไหร่?", "time": 2.780903}
+{"idx": "08", "asr": "請問這裡可以使用電子票證嗎?", "tgt": "en", "out": "Can I use a contactless payment card here?", "time": 1.357301}
+{"idx": "08", "asr": "請問這裡可以使用電子票證嗎?", "tgt": "ja", "out": "ここで電子チケットを使えますか。", "time": 0.207187}
+{"idx": "08", "asr": "請問這裡可以使用電子票證嗎?", "tgt": "ko", "out": "여기서 e-티켓을 사용할 수 있나요?", "time": 0.361371}
+{"idx": "08", "asr": "請問這裡可以使用電子票證嗎?", "tgt": "id", "out": "Apakah di sini dapat menggunakan kartu elektronik?", "time": 1.210511}
+{"idx": "08", "asr": "請問這裡可以使用電子票證嗎?", "tgt": "vi", "out": "Xin hỏi, có thể sử dụng thẻ điện tử ở đây không?", "time": 1.940723}
+{"idx": "08", "asr": "請問這裡可以使用電子票證嗎?", "tgt": "th", "out": "รบกวนสอบถามว่า ที่นี่สามารถใช้บัตรโดยสารอิเล็กทรอนิกส์ได้หรือไม่คะ/ครับ?", "time": 3.419261}
+{"idx": "09", "asr": "我想退款,請問要去哪裡?", "tgt": "en", "out": "I would like to request a refund. Where should I go?", "time": 1.783447}
+{"idx": "09", "asr": "我想退款,請問要去哪裡?", "tgt": "ja", "out": "返金したいんだ どこに行けばいい？", "time": 0.249259}
+{"idx": "09", "asr": "我想退款,請問要去哪裡?", "tgt": "ko", "out": "환불을 원합니다. 어디로 가야 하나요?", "time": 0.384289}
+{"idx": "09", "asr": "我想退款,請問要去哪裡?", "tgt": "id", "out": "Saya ingin mengajukan pengembalian dana, mohon beritahu saya ke mana saya harus pergi.", "time": 2.694419}
+{"idx": "09", "asr": "我想退款,請問要去哪裡?", "tgt": "vi", "out": "Tôi muốn trả lại hàng, xin hỏi tôi phải đến đâu?", "time": 1.707408}
+{"idx": "09", "asr": "我想退款,請問要去哪裡?", "tgt": "th", "out": "ฉันต้องการขอคืนเงิน กรุณาบอกฉันหน่อยว่าต้องไปที่ไหน?", "time": 2.224459}
+{"idx": "10", "asr": "請問洗手間在哪裡?", "tgt": "en", "out": "Could you please tell me where the restroom is?", "time": 1.510375}
+{"idx": "10", "asr": "請問洗手間在哪裡?", "tgt": "ja", "out": "トイレはどこですか。", "time": 0.132952}
+{"idx": "10", "asr": "請問洗手間在哪裡?", "tgt": "ko", "out": "화장실은 어디 있어요?", "time": 0.285056}
+{"idx": "10", "asr": "請問洗手間在哪裡?", "tgt": "id", "out": "Permisi, di mana letak toiletnya?", "time": 1.378754}
+{"idx": "10", "asr": "請問洗手間在哪裡?", "tgt": "vi", "out": "Xin hỏi nhà vệ sinh ở đâu ạ?", "time": 1.228976}
+{"idx": "10", "asr": "請問洗手間在哪裡?", "tgt": "th", "out": "ห้องน้ำอยู่ที่ไหนคะ/ครับ?", "time": 1.100413}
+{"idx": "11", "asr": "請問置物櫃在幾樓", "tgt": "en", "out": "Could you please tell me which floor the lockers are located on?", "time": 1.816583}
+{"idx": "11", "asr": "請問置物櫃在幾樓", "tgt": "ja", "out": "ロッカーはどれくらい高い？", "time": 0.190476}
+{"idx": "11", "asr": "請問置物櫃在幾樓", "tgt": "ko", "out": "사물함은 얼마나 높아요?", "time": 0.330802}
+{"idx": "11", "asr": "請問置物櫃在幾樓", "tgt": "id", "out": "Mohon informasinya, loker berada di lantai berapa?", "time": 1.675426}
+{"idx": "11", "asr": "請問置物櫃在幾樓", "tgt": "vi", "out": "Xin hỏi tủ đồ để đồ ở tầng nào?", "time": 1.362074}
+{"idx": "11", "asr": "請問置物櫃在幾樓", "tgt": "th", "out": "รบกวนสอบถามว่าตู้เก็บของอยู่ที่ชั้นไหนคะ/ครับ?", "time": 2.348824}
+{"idx": "12", "asr": "我想去美麗島站,怎麼轉成捷運", "tgt": "en", "out": "I want to go to the \"Beautiful Island\" station. How can I transfer to the MRT (subway)?", "time": 2.961197}
+{"idx": "12", "asr": "我想去美麗島站,怎麼轉成捷運", "tgt": "ja", "out": "梅里島駅に行きたいのですが どうやって特急に乗り換えますか？", "time": 0.345475}
+{"idx": "12", "asr": "我想去美麗島站,怎麼轉成捷運", "tgt": "ko", "out": "메리지마역으로 가고 싶습니다. 고속열차로 환승하는 방법", "time": 0.471343}
+{"idx": "12", "asr": "我想去美麗島站,怎麼轉成捷運", "tgt": "id", "out": "Saya ingin pergi ke Stasiun Meilidao, bagaimana cara berpindah menggunakan kereta bawah tanah (MRT)?", "time": 2.715502}
+{"idx": "12", "asr": "我想去美麗島站,怎麼轉成捷運", "tgt": "vi", "out": "Tôi muốn đi đến ga \"Đảo Đẹp\", làm thế nào để chuyển sang tàu điện ngầm?", "time": 2.746814}
+{"idx": "12", "asr": "我想去美麗島站,怎麼轉成捷運", "tgt": "th", "out": "ฉันต้องการไปสถานี \"เมย์หลี่เตา\" (美丽岛站) จะต้องเปลี่ยนไปใช้รถไฟฟ้าใต้ดินอย่างไรบ้าง?", "time": 3.721537}
+{"idx": "13", "asr": "我的手機不見了,請問要去哪裡報屍?", "tgt": "en", "out": "My phone is missing. Could you please tell me where I can report it?", "time": 2.057899}
+{"idx": "13", "asr": "我的手機不見了,請問要去哪裡報屍?", "tgt": "ja", "out": "どこに行きたいの？", "time": 0.155828}
+{"idx": "13", "asr": "我的手機不見了,請問要去哪裡報屍?", "tgt": "ko", "out": "어디로 가시겠습니까?", "time": 0.307225}
+{"idx": "13", "asr": "我的手機不見了,請問要去哪裡報屍?", "tgt": "id", "out": "Ponsel saya hilang, saya ingin bertanya, di mana saya bisa melaporkan kehilangan tersebut?", "time": 2.48499}
+{"idx": "13", "asr": "我的手機不見了,請問要去哪裡報屍?", "tgt": "vi", "out": "Điện thoại của tôi bị mất, tôi muốn hỏi phải đi đâu để báo mất.", "time": 2.310094}
+{"idx": "13", "asr": "我的手機不見了,請問要去哪裡報屍?", "tgt": "th", "out": "โทรศัพท์มือถือของฉันหายไปแล้ว ฉันควรไปแจ้งความที่ไหนคะ/ครับ?", "time": 2.649079}
+{"idx": "14", "asr": "請說慢一點,我聽不太清楚", "tgt": "en", "out": "Please speak a little slower; I can't hear you very well.", "time": 1.982863}
+{"idx": "14", "asr": "請說慢一點,我聽不太清楚", "tgt": "ja", "out": "ゆっくり　聞こえない", "time": 0.192303}
+{"idx": "14", "asr": "請說慢一點,我聽不太清楚", "tgt": "ko", "out": "제발 천천히요 들리지 않아요", "time": 0.361751}
+{"idx": "14", "asr": "請說慢一點,我聽不太清楚", "tgt": "id", "out": "Tolong bicaralah lebih pelan, saya kurang jelas mendengarnya.", "time": 2.105466}
+{"idx": "14", "asr": "請說慢一點,我聽不太清楚", "tgt": "vi", "out": "Xin vui lòng nói chậm hơn một chút, tôi không nghe rõ lắm.", "time": 1.963005}
+{"idx": "14", "asr": "請說慢一點,我聽不太清楚", "tgt": "th", "out": "กรุณาพูดช้าๆ หน่อยนะคะ ฉันฟังไม่ค่อยชัดค่ะ/ครับ", "time": 2.394487}
+{"idx": "15", "asr": "我身體不舒服,請幫我叫站務人員", "tgt": "en", "out": "I'm not feeling well. Please call a station attendant for me.", "time": 1.987064}
+{"idx": "15", "asr": "我身體不舒服,請幫我叫站務人員", "tgt": "ja", "out": "気分が悪い 待合室に電話してください", "time": 0.228212}
+{"idx": "15", "asr": "我身體不舒服,請幫我叫站務人員", "tgt": "ko", "out": "기분이 안 좋아요 간호사한테 전화해주세요", "time": 0.405357}
+{"idx": "15", "asr": "我身體不舒服,請幫我叫站務人員", "tgt": "id", "out": "Saya merasa tidak enak badan, tolong panggil petugas stasiun untuk membantu saya.", "time": 2.244586}
+{"idx": "15", "asr": "我身體不舒服,請幫我叫站務人員", "tgt": "vi", "out": "Tôi cảm thấy không khỏe, xin hãy giúp tôi gọi nhân viên nhà ga.", "time": 2.069515}
+{"idx": "15", "asr": "我身體不舒服,請幫我叫站務人員", "tgt": "th", "out": "ฉันรู้สึกไม่สบายตัว ขอความช่วยเหลือจากเจ้าหน้าที่สถานีด้วยค่ะ/ครับ。", "time": 2.345925}
+{"idx": "16", "asr": "請問這班車會停臺南 (Tainan)嗎?", "tgt": "en", "out": "Does this train stop at Tainan?", "time": 1.128005}
+{"idx": "16", "asr": "請問這班車會停臺南 (Tainan)嗎?", "tgt": "ja", "out": "この列車は台南に停車しますか。", "time": 0.195418}
+{"idx": "16", "asr": "請問這班車會停臺南 (Tainan)嗎?", "tgt": "ko", "out": "이 기차가 타이난에 정차하나요?", "time": 0.344391}
+{"idx": "16", "asr": "請問這班車會停臺南 (Tainan)嗎?", "tgt": "id", "out": "Apakah kereta ini akan berhenti di Tainan?", "time": 1.255541}
+{"idx": "16", "asr": "請問這班車會停臺南 (Tainan)嗎?", "tgt": "vi", "out": "Xin hỏi, chuyến tàu này có dừng ở Đài Nam không?", "time": 1.774303}
+{"idx": "16", "asr": "請問這班車會停臺南 (Tainan)嗎?", "tgt": "th", "out": "รถไฟขบวนนี้จะจอดที่เมืองไถหนาน (Tainan) หรือไม่คะ/ครับ?", "time": 3.224313}
+{"idx": "17", "asr": "請問出口 (Exit)在哪裡?", "tgt": "en", "out": "Could you please tell me where the exit is?", "time": 1.500977}
+{"idx": "17", "asr": "請問出口 (Exit)在哪裡?", "tgt": "ja", "out": "出口はどこですか。", "time": 0.133461}
+{"idx": "17", "asr": "請問出口 (Exit)在哪裡?", "tgt": "ko", "out": "출구는 어디예요?", "time": 0.2676}
+{"idx": "17", "asr": "請問出口 (Exit)在哪裡?", "tgt": "id", "out": "Permisi, di mana pintu keluarnya?", "time": 1.281832}
+{"idx": "17", "asr": "請問出口 (Exit)在哪裡?", "tgt": "vi", "out": "Xin hỏi, lối ra ở đâu?", "time": 1.136634}
+{"idx": "17", "asr": "請問出口 (Exit)在哪裡?", "tgt": "th", "out": "ขอโทษนะคะ ทางออกอยู่ที่ไหนคะ?", "time": 1.253772}
+{"idx": "18", "asr": "請問公車站在哪裡?", "tgt": "en", "out": "Could you please tell me where the bus stop is?", "time": 1.510859}
+{"idx": "18", "asr": "請問公車站在哪裡?", "tgt": "ja", "out": "バス停はどこですか。", "time": 0.166307}
+{"idx": "18", "asr": "請問公車站在哪裡?", "tgt": "ko", "out": "버스 정류장은 어디예요?", "time": 0.186684}
+{"idx": "18", "asr": "請問公車站在哪裡?", "tgt": "id", "out": "Permisi, di mana halte bus berada?", "time": 1.269316}
+{"idx": "18", "asr": "請問公車站在哪裡?", "tgt": "vi", "out": "Xin hỏi, trạm xe buýt ở đâu ạ?", "time": 1.62962}
+{"idx": "18", "asr": "請問公車站在哪裡?", "tgt": "th", "out": "รบกวนสอบถามว่าป้ายรถเมล์อยู่ที่ไหนคะ/ครับ?", "time": 2.336079}
+{"idx": "19", "asr": "請問這裡可以寄放大型行李嗎?", "tgt": "en", "out": "\"Is it possible to store large luggage here?\"", "time": 1.499465}
+{"idx": "19", "asr": "請問這裡可以寄放大型行李嗎?", "tgt": "ja", "out": "大型の荷物をここに置いてもいいですか。", "time": 0.232492}
+{"idx": "19", "asr": "請問這裡可以寄放大型行李嗎?", "tgt": "ko", "out": "대형 수하물을 여기에 두고 갈 수 있어요?", "time": 0.242037}
+{"idx": "19", "asr": "請問這裡可以寄放大型行李嗎?", "tgt": "id", "out": "Apakah di sini tersedia layanan penitipan barang untuk bagasi berukuran besar?", "time": 2.020791}
+{"idx": "19", "asr": "請問這裡可以寄放大型行李嗎?", "tgt": "vi", "out": "Xin hỏi, ở đây có dịch vụ giữ hành lý lớn không?", "time": 1.881576}
+{"idx": "19", "asr": "請問這裡可以寄放大型行李嗎?", "tgt": "th", "out": "รบกวนสอบถามว่า ที่นี่มีบริการรับฝากสัมภาระขนาดใหญ่หรือไม่คะ/ครับ?", "time": 3.10953}
+{"idx": "20", "asr": "謝謝您的幫忙,祝您有美好的一天", "tgt": "en", "out": "Thank you for your help. I wish you a wonderful day.", "time": 1.742103}
+{"idx": "20", "asr": "謝謝您的幫忙,祝您有美好的一天", "tgt": "ja", "out": "助けてくれてありがとう 良い一日を", "time": 0.228116}
+{"idx": "20", "asr": "謝謝您的幫忙,祝您有美好的一天", "tgt": "ko", "out": "당신의 도움과 좋은 하루를 주셔서 감사합니다", "time": 0.232453}
+{"idx": "20", "asr": "謝謝您的幫忙,祝您有美好的一天", "tgt": "id", "out": "Terima kasih atas bantuannya, semoga Anda memiliki hari yang menyenangkan.", "time": 1.878728}
+{"idx": "20", "asr": "謝謝您的幫忙,祝您有美好的一天", "tgt": "vi", "out": "Cảm ơn sự giúp đỡ của bạn, chúc bạn một ngày tốt lành.", "time": 2.123534}
+{"idx": "20", "asr": "謝謝您的幫忙,祝您有美好的一天", "tgt": "th", "out": "ขอบคุณสำหรับความช่วยเหลือ ขอให้คุณมีวันที่ดีนะคะ/ครับ", "time": 1.859257}
