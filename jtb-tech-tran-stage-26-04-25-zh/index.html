@@ -56,14 +56,26 @@ footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
 <div class="card">
 <h2>測試結果摘要</h2>
 <div class="stats">
-<div class="stat"><div class="number" style="color:#9ca3af;">待評分</div><div class="label">正確率<br>(0/120)</div></div>
-<div class="stat"><div class="number" style="color:#16a34a;">0</div><div class="label">通過</div></div>
-<div class="stat"><div class="number" style="color:#dc2626;">0</div><div class="label">失敗</div></div>
-<div class="stat"><div class="number" style="color:#6b7280;">120</div><div class="label">待評</div></div>
-<div class="stat"><div class="number" style="color:#6b7280;">6</div><div class="label">語系</div></div>
-<div class="stat"><div class="number" style="color:#6b7280;">20</div><div class="label">句/語系</div></div>
+<div class="stat"><div class="number" style="color:#9ca3af;">待評分</div><div class="label">正確率<br>(尚未評分)</div></div>
+<div class="stat"><div class="number" style="color:#6b7280;">120</div><div class="label">待評<br>(0 pass / 0 fail)</div></div>
+<div class="stat"><div class="number" style="color:#6b7280;">6</div><div class="label">目標語系<br>(EN JA KO ID VI TH)</div></div>
+<div class="stat"><div class="number" style="color:#6b7280;">20</div><div class="label">中文句/語系</div></div>
+<div class="stat"><div class="number" style="color:#2563eb;">zh → xx</div><div class="label">方向<br>（中文為來源）</div></div>
 </div>
-<p style="margin-top:1rem;color:#6b7280;font-size:0.85rem;">評分規則（沿用 HackMD <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">Sk9Um7FcWx</a>）：翻譯正確率 ≥ 70%、每句反應時間 &lt; 3 秒。Reviewer 需懂對應語言（en / ja / ko / id / vi / th）。</p>
+<p style="margin-top:1rem;color:#6b7280;font-size:0.85rem;">⚠ 本次是 <b>zh → 外語</b>，中文為來源；每題第 3 欄「中文參考」就是原句，第 4 欄為 Whisper ASR 結果，第 5 欄為翻譯輸出。評分規則（沿用 HackMD <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">Sk9Um7FcWx</a>）：翻譯正確率 ≥ 70%、每句反應時間 &lt; 3 秒。Reviewer 需懂對應語言。</p>
+</div>
+
+<div class="card">
+<h2>音檔樣本（首 3 題中文來源）</h2>
+<table>
+<thead><tr><th>#</th><th>音檔（TTS + golden_background 混音）</th><th>中文內容</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td><td>您好，請問高雄車站的售票窗口在哪裡？</td></tr>
+<tr><td>2</td><td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td><td>我要買一張到台南的車票。</td></tr>
+<tr><td>3</td><td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td><td>請問這班車幾點發車？</td></tr>
+</tbody>
+</table>
+<p style="color:#6b7280;font-size:0.85rem;margin-top:0.5rem;">混音參數：<code>ffmpeg -i TTS.mp3 -i golden_background.wav -filter_complex "[1:a]volume=0.5[bg];[0:a][bg]amix=inputs=2:duration=first"</code> ｜ 驗證：TTS 原 -19.6 dB → 混音後 -26.0 dB（背景音 -47.5 dB，有混入）</p>
 </div>
 
 <div class="card">
