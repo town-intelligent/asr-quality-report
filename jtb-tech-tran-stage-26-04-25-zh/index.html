@@ -56,13 +56,15 @@ footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
 <div class="card">
 <h2>測試結果摘要</h2>
 <div class="stats">
-<div class="stat"><div class="number" style="color:#9ca3af;">待評分</div><div class="label">正確率<br>(尚未評分)</div></div>
-<div class="stat"><div class="number" style="color:#6b7280;">120</div><div class="label">待評<br>(0 pass / 0 fail)</div></div>
-<div class="stat"><div class="number" style="color:#6b7280;">6</div><div class="label">目標語系<br>(EN JA KO ID VI TH)</div></div>
-<div class="stat"><div class="number" style="color:#6b7280;">20</div><div class="label">中文句/語系</div></div>
+<div class="stat"><div class="number" style="color:#16a34a;">79.2%</div><div class="label">正確率<br>(95/120)</div></div>
+<div class="stat"><div class="number" style="color:#16a34a;">95</div><div class="label">通過</div></div>
+<div class="stat"><div class="number" style="color:#dc2626;">25</div><div class="label">失敗</div></div>
+<div class="stat"><div class="number" style="color:#dc2626;">48%</div><div class="label">Madlad bridging<br>(ja+ko = 19/40)</div></div>
+<div class="stat"><div class="number" style="color:#16a34a;">95%</div><div class="label">TranslateGemma<br>(en+id+vi+th = 76/80)</div></div>
 <div class="stat"><div class="number" style="color:#2563eb;">zh → xx</div><div class="label">方向<br>（中文為來源）</div></div>
 </div>
-<p style="margin-top:1rem;color:#6b7280;font-size:0.85rem;">⚠ 本次是 <b>zh → 外語</b>，中文為來源；每題第 3 欄「中文參考」就是原句，第 4 欄為 Whisper ASR 結果，第 5 欄為翻譯輸出。評分規則（沿用 HackMD <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">Sk9Um7FcWx</a>）：翻譯正確率 ≥ 70%、每句反應時間 &lt; 3 秒。Reviewer 需懂對應語言。</p>
+<p style="margin-top:1rem;color:#6b7280;font-size:0.85rem;">⚠ 本次是 <b>zh → 外語</b>，中文為來源；每題第 3 欄「中文參考」為原句，第 4 欄為 Whisper ASR，第 5 欄為翻譯結果（下方小字為期望翻譯 ground truth）。評分人：Claude（自評，對照 HackMD <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">Sk9Um7FcWx</a> ground truth）。合格線：翻譯正確率 ≥ 70%、每句反應時間 &lt; 3 秒。</p>
+<p style="margin-top:0.5rem;color:#dc2626;font-size:0.9rem;font-weight:bold;">🔥 關鍵發現：Madlad bridging 路徑（ja/ko）僅 48%，遠低於 TranslateGemma 的 95%。常見錯誤：地名亂碼（高雄→&lt;0xEC&gt;、美麗島→梅里島/梅里じま、Zuoying→豆英）、語意錯譯（捷運→高速公路、站務員→護士/待合室）。</p>
 </div>
 
 <div class="card">
@@ -79,1137 +81,1131 @@ footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
 </div>
 
 <div class="card">
-<h2>English（EN）— 0/20 <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
+<h2>English（EN）— <span style="color:#16a34a">19/20</span> <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
 <table>
-<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th>時間</th><th>評分</th></tr></thead>
+<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果（+ 期望）</th><th>時間</th><th>評分</th></tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>您好，請問高雄車站的售票窗口在哪裡？</td>
-<td>您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
-<td>Hello, could you please tell me where the ticket counter is located at the Kaohsiung train station?</td>
+<td style="font-size:0.8rem;color:#475569">您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
+<td><div>Hello, could you please tell me where the ticket counter is located at the Kaohsiung train station?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Hello, where is the ticket counter at Kaohsiung Station?</div></td>
 <td>2.84s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>2</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我要買一張到台南的車票。</td>
-<td>我要買一張到臺南 (Tainan)的車票</td>
-<td>I would like to buy a train ticket to Tainan.</td>
+<td style="font-size:0.8rem;color:#475569">我要買一張到臺南 (Tainan)的車票</td>
+<td><div>I would like to buy a train ticket to Tainan.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：I would like to buy one ticket to Tainan.</div></td>
 <td>1.58s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>3</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車幾點發車？</td>
-<td>請問這班車幾點發車</td>
-<td>Could you please tell me what time this train departs?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車幾點發車</td>
+<td><div>Could you please tell me what time this train departs?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：What time does this train leave?</div></td>
 <td>1.63s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>4</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/04_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問我要去第二月台怎麼走？</td>
-<td>請問我要去第二月臺 (Platform)怎麼走</td>
-<td>Could you please tell me how to get to Platform 2?</td>
+<td style="font-size:0.8rem;color:#475569">請問我要去第二月臺 (Platform)怎麼走</td>
+<td><div>Could you please tell me how to get to Platform 2?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：How can I get to Platform 2?</div></td>
 <td>1.67s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>5</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/05_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問捷運入口在哪裡？</td>
-<td>請問捷運入口 (Entrance)在哪裡?</td>
-<td>Could you please tell me where the subway entrance is?</td>
+<td style="font-size:0.8rem;color:#475569">請問捷運入口 (Entrance)在哪裡?</td>
+<td><div>Could you please tell me where the subway entrance is?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Where is the metro entrance?</div></td>
 <td>1.53s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>6</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/06_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問到左營要搭哪一班車？</td>
-<td>請問到左營 (Zuoying)要搭哪一班車</td>
-<td>Could you please tell me which bus to take to get to Zuoying?</td>
+<td style="font-size:0.8rem;color:#475569">請問到左營 (Zuoying)要搭哪一班車</td>
+<td><div>Could you please tell me which bus to take to get to Zuoying?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Which train should I take to Zuoying?</div></td>
 <td>1.98s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>7</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/07_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>一張到新左營的票多少錢？</td>
-<td>一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
-<td>How much does a ticket to Zuoying cost?</td>
+<td style="font-size:0.8rem;color:#475569">一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
+<td><div>How much does a ticket to Zuoying cost?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：How much is one ticket to Xinzuoying?</div></td>
 <td>1.33s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">漏『新』— 新左營翻成 Zuoying（應為 Xinzuoying）</div></td>
 </tr>
 <tr>
 <td>8</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/08_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以使用電子票證嗎？</td>
-<td>請問這裡可以使用電子票證嗎?</td>
-<td>Can I use a contactless payment card here?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以使用電子票證嗎?</td>
+<td><div>Can I use a contactless payment card here?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Can I use an electronic transit card here?</div></td>
 <td>1.36s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>9</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/09_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想退款，請問要去哪裡？</td>
-<td>我想退款,請問要去哪裡?</td>
-<td>I would like to request a refund. Where should I go?</td>
+<td style="font-size:0.8rem;color:#475569">我想退款,請問要去哪裡?</td>
+<td><div>I would like to request a refund. Where should I go?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：I would like a refund. Where should I go?</div></td>
 <td>1.78s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>10</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/10_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問洗手間在哪裡？</td>
-<td>請問洗手間在哪裡?</td>
-<td>Could you please tell me where the restroom is?</td>
+<td style="font-size:0.8rem;color:#475569">請問洗手間在哪裡?</td>
+<td><div>Could you please tell me where the restroom is?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Where is the restroom?</div></td>
 <td>1.51s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>11</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/11_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問置物櫃在幾樓？</td>
-<td>請問置物櫃在幾樓</td>
-<td>Could you please tell me which floor the lockers are located on?</td>
+<td style="font-size:0.8rem;color:#475569">請問置物櫃在幾樓</td>
+<td><div>Could you please tell me which floor the lockers are located on?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：On which floor are the lockers?</div></td>
 <td>1.82s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>12</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/12_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想去美麗島站，怎麼轉乘捷運？</td>
-<td>我想去美麗島站,怎麼轉成捷運</td>
-<td>I want to go to the "Beautiful Island" station. How can I transfer to the MRT (subway)?</td>
+<td style="font-size:0.8rem;color:#475569">我想去美麗島站,怎麼轉成捷運</td>
+<td><div>I want to go to the "Beautiful Island" station. How can I transfer to the MRT (subway)?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：I want to go to Formosa Boulevard Station. How do I transfer to the metro?</div></td>
 <td>2.96s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>13</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/13_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我的手機不見了，請問要去哪裡報失？</td>
-<td>我的手機不見了,請問要去哪裡報屍?</td>
-<td>My phone is missing. Could you please tell me where I can report it?</td>
+<td style="font-size:0.8rem;color:#475569">我的手機不見了,請問要去哪裡報屍?</td>
+<td><div>My phone is missing. Could you please tell me where I can report it?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：I lost my phone. Where can I report it?</div></td>
 <td>2.06s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>14</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/14_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請說慢一點，我聽不太清楚。</td>
-<td>請說慢一點,我聽不太清楚</td>
-<td>Please speak a little slower; I can't hear you very well.</td>
+<td style="font-size:0.8rem;color:#475569">請說慢一點,我聽不太清楚</td>
+<td><div>Please speak a little slower; I can't hear you very well.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Please speak more slowly. I cannot hear clearly.</div></td>
 <td>1.98s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>15</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/15_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我身體不舒服，請幫我叫站務人員。</td>
-<td>我身體不舒服,請幫我叫站務人員</td>
-<td>I'm not feeling well. Please call a station attendant for me.</td>
+<td style="font-size:0.8rem;color:#475569">我身體不舒服,請幫我叫站務人員</td>
+<td><div>I'm not feeling well. Please call a station attendant for me.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：I do not feel well. Please call a station staff member.</div></td>
 <td>1.99s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>16</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/16_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車會停台南嗎？</td>
-<td>請問這班車會停臺南 (Tainan)嗎?</td>
-<td>Does this train stop at Tainan?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車會停臺南 (Tainan)嗎?</td>
+<td><div>Does this train stop at Tainan?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Does this train stop at Tainan?</div></td>
 <td>1.13s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>17</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/17_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問出口在哪裡？</td>
-<td>請問出口 (Exit)在哪裡?</td>
-<td>Could you please tell me where the exit is?</td>
+<td style="font-size:0.8rem;color:#475569">請問出口 (Exit)在哪裡?</td>
+<td><div>Could you please tell me where the exit is?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Where is the exit?</div></td>
 <td>1.50s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>18</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/18_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問公車站在哪裡？</td>
-<td>請問公車站在哪裡?</td>
-<td>Could you please tell me where the bus stop is?</td>
+<td style="font-size:0.8rem;color:#475569">請問公車站在哪裡?</td>
+<td><div>Could you please tell me where the bus stop is?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Where is the bus stop?</div></td>
 <td>1.51s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>19</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/19_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以寄放大型行李嗎？</td>
-<td>請問這裡可以寄放大型行李嗎?</td>
-<td>"Is it possible to store large luggage here?"</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以寄放大型行李嗎?</td>
+<td><div>"Is it possible to store large luggage here?"</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Can I leave large luggage here?</div></td>
 <td>1.50s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>20</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/20_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>謝謝您的幫忙，祝您有美好的一天。</td>
-<td>謝謝您的幫忙,祝您有美好的一天</td>
-<td>Thank you for your help. I wish you a wonderful day.</td>
+<td style="font-size:0.8rem;color:#475569">謝謝您的幫忙,祝您有美好的一天</td>
+<td><div>Thank you for your help. I wish you a wonderful day.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Thank you for your help. Have a nice day.</div></td>
 <td>1.74s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 </tbody></table>
-<p style="font-size:0.8rem;color:#6b7280;">期望翻譯（ground truth）可參考 <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">HackMD Sk9Um7FcWx</a>。</p>
 </div>
 
 <div class="card">
-<h2>日本語（JA）— 0/20 <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#fed7aa;color:#9a3412">Madlad bridging</span></span></h2>
+<h2>日本語（JA）— <span style="color:#dc2626">10/20</span> <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#fed7aa;color:#9a3412">Madlad bridging</span></span></h2>
 <table>
-<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th>時間</th><th>評分</th></tr></thead>
+<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果（+ 期望）</th><th>時間</th><th>評分</th></tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>您好，請問高雄車站的售票窗口在哪裡？</td>
-<td>您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
-<td>もしもし、高雄駅の切符売り場はどこですか。</td>
+<td style="font-size:0.8rem;color:#475569">您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
+<td><div>もしもし、高雄駅の切符売り場はどこですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：こんにちは、高雄駅の切符売り場はどこですか。</div></td>
 <td>0.44s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『もしもし』是電話招呼，當面應為『こんにちは』</div></td>
 </tr>
 <tr>
 <td>2</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我要買一張到台南的車票。</td>
-<td>我要買一張到臺南 (Tainan)的車票</td>
-<td>台南へのチケットを買いたい。</td>
+<td style="font-size:0.8rem;color:#475569">我要買一張到臺南 (Tainan)的車票</td>
+<td><div>台南へのチケットを買いたい。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：台南までの切符を一枚買いたいです。</div></td>
 <td>0.20s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>3</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車幾點發車？</td>
-<td>請問這班車幾點發車</td>
-<td>この列車は何時に出発しますか。</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車幾點發車</td>
+<td><div>この列車は何時に出発しますか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：この電車は何時に出発しますか。</div></td>
 <td>0.17s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>4</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/04_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問我要去第二月台怎麼走？</td>
-<td>請問我要去第二月臺 (Platform)怎麼走</td>
-<td>どうやってホームに行くの？</td>
+<td style="font-size:0.8rem;color:#475569">請問我要去第二月臺 (Platform)怎麼走</td>
+<td><div>どうやってホームに行くの？</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：2番ホームへはどう行けばいいですか。</div></td>
 <td>0.19s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">漏『第二月台』— 『ホーム』沒指定 2 番</div></td>
 </tr>
 <tr>
 <td>5</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/05_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問捷運入口在哪裡？</td>
-<td>請問捷運入口 (Entrance)在哪裡?</td>
-<td>高速道路の入り口はどこですか。</td>
+<td style="font-size:0.8rem;color:#475569">請問捷運入口 (Entrance)在哪裡?</td>
+<td><div>高速道路の入り口はどこですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：地下鉄の入口はどこですか。</div></td>
 <td>0.20s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『高速道路』(highway) 錯譯『捷運』；應為『地下鉄』</div></td>
 </tr>
 <tr>
 <td>6</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/06_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問到左營要搭哪一班車？</td>
-<td>請問到左營 (Zuoying)要搭哪一班車</td>
-<td>どちらの列車で豆英へ行くのか教えてください。</td>
+<td style="font-size:0.8rem;color:#475569">請問到左營 (Zuoying)要搭哪一班車</td>
+<td><div>どちらの列車で豆英へ行くのか教えてください。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：左営へ行くにはどの電車に乗ればいいですか。</div></td>
 <td>0.24s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『豆英』— 明顯 bridging 亂碼（Zuoying 譯錯）</div></td>
 </tr>
 <tr>
 <td>7</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/07_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>一張到新左營的票多少錢？</td>
-<td>一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
-<td>左營へのチケットはいくらですか。</td>
+<td style="font-size:0.8rem;color:#475569">一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
+<td><div>左營へのチケットはいくらですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：新左営までの切符はいくらですか。</div></td>
 <td>0.24s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">漏『新』— 新左營→左營</div></td>
 </tr>
 <tr>
 <td>8</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/08_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以使用電子票證嗎？</td>
-<td>請問這裡可以使用電子票證嗎?</td>
-<td>ここで電子チケットを使えますか。</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以使用電子票證嗎?</td>
+<td><div>ここで電子チケットを使えますか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ここで交通系ICカードは使えますか。</div></td>
 <td>0.21s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>9</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/09_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想退款，請問要去哪裡？</td>
-<td>我想退款,請問要去哪裡?</td>
-<td>返金したいんだ どこに行けばいい？</td>
+<td style="font-size:0.8rem;color:#475569">我想退款,請問要去哪裡?</td>
+<td><div>返金したいんだ どこに行けばいい？</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：返金をお願いしたいのですが、どこへ行けばいいですか。</div></td>
 <td>0.25s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>10</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/10_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問洗手間在哪裡？</td>
-<td>請問洗手間在哪裡?</td>
-<td>トイレはどこですか。</td>
+<td style="font-size:0.8rem;color:#475569">請問洗手間在哪裡?</td>
+<td><div>トイレはどこですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：お手洗いはどこですか。</div></td>
 <td>0.13s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>11</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/11_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問置物櫃在幾樓？</td>
-<td>請問置物櫃在幾樓</td>
-<td>ロッカーはどれくらい高い？</td>
+<td style="font-size:0.8rem;color:#475569">請問置物櫃在幾樓</td>
+<td><div>ロッカーはどれくらい高い？</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：コインロッカーは何階ですか。</div></td>
 <td>0.19s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『どれくらい高い？』(多高) 誤譯『幾樓』— 應為『何階』</div></td>
 </tr>
 <tr>
 <td>12</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/12_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想去美麗島站，怎麼轉乘捷運？</td>
-<td>我想去美麗島站,怎麼轉成捷運</td>
-<td>梅里島駅に行きたいのですが どうやって特急に乗り換えますか？</td>
+<td style="font-size:0.8rem;color:#475569">我想去美麗島站,怎麼轉成捷運</td>
+<td><div>梅里島駅に行きたいのですが どうやって特急に乗り換えますか？</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：美麗島駅に行きたいのですが、地下鉄への乗り換えはどうすればいいですか。</div></td>
 <td>0.35s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『梅里島』錯寫（應美麗島）；『特急』(express train) 錯譯捷運</div></td>
 </tr>
 <tr>
 <td>13</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/13_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我的手機不見了，請問要去哪裡報失？</td>
-<td>我的手機不見了,請問要去哪裡報屍?</td>
-<td>どこに行きたいの？</td>
+<td style="font-size:0.8rem;color:#475569">我的手機不見了,請問要去哪裡報屍?</td>
+<td><div>どこに行きたいの？</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：携帯電話をなくしました。どこで届け出ればいいですか。</div></td>
 <td>0.16s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『どこに行きたいの？』完全丟失原句『手機不見了報失』</div></td>
 </tr>
 <tr>
 <td>14</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/14_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請說慢一點，我聽不太清楚。</td>
-<td>請說慢一點,我聽不太清楚</td>
-<td>ゆっくり　聞こえない</td>
+<td style="font-size:0.8rem;color:#475569">請說慢一點,我聽不太清楚</td>
+<td><div>ゆっくり　聞こえない</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：もう少しゆっくり話してください。よく聞こえません。</div></td>
 <td>0.19s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">句子不完整『ゆっくり 聞こえない』</div></td>
 </tr>
 <tr>
 <td>15</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/15_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我身體不舒服，請幫我叫站務人員。</td>
-<td>我身體不舒服,請幫我叫站務人員</td>
-<td>気分が悪い 待合室に電話してください</td>
+<td style="font-size:0.8rem;color:#475569">我身體不舒服,請幫我叫站務人員</td>
+<td><div>気分が悪い 待合室に電話してください</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：体調が悪いです。駅員を呼んでください。</div></td>
 <td>0.23s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『待合室に電話』= 打電話到候車室，應為『駅員を呼ぶ』</div></td>
 </tr>
 <tr>
 <td>16</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/16_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車會停台南嗎？</td>
-<td>請問這班車會停臺南 (Tainan)嗎?</td>
-<td>この列車は台南に停車しますか。</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車會停臺南 (Tainan)嗎?</td>
+<td><div>この列車は台南に停車しますか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：この電車は台南に止まりますか。</div></td>
 <td>0.20s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>17</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/17_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問出口在哪裡？</td>
-<td>請問出口 (Exit)在哪裡?</td>
-<td>出口はどこですか。</td>
+<td style="font-size:0.8rem;color:#475569">請問出口 (Exit)在哪裡?</td>
+<td><div>出口はどこですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：出口はどこですか。</div></td>
 <td>0.13s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>18</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/18_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問公車站在哪裡？</td>
-<td>請問公車站在哪裡?</td>
-<td>バス停はどこですか。</td>
+<td style="font-size:0.8rem;color:#475569">請問公車站在哪裡?</td>
+<td><div>バス停はどこですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：バス停はどこですか。</div></td>
 <td>0.17s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>19</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/19_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以寄放大型行李嗎？</td>
-<td>請問這裡可以寄放大型行李嗎?</td>
-<td>大型の荷物をここに置いてもいいですか。</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以寄放大型行李嗎?</td>
+<td><div>大型の荷物をここに置いてもいいですか。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ここで大きな荷物を預けられますか。</div></td>
 <td>0.23s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>20</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/20_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>謝謝您的幫忙，祝您有美好的一天。</td>
-<td>謝謝您的幫忙,祝您有美好的一天</td>
-<td>助けてくれてありがとう 良い一日を</td>
+<td style="font-size:0.8rem;color:#475569">謝謝您的幫忙,祝您有美好的一天</td>
+<td><div>助けてくれてありがとう 良い一日を</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ご協力ありがとうございます。良い一日をお過ごしください。</div></td>
 <td>0.23s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 </tbody></table>
-<p style="font-size:0.8rem;color:#6b7280;">期望翻譯（ground truth）可參考 <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">HackMD Sk9Um7FcWx</a>。</p>
 </div>
 
 <div class="card">
-<h2>한국어（KO）— 0/20 <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#fed7aa;color:#9a3412">Madlad bridging</span></span></h2>
+<h2>한국어（KO）— <span style="color:#dc2626">9/20</span> <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#fed7aa;color:#9a3412">Madlad bridging</span></span></h2>
 <table>
-<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th>時間</th><th>評分</th></tr></thead>
+<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果（+ 期望）</th><th>時間</th><th>評分</th></tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>您好，請問高雄車站的售票窗口在哪裡？</td>
-<td>您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
-<td>안녕하세요, 가오<0xEC><0x8A><0x9D> 역의 티켓 사무소는 어디에 있습니까?</td>
+<td style="font-size:0.8rem;color:#475569">您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
+<td><div>안녕하세요, 가오&lt;0xEC&gt;&lt;0x8A&gt;&lt;0x9D&gt; 역의 티켓 사무소는 어디에 있습니까?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：안녕하세요, 가오슝역 매표소는 어디에 있나요?</div></td>
 <td>0.35s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『가오<0xEC><0x8A><0x9D>』tokenizer 壞掉，高雄未完整解碼</div></td>
 </tr>
 <tr>
 <td>2</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我要買一張到台南的車票。</td>
-<td>我要買一張到臺南 (Tainan)的車票</td>
-<td>타이난행 항공권을 사고 싶어요.</td>
+<td style="font-size:0.8rem;color:#475569">我要買一張到臺南 (Tainan)的車票</td>
+<td><div>타이난행 항공권을 사고 싶어요.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：타이난까지 표 한 장 사고 싶습니다.</div></td>
 <td>0.37s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『항공권』(飛機票) 錯譯『車票』— 應為『기차표/승차권』</div></td>
 </tr>
 <tr>
 <td>3</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車幾點發車？</td>
-<td>請問這班車幾點發車</td>
-<td>이 기차는 몇 시에 떠나요?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車幾點發車</td>
+<td><div>이 기차는 몇 시에 떠나요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：이 열차는 몇 시에 출발하나요?</div></td>
 <td>0.31s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>4</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/04_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問我要去第二月台怎麼走？</td>
-<td>請問我要去第二月臺 (Platform)怎麼走</td>
-<td>플랫폼에 어떻게 갈 수 있나요?</td>
+<td style="font-size:0.8rem;color:#475569">請問我要去第二月臺 (Platform)怎麼走</td>
+<td><div>플랫폼에 어떻게 갈 수 있나요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：2번 승강장에는 어떻게 가나요?</div></td>
 <td>0.32s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">漏『第二月台』— 只譯『플랫폼』未指定 2 號</div></td>
 </tr>
 <tr>
 <td>5</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/05_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問捷運入口在哪裡？</td>
-<td>請問捷運入口 (Entrance)在哪裡?</td>
-<td>고속도로 입구는 어디예요?</td>
+<td style="font-size:0.8rem;color:#475569">請問捷運入口 (Entrance)在哪裡?</td>
+<td><div>고속도로 입구는 어디예요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：지하철 입구는 어디에 있나요?</div></td>
 <td>0.20s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『고속도로』(高速公路) 錯譯捷運</div></td>
 </tr>
 <tr>
 <td>6</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/06_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問到左營要搭哪一班車？</td>
-<td>請問到左營 (Zuoying)要搭哪一班車</td>
-<td>어느 열차로 Zuoying에 가는지 말해주세요.</td>
+<td style="font-size:0.8rem;color:#475569">請問到左營 (Zuoying)要搭哪一班車</td>
+<td><div>어느 열차로 Zuoying에 가는지 말해주세요.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：쭤잉으로 가려면 어떤 열차를 타야 하나요?</div></td>
 <td>0.39s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">漏『班』(which)，且 Zuoying 未翻成韓文</div></td>
 </tr>
 <tr>
 <td>7</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/07_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>一張到新左營的票多少錢？</td>
-<td>一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
-<td>Zuoying에 가는 티켓은 얼마입니까?</td>
+<td style="font-size:0.8rem;color:#475569">一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
+<td><div>Zuoying에 가는 티켓은 얼마입니까?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：신쭤잉까지 표 한 장은 얼마인가요?</div></td>
 <td>0.41s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">漏『新』— Xinzuoying→Zuoying</div></td>
 </tr>
 <tr>
 <td>8</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/08_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以使用電子票證嗎？</td>
-<td>請問這裡可以使用電子票證嗎?</td>
-<td>여기서 e-티켓을 사용할 수 있나요?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以使用電子票證嗎?</td>
+<td><div>여기서 e-티켓을 사용할 수 있나요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：여기에서 교통카드를 사용할 수 있나요?</div></td>
 <td>0.36s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>9</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/09_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想退款，請問要去哪裡？</td>
-<td>我想退款,請問要去哪裡?</td>
-<td>환불을 원합니다. 어디로 가야 하나요?</td>
+<td style="font-size:0.8rem;color:#475569">我想退款,請問要去哪裡?</td>
+<td><div>환불을 원합니다. 어디로 가야 하나요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：환불 받고 싶은데 어디로 가야 하나요?</div></td>
 <td>0.38s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>10</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/10_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問洗手間在哪裡？</td>
-<td>請問洗手間在哪裡?</td>
-<td>화장실은 어디 있어요?</td>
+<td style="font-size:0.8rem;color:#475569">請問洗手間在哪裡?</td>
+<td><div>화장실은 어디 있어요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：화장실은 어디에 있나요?</div></td>
 <td>0.29s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>11</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/11_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問置物櫃在幾樓？</td>
-<td>請問置物櫃在幾樓</td>
-<td>사물함은 얼마나 높아요?</td>
+<td style="font-size:0.8rem;color:#475569">請問置物櫃在幾樓</td>
+<td><div>사물함은 얼마나 높아요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：물품 보관함은 몇 층에 있나요?</div></td>
 <td>0.33s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『얼마나 높아요?』(多高) 誤譯『幾樓』— 同 ja #11</div></td>
 </tr>
 <tr>
 <td>12</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/12_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想去美麗島站，怎麼轉乘捷運？</td>
-<td>我想去美麗島站,怎麼轉成捷運</td>
-<td>메리지마역으로 가고 싶습니다. 고속열차로 환승하는 방법</td>
+<td style="font-size:0.8rem;color:#475569">我想去美麗島站,怎麼轉成捷運</td>
+<td><div>메리지마역으로 가고 싶습니다. 고속열차로 환승하는 방법</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：메이리다오역에 가고 싶은데 지하철로 어떻게 환승하나요?</div></td>
 <td>0.47s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『메리지마역』亂碼美麗島；『고속열차』(高速列車) 錯譯 MRT</div></td>
 </tr>
 <tr>
 <td>13</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/13_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我的手機不見了，請問要去哪裡報失？</td>
-<td>我的手機不見了,請問要去哪裡報屍?</td>
-<td>어디로 가시겠습니까?</td>
+<td style="font-size:0.8rem;color:#475569">我的手機不見了,請問要去哪裡報屍?</td>
+<td><div>어디로 가시겠습니까?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：휴대폰을 잃어버렸어요. 어디에서 신고해야 하나요?</div></td>
 <td>0.31s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『어디로 가시겠습니까?』完全丟失原意</div></td>
 </tr>
 <tr>
 <td>14</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/14_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請說慢一點，我聽不太清楚。</td>
-<td>請說慢一點,我聽不太清楚</td>
-<td>제발 천천히요 들리지 않아요</td>
+<td style="font-size:0.8rem;color:#475569">請說慢一點,我聽不太清楚</td>
+<td><div>제발 천천히요 들리지 않아요</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：조금 천천히 말씀해 주세요. 잘 들리지 않아요.</div></td>
 <td>0.36s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>15</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/15_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我身體不舒服，請幫我叫站務人員。</td>
-<td>我身體不舒服,請幫我叫站務人員</td>
-<td>기분이 안 좋아요 간호사한테 전화해주세요</td>
+<td style="font-size:0.8rem;color:#475569">我身體不舒服,請幫我叫站務人員</td>
+<td><div>기분이 안 좋아요 간호사한테 전화해주세요</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：몸이 불편해요. 역무원을 불러 주세요.</div></td>
 <td>0.41s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『간호사한테 전화』= 打電話給護士；應為叫站務員</div></td>
 </tr>
 <tr>
 <td>16</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/16_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車會停台南嗎？</td>
-<td>請問這班車會停臺南 (Tainan)嗎?</td>
-<td>이 기차가 타이난에 정차하나요?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車會停臺南 (Tainan)嗎?</td>
+<td><div>이 기차가 타이난에 정차하나요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：이 열차는 타이난에 정차하나요?</div></td>
 <td>0.34s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>17</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/17_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問出口在哪裡？</td>
-<td>請問出口 (Exit)在哪裡?</td>
-<td>출구는 어디예요?</td>
+<td style="font-size:0.8rem;color:#475569">請問出口 (Exit)在哪裡?</td>
+<td><div>출구는 어디예요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：출구는 어디에 있나요?</div></td>
 <td>0.27s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>18</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/18_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問公車站在哪裡？</td>
-<td>請問公車站在哪裡?</td>
-<td>버스 정류장은 어디예요?</td>
+<td style="font-size:0.8rem;color:#475569">請問公車站在哪裡?</td>
+<td><div>버스 정류장은 어디예요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：버스 정류장은 어디에 있나요?</div></td>
 <td>0.19s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>19</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/19_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以寄放大型行李嗎？</td>
-<td>請問這裡可以寄放大型行李嗎?</td>
-<td>대형 수하물을 여기에 두고 갈 수 있어요?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以寄放大型行李嗎?</td>
+<td><div>대형 수하물을 여기에 두고 갈 수 있어요?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：여기에서 큰 짐을 맡길 수 있나요?</div></td>
 <td>0.24s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>20</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/20_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>謝謝您的幫忙，祝您有美好的一天。</td>
-<td>謝謝您的幫忙,祝您有美好的一天</td>
-<td>당신의 도움과 좋은 하루를 주셔서 감사합니다</td>
+<td style="font-size:0.8rem;color:#475569">謝謝您的幫忙,祝您有美好的一天</td>
+<td><div>당신의 도움과 좋은 하루를 주셔서 감사합니다</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：도와주셔서 감사합니다. 좋은 하루 되세요.</div></td>
 <td>0.23s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">語法扭曲『당신의 도움과 좋은 하루를 주셔서』= 感謝給我幫助和美好一天（原為兩個獨立句）</div></td>
 </tr>
 </tbody></table>
-<p style="font-size:0.8rem;color:#6b7280;">期望翻譯（ground truth）可參考 <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">HackMD Sk9Um7FcWx</a>。</p>
 </div>
 
 <div class="card">
-<h2>Bahasa Indonesia（ID）— 0/20 <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
+<h2>Bahasa Indonesia（ID）— <span style="color:#16a34a">20/20</span> <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
 <table>
-<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th>時間</th><th>評分</th></tr></thead>
+<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果（+ 期望）</th><th>時間</th><th>評分</th></tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>您好，請問高雄車站的售票窗口在哪裡？</td>
-<td>您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
-<td>Halo, bolehkah saya bertanya, di mana loket penjualan tiket di Stasiun Kaohsiung?</td>
+<td style="font-size:0.8rem;color:#475569">您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
+<td><div>Halo, bolehkah saya bertanya, di mana loket penjualan tiket di Stasiun Kaohsiung?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Halo, di mana loket tiket di Stasiun Kaohsiung?</div></td>
 <td>2.70s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>2</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我要買一張到台南的車票。</td>
-<td>我要買一張到臺南 (Tainan)的車票</td>
-<td>Saya ingin membeli satu tiket kereta api ke Tainan.</td>
+<td style="font-size:0.8rem;color:#475569">我要買一張到臺南 (Tainan)的車票</td>
+<td><div>Saya ingin membeli satu tiket kereta api ke Tainan.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Saya ingin membeli satu tiket ke Tainan.</div></td>
 <td>1.50s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>3</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車幾點發車？</td>
-<td>請問這班車幾點發車</td>
-<td>Berapa waktu keberangkatan kereta ini?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車幾點發車</td>
+<td><div>Berapa waktu keberangkatan kereta ini?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Kereta ini berangkat jam berapa?</div></td>
 <td>1.45s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>4</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/04_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問我要去第二月台怎麼走？</td>
-<td>請問我要去第二月臺 (Platform)怎麼走</td>
-<td>Mohon beritahu saya, bagaimana cara menuju peron kedua?</td>
+<td style="font-size:0.8rem;color:#475569">請問我要去第二月臺 (Platform)怎麼走</td>
+<td><div>Mohon beritahu saya, bagaimana cara menuju peron kedua?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Bagaimana cara menuju peron nomor dua?</div></td>
 <td>1.88s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>5</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/05_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問捷運入口在哪裡？</td>
-<td>請問捷運入口 (Entrance)在哪裡?</td>
-<td>Permisi, di mana pintu masuk stasiun kereta bawah tanah (MRT) berada?</td>
+<td style="font-size:0.8rem;color:#475569">請問捷運入口 (Entrance)在哪裡?</td>
+<td><div>Permisi, di mana pintu masuk stasiun kereta bawah tanah (MRT) berada?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Di mana pintu masuk MRT?</div></td>
 <td>2.35s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>6</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/06_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問到左營要搭哪一班車？</td>
-<td>請問到左營 (Zuoying)要搭哪一班車</td>
-<td>Mohon informasinya, kereta apa yang harus saya naiki untuk menuju Zuoying?</td>
+<td style="font-size:0.8rem;color:#475569">請問到左營 (Zuoying)要搭哪一班車</td>
+<td><div>Mohon informasinya, kereta apa yang harus saya naiki untuk menuju Zuoying?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Kereta mana yang harus saya naik ke Zuoying?</div></td>
 <td>2.37s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>7</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/07_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>一張到新左營的票多少錢？</td>
-<td>一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
-<td>Berapa harga tiket ke Xinzuoying?</td>
+<td style="font-size:0.8rem;color:#475569">一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
+<td><div>Berapa harga tiket ke Xinzuoying?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Berapa harga satu tiket ke Xinzuoying?</div></td>
 <td>1.34s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>8</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/08_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以使用電子票證嗎？</td>
-<td>請問這裡可以使用電子票證嗎?</td>
-<td>Apakah di sini dapat menggunakan kartu elektronik?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以使用電子票證嗎?</td>
+<td><div>Apakah di sini dapat menggunakan kartu elektronik?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Apakah saya bisa menggunakan kartu transportasi elektronik di sini?</div></td>
 <td>1.21s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>9</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/09_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想退款，請問要去哪裡？</td>
-<td>我想退款,請問要去哪裡?</td>
-<td>Saya ingin mengajukan pengembalian dana, mohon beritahu saya ke mana saya harus pergi.</td>
+<td style="font-size:0.8rem;color:#475569">我想退款,請問要去哪裡?</td>
+<td><div>Saya ingin mengajukan pengembalian dana, mohon beritahu saya ke mana saya harus pergi.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Saya ingin minta pengembalian dana. Saya harus ke mana?</div></td>
 <td>2.69s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>10</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/10_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問洗手間在哪裡？</td>
-<td>請問洗手間在哪裡?</td>
-<td>Permisi, di mana letak toiletnya?</td>
+<td style="font-size:0.8rem;color:#475569">請問洗手間在哪裡?</td>
+<td><div>Permisi, di mana letak toiletnya?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Di mana toiletnya?</div></td>
 <td>1.38s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>11</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/11_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問置物櫃在幾樓？</td>
-<td>請問置物櫃在幾樓</td>
-<td>Mohon informasinya, loker berada di lantai berapa?</td>
+<td style="font-size:0.8rem;color:#475569">請問置物櫃在幾樓</td>
+<td><div>Mohon informasinya, loker berada di lantai berapa?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Loker ada di lantai berapa?</div></td>
 <td>1.68s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>12</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/12_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想去美麗島站，怎麼轉乘捷運？</td>
-<td>我想去美麗島站,怎麼轉成捷運</td>
-<td>Saya ingin pergi ke Stasiun Meilidao, bagaimana cara berpindah menggunakan kereta bawah tanah (MRT)?</td>
+<td style="font-size:0.8rem;color:#475569">我想去美麗島站,怎麼轉成捷運</td>
+<td><div>Saya ingin pergi ke Stasiun Meilidao, bagaimana cara berpindah menggunakan kereta bawah tanah (MRT)?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Saya ingin ke Stasiun Formosa Boulevard. Bagaimana cara berpindah ke MRT?</div></td>
 <td>2.72s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>13</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/13_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我的手機不見了，請問要去哪裡報失？</td>
-<td>我的手機不見了,請問要去哪裡報屍?</td>
-<td>Ponsel saya hilang, saya ingin bertanya, di mana saya bisa melaporkan kehilangan tersebut?</td>
+<td style="font-size:0.8rem;color:#475569">我的手機不見了,請問要去哪裡報屍?</td>
+<td><div>Ponsel saya hilang, saya ingin bertanya, di mana saya bisa melaporkan kehilangan tersebut?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Saya kehilangan HP. Di mana saya bisa melapor?</div></td>
 <td>2.48s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>14</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/14_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請說慢一點，我聽不太清楚。</td>
-<td>請說慢一點,我聽不太清楚</td>
-<td>Tolong bicaralah lebih pelan, saya kurang jelas mendengarnya.</td>
+<td style="font-size:0.8rem;color:#475569">請說慢一點,我聽不太清楚</td>
+<td><div>Tolong bicaralah lebih pelan, saya kurang jelas mendengarnya.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tolong bicara lebih pelan. Saya tidak bisa mendengar dengan jelas.</div></td>
 <td>2.11s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>15</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/15_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我身體不舒服，請幫我叫站務人員。</td>
-<td>我身體不舒服,請幫我叫站務人員</td>
-<td>Saya merasa tidak enak badan, tolong panggil petugas stasiun untuk membantu saya.</td>
+<td style="font-size:0.8rem;color:#475569">我身體不舒服,請幫我叫站務人員</td>
+<td><div>Saya merasa tidak enak badan, tolong panggil petugas stasiun untuk membantu saya.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Saya tidak enak badan. Tolong panggil petugas stasiun.</div></td>
 <td>2.24s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>16</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/16_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車會停台南嗎？</td>
-<td>請問這班車會停臺南 (Tainan)嗎?</td>
-<td>Apakah kereta ini akan berhenti di Tainan?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車會停臺南 (Tainan)嗎?</td>
+<td><div>Apakah kereta ini akan berhenti di Tainan?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Apakah kereta ini berhenti di Tainan?</div></td>
 <td>1.26s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>17</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/17_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問出口在哪裡？</td>
-<td>請問出口 (Exit)在哪裡?</td>
-<td>Permisi, di mana pintu keluarnya?</td>
+<td style="font-size:0.8rem;color:#475569">請問出口 (Exit)在哪裡?</td>
+<td><div>Permisi, di mana pintu keluarnya?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Di mana pintu keluar?</div></td>
 <td>1.28s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>18</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/18_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問公車站在哪裡？</td>
-<td>請問公車站在哪裡?</td>
-<td>Permisi, di mana halte bus berada?</td>
+<td style="font-size:0.8rem;color:#475569">請問公車站在哪裡?</td>
+<td><div>Permisi, di mana halte bus berada?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Di mana halte bus?</div></td>
 <td>1.27s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>19</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/19_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以寄放大型行李嗎？</td>
-<td>請問這裡可以寄放大型行李嗎?</td>
-<td>Apakah di sini tersedia layanan penitipan barang untuk bagasi berukuran besar?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以寄放大型行李嗎?</td>
+<td><div>Apakah di sini tersedia layanan penitipan barang untuk bagasi berukuran besar?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Bisakah saya menitipkan bagasi besar di sini?</div></td>
 <td>2.02s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>20</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/20_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>謝謝您的幫忙，祝您有美好的一天。</td>
-<td>謝謝您的幫忙,祝您有美好的一天</td>
-<td>Terima kasih atas bantuannya, semoga Anda memiliki hari yang menyenangkan.</td>
+<td style="font-size:0.8rem;color:#475569">謝謝您的幫忙,祝您有美好的一天</td>
+<td><div>Terima kasih atas bantuannya, semoga Anda memiliki hari yang menyenangkan.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Terima kasih atas bantuan Anda. Semoga hari Anda menyenangkan.</div></td>
 <td>1.88s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 </tbody></table>
-<p style="font-size:0.8rem;color:#6b7280;">期望翻譯（ground truth）可參考 <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">HackMD Sk9Um7FcWx</a>。</p>
 </div>
 
 <div class="card">
-<h2>Tiếng Việt（VI）— 0/20 <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
+<h2>Tiếng Việt（VI）— <span style="color:#16a34a">18/20</span> <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
 <table>
-<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th>時間</th><th>評分</th></tr></thead>
+<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果（+ 期望）</th><th>時間</th><th>評分</th></tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>您好，請問高雄車站的售票窗口在哪裡？</td>
-<td>您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
-<td>Xin chào, tôi muốn hỏi, văn phòng bán vé của ga Kaohsiung ở đâu ạ?</td>
+<td style="font-size:0.8rem;color:#475569">您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
+<td><div>Xin chào, tôi muốn hỏi, văn phòng bán vé của ga Kaohsiung ở đâu ạ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Xin chào, quầy bán vé ở ga Cao Hùng ở đâu?</div></td>
 <td>2.67s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>2</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我要買一張到台南的車票。</td>
-<td>我要買一張到臺南 (Tainan)的車票</td>
-<td>Tôi muốn mua một vé tàu đi Đài Nam.</td>
+<td style="font-size:0.8rem;color:#475569">我要買一張到臺南 (Tainan)的車票</td>
+<td><div>Tôi muốn mua một vé tàu đi Đài Nam.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi muốn mua một vé đi Đài Nam.</div></td>
 <td>1.40s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>3</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車幾點發車？</td>
-<td>請問這班車幾點發車</td>
-<td>Cho tôi hỏi, chuyến xe này xuất phát lúc mấy giờ?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車幾點發車</td>
+<td><div>Cho tôi hỏi, chuyến xe này xuất phát lúc mấy giờ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Chuyến tàu này khởi hành lúc mấy giờ?</div></td>
 <td>1.69s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>4</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/04_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問我要去第二月台怎麼走？</td>
-<td>請問我要去第二月臺 (Platform)怎麼走</td>
-<td>Xin hỏi, tôi muốn đi đến nhà ga số 2, tôi phải đi đường nào?</td>
+<td style="font-size:0.8rem;color:#475569">請問我要去第二月臺 (Platform)怎麼走</td>
+<td><div>Xin hỏi, tôi muốn đi đến nhà ga số 2, tôi phải đi đường nào?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi đi đến sân ga số 2 bằng cách nào?</div></td>
 <td>2.66s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『nhà ga số 2』= 第二號車站，非月台（應為『sân ga』）</div></td>
 </tr>
 <tr>
 <td>5</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/05_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問捷運入口在哪裡？</td>
-<td>請問捷運入口 (Entrance)在哪裡?</td>
-<td>Xin hỏi, lối vào ga tàu điện ngầm ở đâu ạ?</td>
+<td style="font-size:0.8rem;color:#475569">請問捷運入口 (Entrance)在哪裡?</td>
+<td><div>Xin hỏi, lối vào ga tàu điện ngầm ở đâu ạ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Lối vào tàu điện ngầm ở đâu?</div></td>
 <td>1.82s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>6</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/06_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問到左營要搭哪一班車？</td>
-<td>請問到左營 (Zuoying)要搭哪一班車</td>
-<td>Xin hỏi, để đến Zuoying, tôi nên đi tuyến xe nào?</td>
+<td style="font-size:0.8rem;color:#475569">請問到左營 (Zuoying)要搭哪一班車</td>
+<td><div>Xin hỏi, để đến Zuoying, tôi nên đi tuyến xe nào?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi phải đi chuyến nào để đến Tả Doanh?</div></td>
 <td>1.94s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>7</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/07_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>一張到新左營的票多少錢？</td>
-<td>一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
-<td>Giá vé đi từ đây đến Zuoying (Xinzuoying) là bao nhiêu tiền?</td>
+<td style="font-size:0.8rem;color:#475569">一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
+<td><div>Giá vé đi từ đây đến Zuoying (Xinzuoying) là bao nhiêu tiền?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Một vé đi Tân Tả Doanh giá bao nhiêu?</div></td>
 <td>2.32s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>8</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/08_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以使用電子票證嗎？</td>
-<td>請問這裡可以使用電子票證嗎?</td>
-<td>Xin hỏi, có thể sử dụng thẻ điện tử ở đây không?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以使用電子票證嗎?</td>
+<td><div>Xin hỏi, có thể sử dụng thẻ điện tử ở đây không?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi có thể dùng thẻ giao thông điện tử ở đây không?</div></td>
 <td>1.94s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>9</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/09_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想退款，請問要去哪裡？</td>
-<td>我想退款,請問要去哪裡?</td>
-<td>Tôi muốn trả lại hàng, xin hỏi tôi phải đến đâu?</td>
+<td style="font-size:0.8rem;color:#475569">我想退款,請問要去哪裡?</td>
+<td><div>Tôi muốn trả lại hàng, xin hỏi tôi phải đến đâu?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi muốn hoàn tiền, tôi phải đến đâu?</div></td>
 <td>1.71s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『trả lại hàng』= 退貨（物品），不是退款（應為『hoàn tiền』）</div></td>
 </tr>
 <tr>
 <td>10</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/10_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問洗手間在哪裡？</td>
-<td>請問洗手間在哪裡?</td>
-<td>Xin hỏi nhà vệ sinh ở đâu ạ?</td>
+<td style="font-size:0.8rem;color:#475569">請問洗手間在哪裡?</td>
+<td><div>Xin hỏi nhà vệ sinh ở đâu ạ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Nhà vệ sinh ở đâu?</div></td>
 <td>1.23s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>11</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/11_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問置物櫃在幾樓？</td>
-<td>請問置物櫃在幾樓</td>
-<td>Xin hỏi tủ đồ để đồ ở tầng nào?</td>
+<td style="font-size:0.8rem;color:#475569">請問置物櫃在幾樓</td>
+<td><div>Xin hỏi tủ đồ để đồ ở tầng nào?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tủ gửi đồ ở tầng mấy?</div></td>
 <td>1.36s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>12</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/12_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想去美麗島站，怎麼轉乘捷運？</td>
-<td>我想去美麗島站,怎麼轉成捷運</td>
-<td>Tôi muốn đi đến ga "Đảo Đẹp", làm thế nào để chuyển sang tàu điện ngầm?</td>
+<td style="font-size:0.8rem;color:#475569">我想去美麗島站,怎麼轉成捷運</td>
+<td><div>Tôi muốn đi đến ga "Đảo Đẹp", làm thế nào để chuyển sang tàu điện ngầm?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi muốn đến ga Mỹ Lệ Đảo. Tôi chuyển sang tàu điện ngầm thế nào?</div></td>
 <td>2.75s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>13</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/13_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我的手機不見了，請問要去哪裡報失？</td>
-<td>我的手機不見了,請問要去哪裡報屍?</td>
-<td>Điện thoại của tôi bị mất, tôi muốn hỏi phải đi đâu để báo mất.</td>
+<td style="font-size:0.8rem;color:#475569">我的手機不見了,請問要去哪裡報屍?</td>
+<td><div>Điện thoại của tôi bị mất, tôi muốn hỏi phải đi đâu để báo mất.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi mất điện thoại. Tôi phải trình báo ở đâu?</div></td>
 <td>2.31s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>14</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/14_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請說慢一點，我聽不太清楚。</td>
-<td>請說慢一點,我聽不太清楚</td>
-<td>Xin vui lòng nói chậm hơn một chút, tôi không nghe rõ lắm.</td>
+<td style="font-size:0.8rem;color:#475569">請說慢一點,我聽不太清楚</td>
+<td><div>Xin vui lòng nói chậm hơn một chút, tôi không nghe rõ lắm.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Xin nói chậm hơn, tôi nghe không rõ.</div></td>
 <td>1.96s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>15</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/15_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我身體不舒服，請幫我叫站務人員。</td>
-<td>我身體不舒服,請幫我叫站務人員</td>
-<td>Tôi cảm thấy không khỏe, xin hãy giúp tôi gọi nhân viên nhà ga.</td>
+<td style="font-size:0.8rem;color:#475569">我身體不舒服,請幫我叫站務人員</td>
+<td><div>Tôi cảm thấy không khỏe, xin hãy giúp tôi gọi nhân viên nhà ga.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi không khỏe. Xin gọi nhân viên nhà ga.</div></td>
 <td>2.07s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>16</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/16_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車會停台南嗎？</td>
-<td>請問這班車會停臺南 (Tainan)嗎?</td>
-<td>Xin hỏi, chuyến tàu này có dừng ở Đài Nam không?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車會停臺南 (Tainan)嗎?</td>
+<td><div>Xin hỏi, chuyến tàu này có dừng ở Đài Nam không?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Chuyến tàu này có dừng ở Đài Nam không?</div></td>
 <td>1.77s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>17</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/17_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問出口在哪裡？</td>
-<td>請問出口 (Exit)在哪裡?</td>
-<td>Xin hỏi, lối ra ở đâu?</td>
+<td style="font-size:0.8rem;color:#475569">請問出口 (Exit)在哪裡?</td>
+<td><div>Xin hỏi, lối ra ở đâu?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Lối ra ở đâu?</div></td>
 <td>1.14s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>18</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/18_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問公車站在哪裡？</td>
-<td>請問公車站在哪裡?</td>
-<td>Xin hỏi, trạm xe buýt ở đâu ạ?</td>
+<td style="font-size:0.8rem;color:#475569">請問公車站在哪裡?</td>
+<td><div>Xin hỏi, trạm xe buýt ở đâu ạ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Trạm xe buýt ở đâu?</div></td>
 <td>1.63s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>19</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/19_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以寄放大型行李嗎？</td>
-<td>請問這裡可以寄放大型行李嗎?</td>
-<td>Xin hỏi, ở đây có dịch vụ giữ hành lý lớn không?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以寄放大型行李嗎?</td>
+<td><div>Xin hỏi, ở đây có dịch vụ giữ hành lý lớn không?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Tôi có thể gửi hành lý lớn ở đây không?</div></td>
 <td>1.88s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>20</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/20_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>謝謝您的幫忙，祝您有美好的一天。</td>
-<td>謝謝您的幫忙,祝您有美好的一天</td>
-<td>Cảm ơn sự giúp đỡ của bạn, chúc bạn một ngày tốt lành.</td>
+<td style="font-size:0.8rem;color:#475569">謝謝您的幫忙,祝您有美好的一天</td>
+<td><div>Cảm ơn sự giúp đỡ của bạn, chúc bạn một ngày tốt lành.</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：Cảm ơn sự giúp đỡ của bạn. Chúc bạn một ngày tốt lành.</div></td>
 <td>2.12s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 </tbody></table>
-<p style="font-size:0.8rem;color:#6b7280;">期望翻譯（ground truth）可參考 <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">HackMD Sk9Um7FcWx</a>。</p>
 </div>
 
 <div class="card">
-<h2>ภาษาไทย（TH）— 0/20 <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
+<h2>ภาษาไทย（TH）— <span style="color:#16a34a">19/20</span> <span style="font-size:0.75rem;font-weight:normal;margin-left:0.5rem;"><span class="tag" style="background:#d1fae5;color:#065f46">TranslateGemma</span></span></h2>
 <table>
-<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果</th><th>時間</th><th>評分</th></tr></thead>
+<thead><tr><th>#</th><th>音檔</th><th>中文參考</th><th>ASR 輸出</th><th>翻譯結果（+ 期望）</th><th>時間</th><th>評分</th></tr></thead>
 <tbody>
 <tr>
 <td>1</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/01_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>您好，請問高雄車站的售票窗口在哪裡？</td>
-<td>您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
-<td>สวัสดีค่ะ/ครับ, รบกวนสอบถามว่า บริเวณสถานีรถไฟเกาสง (Kaohsiung) มีเคาน์เตอร์จำหน่ายตั๋วอยู่ที่ไหนคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">您好,請問高雄 (Kaohsiung)車站的售票視窗在哪裡?</td>
+<td><div>สวัสดีค่ะ/ครับ, รบกวนสอบถามว่า บริเวณสถานีรถไฟเกาสง (Kaohsiung) มีเคาน์เตอร์จำหน่ายตั๋วอยู่ที่ไหนคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：สวัสดีค่ะ เคาน์เตอร์ซื้อบัตรที่สถานีเกาสงอยู่ที่ไหนคะ</div></td>
 <td>5.34s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>2</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/02_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我要買一張到台南的車票。</td>
-<td>我要買一張到臺南 (Tainan)的車票</td>
-<td>ฉันต้องการซื้อตั๋วรถไฟไปเมืองไทจง (Tainan) ค่ะ/ครับ。</td>
+<td style="font-size:0.8rem;color:#475569">我要買一張到臺南 (Tainan)的車票</td>
+<td><div>ฉันต้องการซื้อตั๋วรถไฟไปเมืองไทจง (Tainan) ค่ะ/ครับ。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ขอซื้อตั๋วรถไฟไปไถหนานหนึ่งใบค่ะ</div></td>
 <td>3.04s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#dc2626;font-weight:bold">✗</span><div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem">『ไทจง』(Taichung) 地名錯譯『Tainan』(台南)</div></td>
 </tr>
 <tr>
 <td>3</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/03_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車幾點發車？</td>
-<td>請問這班車幾點發車</td>
-<td>รบกวนสอบถามว่ารถไฟขบวนนี้ออกเดินทางเวลาใดคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車幾點發車</td>
+<td><div>รบกวนสอบถามว่ารถไฟขบวนนี้ออกเดินทางเวลาใดคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：รถไฟขบวนนี้จะออกตอนกี่โมงคะ</div></td>
 <td>2.49s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>4</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/04_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問我要去第二月台怎麼走？</td>
-<td>請問我要去第二月臺 (Platform)怎麼走</td>
-<td>ขอทราบเส้นทางไปยังชานชาลาหมายเลข 2 (Platform 2) หน่อยได้ไหมคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問我要去第二月臺 (Platform)怎麼走</td>
+<td><div>ขอทราบเส้นทางไปยังชานชาลาหมายเลข 2 (Platform 2) หน่อยได้ไหมคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ฉันจะไปชานชาลาที่ 2 ได้อย่างไร</div></td>
 <td>3.22s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>5</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/05_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問捷運入口在哪裡？</td>
-<td>請問捷運入口 (Entrance)在哪裡?</td>
-<td>รบกวนสอบถามว่าทางเข้าสถานีรถไฟฟ้า (รถไฟใต้ดิน) อยู่ที่ไหนคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問捷運入口 (Entrance)在哪裡?</td>
+<td><div>รบกวนสอบถามว่าทางเข้าสถานีรถไฟฟ้า (รถไฟใต้ดิน) อยู่ที่ไหนคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ทางเข้า MRT อยู่ที่ไหน</div></td>
 <td>3.35s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>6</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/06_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問到左營要搭哪一班車？</td>
-<td>請問到左營 (Zuoying)要搭哪一班車</td>
-<td>รบกวนสอบถามว่าต้องขึ้นรถสายไหนเพื่อไปซูอิง (Zuoying) คะ?</td>
+<td style="font-size:0.8rem;color:#475569">請問到左營 (Zuoying)要搭哪一班車</td>
+<td><div>รบกวนสอบถามว่าต้องขึ้นรถสายไหนเพื่อไปซูอิง (Zuoying) คะ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ถ้าจะไปจั๋วอิ๋ง ต้องขึ้นรถไฟขบวนไหน</div></td>
 <td>3.06s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>7</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/07_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>一張到新左營的票多少錢？</td>
-<td>一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
-<td>ตั๋วรถไปสถานีใหม่ซูอิง (Xinzuoying) ราคาเท่าไหร่?</td>
+<td style="font-size:0.8rem;color:#475569">一張到新左營 (Zuoying) (Xinzuoying)的票多少錢</td>
+<td><div>ตั๋วรถไปสถานีใหม่ซูอิง (Xinzuoying) ราคาเท่าไหร่?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ตั๋วไปซินจั๋วอิ๋งหนึ่งใบราคาเท่าไร</div></td>
 <td>2.78s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>8</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/08_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以使用電子票證嗎？</td>
-<td>請問這裡可以使用電子票證嗎?</td>
-<td>รบกวนสอบถามว่า ที่นี่สามารถใช้บัตรโดยสารอิเล็กทรอนิกส์ได้หรือไม่คะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以使用電子票證嗎?</td>
+<td><div>รบกวนสอบถามว่า ที่นี่สามารถใช้บัตรโดยสารอิเล็กทรอนิกส์ได้หรือไม่คะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ที่นี่ใช้บัตรโดยสารอิเล็กทรอนิกส์ได้ไหม</div></td>
 <td>3.42s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>9</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/09_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想退款，請問要去哪裡？</td>
-<td>我想退款,請問要去哪裡?</td>
-<td>ฉันต้องการขอคืนเงิน กรุณาบอกฉันหน่อยว่าต้องไปที่ไหน?</td>
+<td style="font-size:0.8rem;color:#475569">我想退款,請問要去哪裡?</td>
+<td><div>ฉันต้องการขอคืนเงิน กรุณาบอกฉันหน่อยว่าต้องไปที่ไหน?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ฉันต้องการขอคืนเงินค่าตั๋ว ต้องไปที่ไหน</div></td>
 <td>2.22s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>10</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/10_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問洗手間在哪裡？</td>
-<td>請問洗手間在哪裡?</td>
-<td>ห้องน้ำอยู่ที่ไหนคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問洗手間在哪裡?</td>
+<td><div>ห้องน้ำอยู่ที่ไหนคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ห้องน้ำอยู่ที่ไหน</div></td>
 <td>1.10s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>11</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/11_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問置物櫃在幾樓？</td>
-<td>請問置物櫃在幾樓</td>
-<td>รบกวนสอบถามว่าตู้เก็บของอยู่ที่ชั้นไหนคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問置物櫃在幾樓</td>
+<td><div>รบกวนสอบถามว่าตู้เก็บของอยู่ที่ชั้นไหนคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ตู้เก็บของอยู่ชั้นไหน</div></td>
 <td>2.35s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>12</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/12_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我想去美麗島站，怎麼轉乘捷運？</td>
-<td>我想去美麗島站,怎麼轉成捷運</td>
-<td>ฉันต้องการไปสถานี "เมย์หลี่เตา" (美丽岛站) จะต้องเปลี่ยนไปใช้รถไฟฟ้าใต้ดินอย่างไรบ้าง?</td>
+<td style="font-size:0.8rem;color:#475569">我想去美麗島站,怎麼轉成捷運</td>
+<td><div>ฉันต้องการไปสถานี "เมย์หลี่เตา" (美丽岛站) จะต้องเปลี่ยนไปใช้รถไฟฟ้าใต้ดินอย่างไรบ้าง?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ฉันอยากไปสถานีเมลีเต่า ต้องเปลี่ยน MRT อย่างไร</div></td>
 <td>3.72s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>13</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/13_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我的手機不見了，請問要去哪裡報失？</td>
-<td>我的手機不見了,請問要去哪裡報屍?</td>
-<td>โทรศัพท์มือถือของฉันหายไปแล้ว ฉันควรไปแจ้งความที่ไหนคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">我的手機不見了,請問要去哪裡報屍?</td>
+<td><div>โทรศัพท์มือถือของฉันหายไปแล้ว ฉันควรไปแจ้งความที่ไหนคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ฉันทำมือถือหาย ต้องแจ้งที่ไหน</div></td>
 <td>2.65s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>14</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/14_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請說慢一點，我聽不太清楚。</td>
-<td>請說慢一點,我聽不太清楚</td>
-<td>กรุณาพูดช้าๆ หน่อยนะคะ ฉันฟังไม่ค่อยชัดค่ะ/ครับ</td>
+<td style="font-size:0.8rem;color:#475569">請說慢一點,我聽不太清楚</td>
+<td><div>กรุณาพูดช้าๆ หน่อยนะคะ ฉันฟังไม่ค่อยชัดค่ะ/ครับ</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：กรุณาพูดช้าหน่อย ฉันฟังไม่ชัด</div></td>
 <td>2.39s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>15</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/15_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>我身體不舒服，請幫我叫站務人員。</td>
-<td>我身體不舒服,請幫我叫站務人員</td>
-<td>ฉันรู้สึกไม่สบายตัว ขอความช่วยเหลือจากเจ้าหน้าที่สถานีด้วยค่ะ/ครับ。</td>
+<td style="font-size:0.8rem;color:#475569">我身體不舒服,請幫我叫站務人員</td>
+<td><div>ฉันรู้สึกไม่สบายตัว ขอความช่วยเหลือจากเจ้าหน้าที่สถานีด้วยค่ะ/ครับ。</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ฉันรู้สึกไม่สบาย กรุณาเรียกเจ้าหน้าที่สถานี</div></td>
 <td>2.35s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>16</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/16_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這班車會停台南嗎？</td>
-<td>請問這班車會停臺南 (Tainan)嗎?</td>
-<td>รถไฟขบวนนี้จะจอดที่เมืองไถหนาน (Tainan) หรือไม่คะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問這班車會停臺南 (Tainan)嗎?</td>
+<td><div>รถไฟขบวนนี้จะจอดที่เมืองไถหนาน (Tainan) หรือไม่คะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：รถไฟขบวนนี้จอดที่ไถหนานไหม</div></td>
 <td>3.22s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>17</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/17_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問出口在哪裡？</td>
-<td>請問出口 (Exit)在哪裡?</td>
-<td>ขอโทษนะคะ ทางออกอยู่ที่ไหนคะ?</td>
+<td style="font-size:0.8rem;color:#475569">請問出口 (Exit)在哪裡?</td>
+<td><div>ขอโทษนะคะ ทางออกอยู่ที่ไหนคะ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ทางออกอยู่ที่ไหน</div></td>
 <td>1.25s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>18</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/18_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問公車站在哪裡？</td>
-<td>請問公車站在哪裡?</td>
-<td>รบกวนสอบถามว่าป้ายรถเมล์อยู่ที่ไหนคะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問公車站在哪裡?</td>
+<td><div>รบกวนสอบถามว่าป้ายรถเมล์อยู่ที่ไหนคะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ป้ายรถเมล์อยู่ที่ไหน</div></td>
 <td>2.34s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>19</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/19_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>請問這裡可以寄放大型行李嗎？</td>
-<td>請問這裡可以寄放大型行李嗎?</td>
-<td>รบกวนสอบถามว่า ที่นี่มีบริการรับฝากสัมภาระขนาดใหญ่หรือไม่คะ/ครับ?</td>
+<td style="font-size:0.8rem;color:#475569">請問這裡可以寄放大型行李嗎?</td>
+<td><div>รบกวนสอบถามว่า ที่นี่มีบริการรับฝากสัมภาระขนาดใหญ่หรือไม่คะ/ครับ?</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ที่นี่ฝากกระเป๋าใหญ่ได้ไหม</div></td>
 <td>3.11s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 <tr>
 <td>20</td>
 <td><audio controls preload="none"><source src="audio/tts-golden/20_zh_mixed.mp3" type="audio/mpeg"></audio></td>
 <td>謝謝您的幫忙，祝您有美好的一天。</td>
-<td>謝謝您的幫忙,祝您有美好的一天</td>
-<td>ขอบคุณสำหรับความช่วยเหลือ ขอให้คุณมีวันที่ดีนะคะ/ครับ</td>
+<td style="font-size:0.8rem;color:#475569">謝謝您的幫忙,祝您有美好的一天</td>
+<td><div>ขอบคุณสำหรับความช่วยเหลือ ขอให้คุณมีวันที่ดีนะคะ/ครับ</div><div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">期望：ขอบคุณสำหรับความช่วยเหลือ ขอให้มีวันที่ดีนะคะ</div></td>
 <td>1.86s</td>
-<td style="text-align:center;color:#9ca3af;">⬜</td>
+<td style="text-align:center;"><span style="color:#16a34a;font-weight:bold">✓</span></td>
 </tr>
 </tbody></table>
-<p style="font-size:0.8rem;color:#6b7280;">期望翻譯（ground truth）可參考 <a href="https://hackmd.io/@CHU-YIN/Sk9Um7FcWx">HackMD Sk9Um7FcWx</a>。</p>
 </div>
 
 <footer>
