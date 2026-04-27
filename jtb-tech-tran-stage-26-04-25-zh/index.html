@@ -67,6 +67,40 @@ footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
 <p style="margin-top:0.5rem;color:#dc2626;font-size:0.9rem;font-weight:bold;">🔥 關鍵發現：Madlad bridging 路徑（ja/ko）僅 48%，遠低於 TranslateGemma 的 95%。常見錯誤：地名亂碼（高雄→&lt;0xEC&gt;、美麗島→梅里島/梅里じま、Zuoying→豆英）、語意錯譯（捷運→高速公路、站務員→護士/待合室）。</p>
 </div>
 
+<div class="card" style="border:2px solid #16a34a;">
+<h2>📊 Phase 2 對照：Gemma direct 跑 zh→ja/ko（暫時繞過 _should_bridge）</h2>
+<div class="stats">
+<div class="stat"><div class="number" style="color:#16a34a;">100%</div><div class="label">Gemma direct ja+ko<br>(40/40)</div></div>
+<div class="stat"><div class="number" style="color:#dc2626;">48%</div><div class="label">Madlad bridging ja+ko<br>(19/40)</div></div>
+<div class="stat"><div class="number" style="color:#16a34a;">+52pp</div><div class="label">Gemma 領先<br>(21 句改善)</div></div>
+<div class="stat"><div class="number" style="color:#16a34a;">20/20</div><div class="label">JA Gemma direct<br>(bridging: 10/20)</div></div>
+<div class="stat"><div class="number" style="color:#16a34a;">20/20</div><div class="label">KO Gemma direct<br>(bridging: 9/20)</div></div>
+</div>
+<p style="margin-top:1rem;color:#374151;font-size:0.9rem;">
+<b>方法</b>：建 ConfigMap 包含 patched <code>madlad400_transformer_translation.py</code>（<code>_should_bridge</code> 改回 <code>return False</code>），mount 至 mt pod 蓋過 image 內檔案；測完移除 mount 還原。
+測試後已恢復原狀（bridging 仍對 zh→ja/ko 啟用）。
+</p>
+<p style="margin-top:0.5rem;color:#dc2626;font-size:0.95rem;font-weight:bold;">
+✅ 結論：Gemma 在 zh→ja/ko 完勝 Madlad bridging。建議 Madlad 退場（Phase 3：移除 <code>_should_bridge</code> + 拔 Madlad CT2 model）。
+</p>
+<details style="margin-top:1rem;">
+<summary style="cursor:pointer;font-size:0.9rem;color:#374151;font-weight:bold;">Bridging vs Gemma direct 主要錯誤對照（點開）</summary>
+<table style="margin-top:0.5rem;">
+<thead><tr><th>#</th><th>中文</th><th>Madlad bridging（錯）</th><th>Gemma direct（對）</th></tr></thead>
+<tbody>
+<tr><td>01 ko</td><td>高雄</td><td>가오&lt;0xEC&gt;&lt;0x8A&gt;&lt;0x9D&gt; (tokenizer 壞)</td><td>가오슝(高雄)</td></tr>
+<tr><td>02 ko</td><td>車票</td><td>항공권（飛機票）</td><td>기차표</td></tr>
+<tr><td>05 ja/ko</td><td>捷運入口</td><td>高速道路 / 고속도로</td><td>地下鉄 / 지하철</td></tr>
+<tr><td>06 ja</td><td>左營</td><td>豆英</td><td>左營（Zuoying）</td></tr>
+<tr><td>11 ja/ko</td><td>幾樓</td><td>どれくらい高い？(多高？) / 얼마나 높아요？</td><td>どの階 / 몇 층</td></tr>
+<tr><td>12 ko</td><td>捷運（轉乘）</td><td>고속열차（高速列車）</td><td>지하철</td></tr>
+<tr><td>13 ja/ko</td><td>手機不見了，要去哪報失</td><td>どこに行きたいの？/어디로 가시겠습니까？（完全丟句）</td><td>遺失物として届け出 / 신고</td></tr>
+<tr><td>15 ja/ko</td><td>站務員</td><td>待合室に電話 / 간호사（護士）</td><td>駅員 / 직원</td></tr>
+</tbody>
+</table>
+</details>
+</div>
+
 <div class="card">
 <h2>音檔樣本（首 3 題中文來源）</h2>
 <table>
