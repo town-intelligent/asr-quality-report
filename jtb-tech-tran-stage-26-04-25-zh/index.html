@@ -35,6 +35,10 @@ footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
 <h1>ASR 品質測試報告 — zh→xx 120 句</h1>
 <p class="subtitle">測試日期 2026-04-25 ｜ 測試機器 jtb-tech-tran-stage ｜ 方向 zh → 6 target</p>
 
+<div class="warn" style="background:#dcfce7;border-left-color:#16a34a;">
+<b>📌 2026-04-28 update</b>：本報告 Phase 2 結論已落地 production — image <code>yillkid/madlad-fastapi:gemma-only-v1</code> 已部署到 jtb-tech-tran-stage（ArgoCD synced），stage 重跑同一份 120 句測試集得 <b>116/120 = 96.7%</b>，與本表 (Phase 1 非 bridging 部分 76/80) + (Phase 2 ja/ko 40/40) 完全一致。<br><b>Madlad bridging 已退場</b>，所有 zh→xx 路徑統一走 TranslateGemma。詳見 <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/issues/185">GitLab #185</a>。
+</div>
+
 <div class="warn">
 <b>⚠ 測試焦點</b>：補齊 <a href="../jtb-tech-tran-stage-26-04-12/">2026-04-12 只測 xx→zh</a> 的盲點。此報告**首次覆蓋 zh → ja/ko 的 Madlad bridging 路徑**。詳見 <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/issues/181">GitLab #181</a>。
 </div>
