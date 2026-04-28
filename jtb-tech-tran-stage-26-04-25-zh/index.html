@@ -44,54 +44,6 @@ footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
 </div>
 
 <div class="card">
-<h2>Changelog（最新在上）</h2>
-<table>
-<thead><tr><th>日期</th><th>事件</th><th>對應</th></tr></thead>
-<tbody>
-<tr>
-<td><b>2026-04-28</b></td>
-<td>
-  <b>Phase 3 — gemma-only-v1 落地 production stage</b><br>
-  ArgoCD sync 後重跑同一份 120 句測試集 = <b>116/120 = 96.7%</b>。<br>
-  zh→ja/ko 從 47.5%（bridging）升到 100%（Gemma direct）。<br>
-  非 bridging 路徑 (en/id/vi/th) 80 句逐字 0 diff（image change 對既有路徑零副作用）。<br>
-  Gemma startup 預載驗證：container 起來 → +115s 預載完成 → +2s 暖機完成。<br>
-  <b>Madlad 退場</b>。
-</td>
-<td>
-  <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/185">#185</a><br>
-  <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/175">#175 closed</a>
-</td>
-</tr>
-<tr>
-<td><b>2026-04-25</b></td>
-<td>
-  <b>Phase 2 — Gemma direct 補測 zh→ja/ko 40 句 = 100%</b><br>
-  暫時透過 ConfigMap mount 蓋過 <code>_should_bridge</code> → return False，繞過 bridging 直接走 Gemma。<br>
-  測試結束後還原 stage deployment（bridging 仍對 zh→ja/ko 啟用）。<br>
-  關鍵發現：bridging 47.5% vs Gemma direct 100%，Madlad 可退場。
-</td>
-<td>
-  <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/181#note_3288332627">#181 Phase 2</a>
-</td>
-</tr>
-<tr>
-<td><b>2026-04-25</b></td>
-<td>
-  <b>Phase 1 — zh→xx 完整 baseline 測試 = 95/120 = 79.2%</b><br>
-  首次覆蓋 zh→ja/ko 的 Madlad bridging 路徑。<br>
-  分布：EN 19/20、JA 10/20（bridging）、KO 9/20（bridging）、ID 20/20、VI 18/20、TH 19/20。<br>
-  bridging 子集 47.5%（fail）vs Gemma 子集 95%（pass）。
-</td>
-<td>
-  <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/181">#181 closed</a>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="card">
 <h2>測試環境</h2>
 <table>
 <tr><td>測試機器</td><td>jtb-tech-tran-stage (mycena-7950x-5090, RTX 5090 32GB)</td></tr>
