@@ -36,7 +36,7 @@
   <p class="subtitle">
     測試機器：<code>jtb-tech-tran-stage</code> ｜ 測試日期：2026-05-17<br>
     音檔來源：達運 Lab 真人錄音（AT2040 麥克風，與出貨規格相同）<br>
-    ASR：<code>Qwen3-ASR-1.7B</code> ｜ 翻譯：<code>TranslateGemma 12B int8</code><br>
+    處理鏈路：升級版 ASR 引擎 → 後校正規則 → 機器翻譯<br>
     語系：vi（女+男）/ id（女）/ ko（女）/ ja（女）／泰文達運未錄製
   </p>
 
@@ -53,10 +53,10 @@
     <h2>測試環境</h2>
     <table>
       <tbody>
-        <tr><td>2way-api-server</td><td><code>yillkid/2way-api:15416e6</code></td></tr>
-        <tr><td>whisper-asr-webservice</td><td><code>yillkid/whisper-asr-webservice:qwen3-v6</code>（ASR_ENGINE=qwen3_asr, ASR_MODEL=Qwen/Qwen3-ASR-1.7B）</td></tr>
-        <tr><td>madlad (MT)</td><td><code>yillkid/madlad-fastapi:gemma-only-v2</code>（strategy=translate_gemma）</td></tr>
-        <tr><td>後校正 cm</td><td><code>whisper-asr-substitutions</code>（vi/id/ko/ja/th，replacement 救成中文 canonical）</td></tr>
+        <tr><td>翻譯 API 服務</td><td>內部 2way-api（接收音檔、串接 ASR + MT）</td></tr>
+        <tr><td>ASR 引擎</td><td>升級版 ASR（取代前一代，多語強化）</td></tr>
+        <tr><td>機器翻譯</td><td>自部署 MT（離線運行）</td></tr>
+        <tr><td>後校正規則</td><td>逐語 post-correction（vi/id/ko/ja/th），ASR 變體 → 中文站名 canonical</td></tr>
         <tr><td>判定標準</td><td>MT 中文輸出包含期望關鍵詞（地名／設施／動作）即算 PASS</td></tr>
       </tbody>
     </table>
@@ -83,7 +83,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th><th>語系</th><th>項次</th><th>達運原評</th><th>音檔</th><th>中文題目</th><th>ASR raw</th><th>後校正</th><th>MT 中文輸出</th><th>判定</th>
+          <th>#</th><th>語系</th><th>項次</th><th>達運原評</th><th>音檔</th><th>達運中譯</th><th>ASR 原始</th><th>後校正</th><th>MT 中文輸出</th><th>判定</th>
         </tr>
       </thead>
       <tbody>
@@ -692,7 +692,6 @@
   </div>
 
   <footer>
-    工具：<code>/tmp/qwen3-unified-49.py</code> ｜ 完整 JSON：<code>/tmp/qwen3-unified-49-results.json</code><br>
     Issue 參考：<a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/207">jtb-tech #207</a>
   </footer>
 </body>
