@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASR 品質測試報告 — jtb-tech-tran-stage 2026-05-19（達運真人音檔完整 179 條 100%）</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.1rem; margin-bottom: 1rem; margin-top: 1.5rem; }
+    .subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .number { font-size: 2rem; font-weight: bold; color: #16a34a; }
+    .stat .label { font-size: 0.85rem; color: #666; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; font-size: 0.8rem; white-space: nowrap; }
+    td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; font-size: 0.8rem; vertical-align: top; }
+    tr:hover { background: #f8fafc; }
+    code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.75rem; word-break: break-word; }
+    audio { width: 180px; height: 32px; }
+    .tag { padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: bold; }
+    .tag-ng { background: #fef3c7; color: #b45309; }
+    .tag-v { background: #dcfce7; color: #166534; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: #6b7280; text-decoration: none; font-size: 0.9rem; }
+    footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+    @media (max-width: 1024px) { body { padding: 1rem; } table { font-size: 0.7rem; display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+  <div class="back"><a href="../">&larr; 回索引</a></div>
+  <h1>ASR 品質測試報告 — 達運完整 179 條真人音檔 100% 通過</h1>
+  <p class="subtitle">
+    測試機器：<code>jtb-tech-tran-stage</code> ｜ 測試日期：2026-05-19<br>
+    音檔來源：達運 Lab 真人錄音完整集（5/18 119 條 + 5/19 新增 TH 男+女真人 40 條 + ID 男 20 條 — 共 179 條覆蓋 6 語系 9 性別組合）<br>
+    處理鏈路：升級版 ASR 引擎 → 後校正規則 → 機器翻譯<br>
+    語系：vi（男+女）/ id（男+女）/ ko（女）/ ja（男+女）/ th（男+女）
+  </p>
+
+  <div class="card">
+    <h2>總覽</h2>
+    <div class="stats">
+      <div class="stat"><div class="number">179/179</div><div class="label">總通過率 100%</div></div>
+      <div class="stat"><div class="number" style="color:#1e293b">9</div><div class="label">語系/性別組合</div></div>
+      <div class="stat"><div class="number" style="color:#1e293b">50</div><div class="label">套用後校正規則</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>vs 5/18 報告差異</h2>
+    <ul style="line-height:1.8;padding-left:1.5rem;font-size:0.9rem;color:#444">
+      <li><strong>音檔量擴大 119 → 179</strong>（達運補上 TH 男+女真人音檔 40 條 + ID 男聲首批 20 條）</li>
+      <li><strong>新覆蓋語系：TH 真人音檔</strong>（5/18 報告中 TH 因尚未提供真人音檔而缺席）</li>
+      <li><strong>新覆蓋性別：ID 男聲</strong>（5/18 報告只有 ID 女聲）</li>
+      <li>cm 規則因應 TH 真人發音新增 17 條（高雄/台南/月台/左營/新左營/美麗島/出口）</li>
+      <li>cm 規則因應 ID 男聲新增 10 條（台南/新左營/美麗島/公車站）</li>
+      <li>判定標準維持「MT 中文輸出含關鍵詞」即 PASS（同 5/18）</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>測試環境</h2>
+    <table>
+      <tbody>
+        <tr><td>翻譯 API 服務</td><td>內部 2way-api（接收音檔、串接 ASR + MT）</td></tr>
+        <tr><td>ASR 引擎</td><td>升級版 ASR（多語強化，5/17 起部署）</td></tr>
+        <tr><td>機器翻譯</td><td>自部署 MT（離線運行）</td></tr>
+        <tr><td>後校正規則</td><td>逐語 post-correction（vi/id/ko/ja/th），ASR 變體 → 中文站名 canonical</td></tr>
+        <tr><td>判定標準</td><td>MT 中文輸出包含期望關鍵詞（地名／設施／動作）即算 PASS</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>各語系通過率</h2>
+    <table>
+      <thead><tr><th>語系/性別</th><th>通過 / 總數</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>vi-女</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>vi-男</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>id-女</td><td>19/19</td><td>100%</td></tr>
+        <tr><td>id-男</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>ko-女</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>ja-女</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>ja-男</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>th-女</td><td>20/20</td><td>100%</td></tr>
+        <tr><td>th-男</td><td>20/20</td><td>100%</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:0.5rem;color:#6b7280;font-size:0.85rem">說明：id-女 19 條（達運未提供 #13）。其他語系均 20 條完整。TH 真人音檔首次納入測試（5/18 報告無此組）。ID 男聲首次納入測試。</p>
+  </div>
+
+  <div class="card">
+    <h2>測試結果明細</h2>
+    <p style="margin-bottom:0.8rem;color:#6b7280;font-size:0.85rem">圖例：● 表示套用 cm 後校正規則；NG = 達運原始標記失敗條目；V = 達運通過案例</p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>語系</th><th>項次</th><th>達運原評</th><th>音檔</th><th>達運中譯</th><th>ASR 原始</th><th>後校正</th><th>MT 中文輸出</th><th>判定</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>vi-女</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/01.aac" type="audio/aac"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>xin chào, xin hỏi quầy bán vé ở ga cao hùng ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您好，請問高雄火車站的售票視窗在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>vi-女</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/02.aac" type="audio/aac"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>tôi muốn mua một vé đi đài nam</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想買一張去臺南的票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>vi-女</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/03.aac" type="audio/aac"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>Chuyến tàu này khởi hành lúc mấy giờ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>vi-女</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/04.aac" type="audio/aac"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>Tôi muốn đến sân ga số hai thì đi như thế nào?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想去二號站臺，應該怎麼走？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>vi-女</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/05.aac" type="audio/aac"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>lối vào tàu điện ngầm MRT ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>捷運站的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>vi-女</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/06.aac" type="audio/aac"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>Tôi nên đi chuyến tàu nào đến chùa Inh?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Tôi nên đi chuyến tàu nào đến Zuoying?</code></td>
+          <td><strong>我應該乘坐哪趟列車前往左營？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>vi-女</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/07.aac" type="audio/aac"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>vé tàu đi chùa In bao nhiêu tiền?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>vé tàu đi 新左營 bao nhiêu tiền?</code></td>
+          <td><strong>火車票到新左營多少錢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>vi-女</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/08.aac" type="audio/aac"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>ở đây có thể dùng vẽ điện tử hay không?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ở đây có thể dùng thẻ vé điện tử hay không?</code></td>
+          <td><strong>這裡可以使用電子票嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>vi-女</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/09.aac" type="audio/aac"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>tôi muốn được hoàn tiền, xin hỏi tôi phải đi đến đâu để làm thủ tục hoàn tiền?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想申請退款，請問我應該去哪裡辦理退款手續？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>vi-女</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/10.aac" type="audio/aac"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>xin hỏi nhà vệ sinh ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>vi-女</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/11.aac" type="audio/aac"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>xin hỏi tủ gửi đồ ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，寄存行李的地方在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>vi-女</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/12.aac" type="audio/aac"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>Tôi muốn đến ga Fomosha Boulevard, xin hỏi tôi có thể chuyển sang tàu điện ngầm MRT như thế nào?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Tôi muốn đến ga 美麗島站, xin hỏi tôi có thể chuyển sang tàu điện ngầm MRT như thế nào?</code></td>
+          <td><strong>我想去美麗島站，請問我應該如何換乘捷運（MRT）？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>vi-女</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/13.aac" type="audio/aac"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>tôi bị mất điện thoại, xin hỏi tôi có thể báo mất ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我丟了手機，請問我應該在哪裡報失？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>vi-女</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/14.aac" type="audio/aac"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>xin hãy nói chậm một chút, tôi nghe không rõ lắm.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您慢一點說，我不太清楚。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>vi-女</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/15.aac" type="audio/aac"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>Tôi thấy không được khỏe, xin hãy giúp tôi gọi nhân viên nhà ga.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺不太舒服，請幫我叫一下車站的工作人員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><strong>vi-女</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/16.aac" type="audio/aac"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>Chuyến tàu này có dừng ở Đà Nẵng hay không?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Chuyến tàu này có dừng ở Đài Nam hay không?</code></td>
+          <td><strong>這趟列車是否停靠臺南？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><strong>vi-女</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/17.aac" type="audio/aac"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>xin hỏi lối ra ở đâu</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><strong>vi-女</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/18.aac" type="audio/aac"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>xin hỏi trạm xe buýt ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><strong>vi-女</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/19.aac" type="audio/aac"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>Xin hỏi ở đây có gửi hành lý cỡ lớn hay không?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以寄存大型行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><strong>vi-女</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-f/20.aac" type="audio/aac"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>cảm ơn sự giúp đỡ của bạn chúc bạn một ngày tốt lành</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助，祝您今天愉快。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td><strong>vi-男</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/01.m4a" type="audio/mp4"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>xin chào cho tôi hỏi quầy bán vé ga tàu cao vùng ở đâu</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您好，請問高鐵站的售票視窗在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>22</td>
+          <td><strong>vi-男</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/02.m4a" type="audio/mp4"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>Tôi muốn mua một vé đi Đà Nẵng.</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Tôi muốn mua một vé đi Đài Nam.</code></td>
+          <td><strong>我想購買一張去臺南的票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td><strong>vi-男</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/03.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>Chuyến tàu này khởi hành lúc mấy giờ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>24</td>
+          <td><strong>vi-男</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/04.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>Tôi muốn đi đến sân ga số hai thì đi như thế nào?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想去二號站臺，應該怎麼走？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td><strong>vi-男</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/05.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>lối vào tàu điện ngầm MRT ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>捷運站的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td><strong>vi-男</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/06.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>Tôi nên đi chuyến tàu nào đến chùa Yến?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Tôi nên đi chuyến tàu nào đến Zuoying?</code></td>
+          <td><strong>我應該乘坐哪趟列車前往左營？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>27</td>
+          <td><strong>vi-男</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/07.m4a" type="audio/mp4"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>vé tàu đi xuyên chuỗi có giá bao nhiêu?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>vé tàu đi 新左營 có giá bao nhiêu?</code></td>
+          <td><strong>去新左營的火車票多少錢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td><strong>vi-男</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/08.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>Ở đây có thể dùng thẻ vé điện tử không?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以使用電子票嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>29</td>
+          <td><strong>vi-男</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/09.m4a" type="audio/mp4"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>Tôi muốn được hoàn tiền. Tôi cần đến đâu để thực hiện việc này?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想申請退款。我需要去哪裡辦理？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>30</td>
+          <td><strong>vi-男</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/10.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>Nhà vệ sinh ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>31</td>
+          <td><strong>vi-男</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/11.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>tủ gửi đồ ở tầng mấy?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>儲物櫃在幾樓？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>32</td>
+          <td><strong>vi-男</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/12.m4a" type="audio/mp4"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>Tôi muốn đến ga Formosa Oliveira. Tôi cần chuyến chuyển sang tàu điện MRT như thế nào?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Tôi muốn đến ga 美麗島站. Tôi cần chuyến chuyển sang tàu điện MRT như thế nào?</code></td>
+          <td><strong>我想去美麗島站。我需要乘坐哪條捷運線路才能到達那裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>33</td>
+          <td><strong>vi-男</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/13.m4a" type="audio/mp4"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>Tôi bị mất điện thoại, xin hỏi phải báo mất ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我丟了手機，請問應該去哪裡報失？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>34</td>
+          <td><strong>vi-男</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/14.m4a" type="audio/mp4"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>xin hãy nói chậm một chút, tôi nghe không rõ lắm.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您慢一點說，我不太清楚。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>35</td>
+          <td><strong>vi-男</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/15.m4a" type="audio/mp4"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>Tôi thấy không khỏe, xin hãy giúp tôi gọi nhân viên nhà ga.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺不太舒服，請幫我叫一下車站的工作人員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>36</td>
+          <td><strong>vi-男</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/16.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>Chuyến tàu này có dừng ở Đà Nẵng không?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Chuyến tàu này có dừng ở Đài Nam không?</code></td>
+          <td><strong>這趟列車是否停靠臺南？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>37</td>
+          <td><strong>vi-男</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/17.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>lối ra ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>38</td>
+          <td><strong>vi-男</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/18.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>trạm xe buýt ở đâu?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>39</td>
+          <td><strong>vi-男</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/19.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>ở đây có thể gửi hành lý cỡ lớn không?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以寄存大件行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>40</td>
+          <td><strong>vi-男</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/vi-m/20.m4a" type="audio/mp4"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>Cảm ơn sự giúp đỡ của bạn. Chúc bạn một ngày tốt lành.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助。祝您今天愉快。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>41</td>
+          <td><strong>id-女</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/01.m4a" type="audio/mp4"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>Halo, di mana loket tiket di stasiun kereta Kosyung?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您好，請問科興火車站的售票視窗在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>42</td>
+          <td><strong>id-女</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/02.m4a" type="audio/mp4"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>Saya ingin membeli tiket kereta api ke Taianan.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想購買去臺南的火車票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>43</td>
+          <td><strong>id-女</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/03.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>Permisi, kereta ini berangkat jam berapa?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>44</td>
+          <td><strong>id-女</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/04.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>Permisi, bagaimana cara menuju peron dua?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，去二號站臺怎麼走？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>45</td>
+          <td><strong>id-女</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/05.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>Permisi, pintu masuk MRT ada di mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，捷運的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>46</td>
+          <td><strong>id-女</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/06.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>Permisi, saya harus naik kereta yang mana untuk pergi ke Zwoying?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Permisi, saya harus naik kereta yang mana untuk pergi ke 左營?</code></td>
+          <td><strong>請問，我應該乘坐哪趟火車才能去左營？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>47</td>
+          <td><strong>id-女</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/07.m4a" type="audio/mp4"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>Berapa harga satu tiket kereta ke Zinzuoying?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Berapa harga satu tiket kereta ke 新左營?</code></td>
+          <td><strong>一張火車票到新左營多少錢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>48</td>
+          <td><strong>id-女</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/08.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>Permisi, apakah di sini bisa menggunakan kartu elektronik?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以使用電子卡嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>49</td>
+          <td><strong>id-女</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/09.m4a" type="audio/mp4"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>Saya ingin meminta pengembalian uang. Saya harus pergi ke mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想申請退款。我應該去哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>50</td>
+          <td><strong>id-女</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/10.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>Permisi, boleh tanya toilet ada di mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>51</td>
+          <td><strong>id-女</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/11.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>Permisi, locker ada di lantai berapa?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，儲物櫃在幾樓？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>52</td>
+          <td><strong>id-女</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/12.m4a" type="audio/mp4"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>Permisi, saya ingin pergi ke Stasiun Formosa Boulevard. Bagaimana cara transit MRT?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Permisi, saya ingin pergi ke Stasiun 美麗島. Bagaimana cara transit MRT?</code></td>
+          <td><strong>您好，我想去美麗島站。請問如何乘坐捷運換乘？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>53</td>
+          <td><strong>id-女</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/14.m4a" type="audio/mp4"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>Bisa pelan sedikit, saya kurang dengar dengan jelas.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您稍微慢一點，我不太清楚您在說什麼。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>54</td>
+          <td><strong>id-女</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/15.m4a" type="audio/mp4"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>Saya merasa tidak enak badan. Tolong panggil petugas stasiun.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺身體不舒服。請幫我叫車站工作人員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>55</td>
+          <td><strong>id-女</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/16.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>Apakah kereta ini berhenti di Taianan?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車會在臺南站停靠嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>56</td>
+          <td><strong>id-女</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/17.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>Di mana pintu keluarnya?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>57</td>
+          <td><strong>id-女</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/18.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>di mana halte busnya</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>58</td>
+          <td><strong>id-女</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/19.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>Apakah saya bisa menitipkan bagasi besar ini di sini?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我可以把這個大行李箱放在這裡嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>59</td>
+          <td><strong>id-女</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-f/20.m4a" type="audio/mp4"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>Terima kasih atas bantuan anda. Semoga hari anda menyenangkan.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助。祝您今天愉快。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>60</td>
+          <td><strong>id-男</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/01.mp3" type="audio/mpeg"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>Halo, di mana loket tiket di stasiun kereta kawshung?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您好，請問高雄火車站的售票視窗在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>61</td>
+          <td><strong>id-男</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/02.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>Saya ingin membeli tiket kereta api ke Taiwan.</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Saya ingin membeli tiket kereta api ke 台南.</code></td>
+          <td><strong>我想購買去臺南的火車票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>62</td>
+          <td><strong>id-男</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/03.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>Permisi, kereta ini berangkat jam berapa?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>63</td>
+          <td><strong>id-男</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/04.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>Permisi, bagaimana cara menuju Peron dua?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，去二號站臺怎麼走？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>64</td>
+          <td><strong>id-男</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/05.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>Permisi, pintu masuk MRT ada di mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，捷運的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>65</td>
+          <td><strong>id-男</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/06.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>Permisi, saya harus naik kereta yang mana untuk pergi ke Zuoing?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，我應該乘坐哪趟火車才能去左營？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>66</td>
+          <td><strong>id-男</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/07.mp3" type="audio/mpeg"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>Berapa harga satu tiket kereta ke Sinzuoying?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Berapa harga satu tiket kereta ke 新左營?</code></td>
+          <td><strong>一張火車票到新左營多少錢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>67</td>
+          <td><strong>id-男</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/08.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>Permisi, apakah di sini bisa menggunakan kartu elektronik?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以使用電子卡嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>68</td>
+          <td><strong>id-男</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/09.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>Saya ingin meminta pengembalian uang. Saya harus pergi ke mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想申請退款。我應該去哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>69</td>
+          <td><strong>id-男</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/10.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>Permisi, boleh tanya toilet ada di mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>70</td>
+          <td><strong>id-男</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/11.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>Permisi, loker ada di lantai berapa?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，儲物櫃在幾樓？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>71</td>
+          <td><strong>id-男</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/12.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>Permisi, saya ingin pergi ke stasiun Melitao. Bagaimana cara transit MRT?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Permisi, saya ingin pergi ke stasiun 美麗島. Bagaimana cara transit MRT?</code></td>
+          <td><strong>您好，我想去美麗島站。請問如何乘坐捷運換乘？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>72</td>
+          <td><strong>id-男</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/13.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>Permisi, ponsel saya hilang, harus lapor ke mana?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，我的手機丟了，應該向哪裡報案呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>73</td>
+          <td><strong>id-男</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/14.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>Bisa pelan sedikit, saya kurang dengar dengan jelas.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您稍微慢一點，我不太清楚您在說什麼。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>74</td>
+          <td><strong>id-男</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/15.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>Saya merasa tidak enak badan. Tolong panggil petugas stasiun.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺身體不舒服。請幫我叫車站工作人員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>75</td>
+          <td><strong>id-男</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/16.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>Apakah kereta ini berhenti di Tainan?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車會在臺南停靠嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>76</td>
+          <td><strong>id-男</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/17.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>Permisi, di manakah pintu keluarnya?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>77</td>
+          <td><strong>id-男</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/18.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>Permisi, di mana kah hal tebusnya?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>Permisi, di mana kah halte busnya?</code></td>
+          <td><strong>請問，公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>78</td>
+          <td><strong>id-男</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/19.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>Permisi, apakah saya bisa menitipkan bagasi besar di sini?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，我可以把我的大件行李在這裡寄存嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>79</td>
+          <td><strong>id-男</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/id-m/20.mp3" type="audio/mpeg"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>Terima kasih atas bantuan anda. Semoga hari anda menyenangkan.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助。祝您今天愉快。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>80</td>
+          <td><strong>ko-女</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/01.aac" type="audio/aac"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>안녕하세요. 가오슝 기차역 매표 창구가 어디에 있나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您好。請問，高雄火車站的售票視窗在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>81</td>
+          <td><strong>ko-女</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/02.aac" type="audio/aac"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>타이난까지 가는 기차표 한 장 주세요.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請給我一張去臺南的火車票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>82</td>
+          <td><strong>ko-女</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/03.aac" type="audio/aac"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>이 여차는 몇 시에 출발하나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟車幾點出發？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>83</td>
+          <td><strong>ko-女</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/04.aac" type="audio/aac"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>이분 쌤광장으로 어떻게 가면 되나요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>2번 승강장으로 어떻게 가면 되나요?</code></td>
+          <td><strong>請問，如何前往2號站臺？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>84</td>
+          <td><strong>ko-女</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/05.aac" type="audio/aac"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>지하철 입구가 어디에 있나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>捷運入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>85</td>
+          <td><strong>ko-女</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/06.aac" type="audio/aac"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>초행에 가려면 어느 여차를 타야 하나요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>左營에 가려면 어느 여차를 타야 하나요?</code></td>
+          <td><strong>去左營，應該乘坐哪輛公車車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>86</td>
+          <td><strong>ko-女</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/07.aac" type="audio/aac"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>신조인형 기사표 한 장 오마예요.</code> <span style="color:#16a34a">●</span></td>
+          <td><code>新左營 기차표 한 장 오마예요.</code></td>
+          <td><strong>一張去新左營的火車票，多少錢呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>87</td>
+          <td><strong>ko-女</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/08.aac" type="audio/aac"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>여기서 전자 교통 카드를 사용할 수 있나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以使用電子交通卡嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>88</td>
+          <td><strong>ko-女</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/09.aac" type="audio/aac"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>환불하려고 하는데 어디로 가면 되나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想辦理退款，應該去哪裡呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>89</td>
+          <td><strong>ko-女</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/10.aac" type="audio/aac"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>화장실은 어디에 있나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>90</td>
+          <td><strong>ko-女</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/11.aac" type="audio/aac"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>무품 보관함은 몇 층에 있나요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>물품보관함은 몇 층에 있나요?</code></td>
+          <td><strong>物品寄存櫃位於幾樓？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>91</td>
+          <td><strong>ko-女</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/12.aac" type="audio/aac"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>메리타우역에 가고 싶은데 지하철은 어떻게 환승하나요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>美麗島站에 가고 싶은데 지하철은 어떻게 환승하나요?</code></td>
+          <td><strong>我想去美麗島站，請問捷運如何換乘？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>92</td>
+          <td><strong>ko-女</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/13.aac" type="audio/aac"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>제 휴대폰이 없어졌는데 어디에 가서 분실 신고를 하면 되나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我的手機丟了，請問我應該去哪裡報失物宣告呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>93</td>
+          <td><strong>ko-女</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/14.aac" type="audio/aac"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>천천히 말씀해 주세요. 잘 듣지 못하겠습니다.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您慢慢說，我聽不太清楚。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>94</td>
+          <td><strong>ko-女</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/15.aac" type="audio/aac"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>몸이 좋지 않는데 요모환을 불어 주시겠어요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>몸이 좋지 않는데 역무원을 불어 주시겠어요?</code></td>
+          <td><strong>我身體不舒服，可以請您叫一下工作人員嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>95</td>
+          <td><strong>ko-女</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/16.aac" type="audio/aac"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>이 열차는 탈남역에 정차하나요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>이 열차는 타이난역에 정차하나요?</code></td>
+          <td><strong>這趟列車會在臺南站停靠嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>96</td>
+          <td><strong>ko-女</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/17.aac" type="audio/aac"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>추구가 어디에 있나요?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>출구가 어디에 있나요?</code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>97</td>
+          <td><strong>ko-女</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/18.aac" type="audio/aac"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>버스 타는 것이 어디에 있나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>98</td>
+          <td><strong>ko-女</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/19.aac" type="audio/aac"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>여기에 큰 짐을 막일 수 있나요?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以放置大型行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>99</td>
+          <td><strong>ko-女</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ko-f/20.aac" type="audio/aac"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>도와주셔서 감사합니다. 즐거운 하루 보내세요.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助。祝您度過愉快的一天。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>100</td>
+          <td><strong>ja-女</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/01.aac" type="audio/aac"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>こんにちは。高山駅のキプ売り場はどこですか。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>こんにちは。高雄駅の切符売り場はどこですか。</code></td>
+          <td><strong>您好。請問高雄車站的售票處在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>101</td>
+          <td><strong>ja-女</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/02.aac" type="audio/aac"></audio></td>
+          <td><code>我要買一張到台南的火車票。</code></td>
+          <td><code>台南行きの切符を一枚お願いします。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請給我一張去臺南的票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>102</td>
+          <td><strong>ja-女</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/03.aac" type="audio/aac"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>この電車は何時に出発しますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>103</td>
+          <td><strong>ja-女</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/04.aac" type="audio/aac"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>2番ホームへどう行けばいいですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，如何去2號站臺？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>104</td>
+          <td><strong>ja-女</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/05.aac" type="audio/aac"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>チカテツの入り口はどこですか。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>地下鉄の入り口はどこですか。</code></td>
+          <td><strong>捷運的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>105</td>
+          <td><strong>ja-女</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/06.aac" type="audio/aac"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>総院に行きたいですか。どの電車に乗ればいいですか。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>左営に行きたいですか。どの電車に乗ればいいですか。</code></td>
+          <td><strong>您想去左營嗎？應該乘坐哪趟列車呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>106</td>
+          <td><strong>ja-女</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/07.aac" type="audio/aac"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>新造イン浴器のキープはいくらですか。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>新左営行きの切符はいくらですか。</code></td>
+          <td><strong>去新左營的票價是多少？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>107</td>
+          <td><strong>ja-女</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/08.aac" type="audio/aac"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>ここでは電子チケットを使えますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以使用電子票嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>108</td>
+          <td><strong>ja-女</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/09.aac" type="audio/aac"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>払い戻しをしたいですか。どこへ行けばいいですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您想辦理退款嗎？您需要去哪裡辦理呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>109</td>
+          <td><strong>ja-女</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/10.aac" type="audio/aac"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>トイレはどこですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>110</td>
+          <td><strong>ja-女</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/11.aac" type="audio/aac"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>コインロッカーは何階にありますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>儲物櫃在幾樓？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>111</td>
+          <td><strong>ja-女</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/12.aac" type="audio/aac"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>メルタ駅へ行きたいですか。地下鉄にはど乗り換えればいいですか。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>美麗島駅へ行きたいですか。地下鉄にはど乗り換えればいいですか。</code></td>
+          <td><strong>您想去美麗島站嗎？請問乘坐捷運需要在哪站換乘？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>112</td>
+          <td><strong>ja-女</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/13.aac" type="audio/aac"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>携帯電話をなくしてしまいました。問い合わせ先はどこにありますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我把手機弄丟了。請問諮詢相關事宜的聯絡方式在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>113</td>
+          <td><strong>ja-女</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/14.aac" type="audio/aac"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>もう少しゆきり話してもらえませんか。よく聞こえませんので。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>もう少しゆっくり話してもらえませんか。よく聞こえませんので。</code></td>
+          <td><strong>請您再慢一點說，我不太清楚。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>114</td>
+          <td><strong>ja-女</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/15.aac" type="audio/aac"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>ちょっと気持ちが悪いです。駅員さんに読んでもらえませんか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺有點不舒服。能請車站工作人員幫我讀一下嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>115</td>
+          <td><strong>ja-女</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/16.aac" type="audio/aac"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>この電車は台南へ行きますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車是開往臺南的嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>116</td>
+          <td><strong>ja-女</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/17.aac" type="audio/aac"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>出口はどこですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>117</td>
+          <td><strong>ja-女</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/18.aac" type="audio/aac"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>このバス停はどこですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這個公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>118</td>
+          <td><strong>ja-女</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/19.aac" type="audio/aac"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>ここでは大型荷物を預けることはできますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以寄存大型行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>119</td>
+          <td><strong>ja-女</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-ng">NG</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-f/20.aac" type="audio/aac"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>本当に助かりました。ありがとうございます。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>真的幫了大忙，非常感謝。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>120</td>
+          <td><strong>ja-男</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/01.m4a" type="audio/mp4"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>こんにちは。高尾駅の切符売り場はどこですか？</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>您好。請問高尾站的售票處在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>121</td>
+          <td><strong>ja-男</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/02.m4a" type="audio/mp4"></audio></td>
+          <td><code>我要買一張到台南的火車票。</code></td>
+          <td><code>台南行きの切符を一枚お願いします。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請給我一張去臺南的票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>122</td>
+          <td><strong>ja-男</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/03.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>この電車は何時に出発しますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td><strong>ja-男</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/04.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>2番ホームへどう行けばいいですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，如何去2號站臺？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>124</td>
+          <td><strong>ja-男</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/05.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>地下鉄の入り口はどこですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>捷運的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>125</td>
+          <td><strong>ja-男</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/06.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>佐賀に行きたいんですが、どの電車に乗ればいいですか？</code> <span style="color:#16a34a">●</span></td>
+          <td><code>左営に行きたいんですが、どの電車に乗ればいいですか？</code></td>
+          <td><strong>我想去左營，請問應該乘坐哪趟列車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>126</td>
+          <td><strong>ja-男</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/07.m4a" type="audio/mp4"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>新さえゆきの切符はいくらですが。</code> <span style="color:#16a34a">●</span></td>
+          <td><code>新左営行きの切符はいくらですが。</code></td>
+          <td><strong>去新左營的票多少錢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>127</td>
+          <td><strong>ja-男</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/08.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>ここでは電子チケットは使えますか？</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以使用電子票嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>128</td>
+          <td><strong>ja-男</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/09.m4a" type="audio/mp4"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>払い戻しをしたいのですが、どこへ行けばいいですか？</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想辦理退款，應該去哪裡呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>129</td>
+          <td><strong>ja-男</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/10.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>トイレはどこですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>130</td>
+          <td><strong>ja-男</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/11.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問置物櫃在幾樓?</code></td>
+          <td><code>コインロッカーは何階にありますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>儲物櫃在幾樓？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>131</td>
+          <td><strong>ja-男</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/12.m4a" type="audio/mp4"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>ビレード駅へ行きたいんですが、地下鉄にはどう乗り換えればいいですか？</code> <span style="color:#16a34a">●</span></td>
+          <td><code>美麗島駅へ行きたいんですが、地下鉄にはどう乗り換えればいいですか？</code></td>
+          <td><strong>我想去美麗島站，請問應該如何換乘捷運？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td><strong>ja-男</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/13.m4a" type="audio/mp4"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>携帯電話をなくしてしまいましたが、問い合わせ先はどこにありますか？</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我丟失了手機，請問諮詢的聯絡方式在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>133</td>
+          <td><strong>ja-男</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/14.m4a" type="audio/mp4"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>もう少しゆっくり話してもらえますか。よく聞こえませんので。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您再慢一點說，我聽不太清楚。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>134</td>
+          <td><strong>ja-男</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/15.m4a" type="audio/mp4"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>ちょっと気持ちが悪いんです。駅員さんを呼んでもらえますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺不太舒服。請您幫忙叫一下站務員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>135</td>
+          <td><strong>ja-男</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/16.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>この電車は台南へ行きますか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車是開往臺南的嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>136</td>
+          <td><strong>ja-男</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/17.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>出口はどこですか。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>137</td>
+          <td><strong>ja-男</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/18.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>このバス停はどこですが。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這個公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>138</td>
+          <td><strong>ja-男</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/19.m4a" type="audio/mp4"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>ここで大形荷物を預けることはできますか？</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以寄存大型行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>139</td>
+          <td><strong>ja-男</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/ja-m/20.m4a" type="audio/mp4"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>本当に助かりました。ありがとうございます。</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>真的幫了大忙，非常感謝。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>140</td>
+          <td><strong>th-女</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/01.mp3" type="audio/mpeg"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>สวัสดีค่าช่องขายตั๋วของสถานีรถไฟเกาสงอยู่ที่ไหนคะ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>สวัสดีค่า高雄火車站的售票窗口อยู่ที่ไหนคะ?</code></td>
+          <td><strong>您好，高雄火車站的售票視窗在哪裡呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>141</td>
+          <td><strong>th-女</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/02.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>ฉันต้องการซื้อตั๋วไปไทยนานหนึ่งใบค่ะ.</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ฉันต้องการซื้อตั๋วไปไถหนานหนึ่งใบค่ะ.</code></td>
+          <td><strong>我想要購買一張去臺南的機票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>142</td>
+          <td><strong>th-女</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/03.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>รถไฟขบวนนี้ออกกี่โมงคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>143</td>
+          <td><strong>th-女</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/04.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>ฉันจะไปชาญชาลาที่สองได้อย่างไรคะ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ฉันจะไปชานชาลาที่สองได้อย่างไรคะ?</code></td>
+          <td><strong>請問，我該如何去二號站臺？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>144</td>
+          <td><strong>th-女</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/05.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>捷運站的入口在哪裡呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>145</td>
+          <td><strong>th-女</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/06.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>ขอถามหน่อยค่ะว่าถ้าจะไปโจเอิงต้องขึ้นรถไฟขบวนไหน?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ขอถามหน่อยค่ะว่าถ้าจะไป 左營ต้องขึ้นรถไฟขบวนไหน?</code></td>
+          <td><strong>請問，如果要去左營，應該乘坐哪趟火車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>146</td>
+          <td><strong>th-女</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/07.mp3" type="audio/mpeg"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>ตัวรถไฟไปซินจัวอิงหนึ่งใบราคาเท่าไหร่คะ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ตัวรถไฟไป 新左營หนึ่งใบราคาเท่าไหร่คะ?</code></td>
+          <td><strong>一張前往新左營的火車票價格是多少？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>147</td>
+          <td><strong>th-女</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/08.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>ขอถามหน่อยคะที่นี่สามารถใช้บัตรโดยสารอิเล็กทรอนิกส์ได้ไหมคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以使用電子車票嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>148</td>
+          <td><strong>th-女</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/09.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>ฉันต้องการขอคืนเงินต้องไปที่ไหนคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我想申請退款，應該去哪裡呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>149</td>
+          <td><strong>th-女</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/10.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>ห้องน้ำอยู่ที่ไหนคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>150</td>
+          <td><strong>th-女</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/11.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問置物櫃在哪一樓層?</code></td>
+          <td><code>ขอถามหน่อยค่ะตู้ล็อกเกอรับฝากของอยู่ชั้นไหน?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問一下，寄存櫃位於哪一層？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>151</td>
+          <td><strong>th-女</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/12.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>ฉันอยากไปสถานีฟอร์โมเซโบลาวัดต้องเปลี่ยนไปขึ้น MRT อย่างไรคะ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ฉันอยากไปสถานี美麗島ต้องเปลี่ยนไปขึ้น MRT อย่างไรคะ?</code></td>
+          <td><strong>我想去美麗島站，需要如何換乘捷運（MRT）呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>152</td>
+          <td><strong>th-女</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/13.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>โทรศัพท์มือถือของฉันหายต้องไปแจ้งที่ไหนคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我的手機丟了，我應該去哪裡報案呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>153</td>
+          <td><strong>th-女</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/14.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>การุณาพูดช้าลงหน่อยข้าฉันฟังไม่ค่อยชัด</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您慢一點說，我不太清楚。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>154</td>
+          <td><strong>th-女</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/15.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>ฉันรู้สึกไม่สบายกรุณาช่วยเรียกเจ้าหน้าที่สถานีให้หน่อยค่ะ</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺不舒服，請您幫忙叫一下車站的工作人員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>155</td>
+          <td><strong>th-女</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/16.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>รถไฟขบวนนี้จอดที่ท้ายนานไหมคะ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>รถไฟขบวนนี้จอดที่ไถหนานไหมคะ?</code></td>
+          <td><strong>這趟火車會在臺南站停靠嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>156</td>
+          <td><strong>th-女</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/17.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>ทางออกอยู่ที่ไหนคะ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>出口在哪裡?</code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>157</td>
+          <td><strong>th-女</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/18.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>ป้ายรถเมล์อยู่ที่ไหนคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>公車車站在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>158</td>
+          <td><strong>th-女</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/19.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>ที่นี่สามารถฝากกระเป๋าเดินทางขนาดใหญ่ได้ไหมคะ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以寄存大型行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>159</td>
+          <td><strong>th-女</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-f/20.mp3" type="audio/mpeg"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>ขอบคุณสำหรับความช่วยเหลือขอให้เป็นวันที่ดีค่ะ</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助，祝您今天愉快。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>160</td>
+          <td><strong>th-男</strong></td>
+          <td>1</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/01.mp3" type="audio/mpeg"></audio></td>
+          <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+          <td><code>สวัสดีครับช่องขายตั๋วของสถานีรถไฟเกาสงอยู่ที่ไหนครับ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>สวัสดีครับ高雄火車站的售票窗口อยู่ที่ไหนครับ?</code></td>
+          <td><strong>您好，高雄火車站的售票視窗在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>161</td>
+          <td><strong>th-男</strong></td>
+          <td>2</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/02.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我要買一張到台南的車票。</code></td>
+          <td><code>ผมต้องการซื้อตั๋วไปไถนาหนึ่งใบครับ.</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ผมต้องการซื้อตั๋วไปไถหนานหนึ่งใบครับ.</code></td>
+          <td><strong>我需要購買一張去臺南的票。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>162</td>
+          <td><strong>th-男</strong></td>
+          <td>3</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/03.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這班車幾點發車?</code></td>
+          <td><code>รถไฟขบวนนี้ออกกี่โมงครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這趟列車幾點發車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>163</td>
+          <td><strong>th-男</strong></td>
+          <td>4</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/04.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問我要去第二月台怎麼走?</code></td>
+          <td><code>ผมจะไปชาญฉลาที่สองได้ยังไงครับ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ผมจะไปชานชาลาที่สองได้ยังไงครับ?</code></td>
+          <td><strong>我該如何到達第二站臺？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>164</td>
+          <td><strong>th-男</strong></td>
+          <td>5</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/05.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問捷運入口在哪裡?</code></td>
+          <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>捷運站的入口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>165</td>
+          <td><strong>th-男</strong></td>
+          <td>6</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/06.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問到左營要搭哪一班車?</code></td>
+          <td><code>ขอถามหน่อยครับว่าถ้าจะไปจูอิงต้องขึ้นรถไฟขบวนไหนครับ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ขอถามหน่อยครับว่าถ้าจะไป 左營ต้องขึ้นรถไฟขบวนไหนครับ?</code></td>
+          <td><strong>請問，如果要去左營，應該乘坐哪趟火車？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>166</td>
+          <td><strong>th-男</strong></td>
+          <td>7</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/07.mp3" type="audio/mpeg"></audio></td>
+          <td><code>一張到新左營的火車票多少錢?</code></td>
+          <td><code>ตัวรถไฟไปสินจัวอิงหนึ่งใบราคาเท่าไหร่ครับ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ตัวรถไฟไป 新左營หนึ่งใบราคาเท่าไหร่ครับ?</code></td>
+          <td><strong>一輛前往新左營的火車票價格是多少？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>167</td>
+          <td><strong>th-男</strong></td>
+          <td>8</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/08.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這裡可以使用電子票證嗎?</code></td>
+          <td><code>ขอถามหน่อยครับที่นี่สามารถใช้บัตรโดยสารอิเล็กทรอนิกส์ได้ไหมครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，這裡可以使用電子車票嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>168</td>
+          <td><strong>th-男</strong></td>
+          <td>9</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/09.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我想退款，請問要去哪裡?</code></td>
+          <td><code>ผมต้องการขอคืนเงินต้องไปที่ไหนครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我需要退款，應該去哪裡呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>169</td>
+          <td><strong>th-男</strong></td>
+          <td>10</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/10.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問洗手間在哪裡?</code></td>
+          <td><code>ห้องน้ำอยู่ที่ไหนครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>洗手間在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>170</td>
+          <td><strong>th-男</strong></td>
+          <td>11</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/11.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問置物櫃在哪一樓層?</code></td>
+          <td><code>ขอถามหน่อยครับตู้ล็อกเกอร์รับฝากของอยู่ชั้นไหน?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請問，寄存行李的儲物櫃位於哪一層？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>171</td>
+          <td><strong>th-男</strong></td>
+          <td>12</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/12.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+          <td><code>ผมอยากไปสถานีฟอร์มูสบุลวาร์ต้องเปลี่ยนไปขึ้น MRT อย่างไรครับ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>ผมอยากไปสถานี美麗島ต้องเปลี่ยนไปขึ้น MRT อย่างไรครับ?</code></td>
+          <td><strong>我想去美麗島站，需要如何換乘捷運（MRT）？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>172</td>
+          <td><strong>th-男</strong></td>
+          <td>13</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/13.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+          <td><code>โทรศัพท์มือถือของผมหาย ต้องไปแจ้งที่ไหนครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我的手機丟了，我應該去哪裡報案呢？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>173</td>
+          <td><strong>th-男</strong></td>
+          <td>14</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/14.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請說慢一點，我聽不太清楚。</code></td>
+          <td><code>กรุณาพูดช้าลงหน่อยครับผมฟังไม่ค่อยชัด</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>請您慢一點說，我不太清楚您在說什麼。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>174</td>
+          <td><strong>th-男</strong></td>
+          <td>15</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/15.mp3" type="audio/mpeg"></audio></td>
+          <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+          <td><code>ผมรู้สึกไม่สบายกรุณาช่วยเรียกเจ้าหน้าที่สถานีให้หน่อยครับ.</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>我感覺不舒服，請幫我叫一下車站的工作人員。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>175</td>
+          <td><strong>th-男</strong></td>
+          <td>16</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/16.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這班車會停台南嗎?</code></td>
+          <td><code>รถไฟขบวนนี้จอดที่ไถนาลใหม่ครับ</code> <span style="color:#16a34a">●</span></td>
+          <td><code>รถไฟขบวนนี้จอดที่ไถหนานใหม่ครับ</code></td>
+          <td><strong>這趟火車停靠在新的臺南站。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>176</td>
+          <td><strong>th-男</strong></td>
+          <td>17</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/17.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問出口在哪裡?</code></td>
+          <td><code>ทางออกอยู่ที่ไหนครับ?</code> <span style="color:#16a34a">●</span></td>
+          <td><code>出口在哪裡?</code></td>
+          <td><strong>出口在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>177</td>
+          <td><strong>th-男</strong></td>
+          <td>18</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/18.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問公車站在哪裡?</code></td>
+          <td><code>ป้ายรถเมย์อยู่ที่ไหนครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>公車車站牌在哪裡？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>178</td>
+          <td><strong>th-男</strong></td>
+          <td>19</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/19.mp3" type="audio/mpeg"></audio></td>
+          <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+          <td><code>ที่นี่สามารถฝากกระเป๋าเดินทางขนาดใหญ่ได้ไหมครับ?</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>這裡可以寄存大型行李嗎？</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+        <tr>
+          <td>179</td>
+          <td><strong>th-男</strong></td>
+          <td>20</td>
+          <td><span class="tag tag-v">V</span></td>
+          <td><audio controls preload="none"><source src="audio/th-m/20.mp3" type="audio/mpeg"></audio></td>
+          <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+          <td><code>ขอบคุณสำหรับความช่วยเหลือขอให้เป็นวันที่ดีครับ</code></td>
+          <td><code><i style=color:#9ca3af>同上</i></code></td>
+          <td><strong>感謝您的幫助，祝您今天愉快。</strong></td>
+          <td style="font-size:1.5rem">✅</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Issue 參考：<a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/207">jtb-tech #207</a>
+  </footer>
+</body>
+</html>
