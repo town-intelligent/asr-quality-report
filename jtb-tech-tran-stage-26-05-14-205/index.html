@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — #205 達運 ja-女 20 句</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.8rem; font-weight: bold; color: #16a34a; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.78rem; }
+audio { width: 150px; height: 32px; }
+.tag { padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: bold; display: inline-block; margin-top: 0.2rem; }
+.tag-ng { background: #fee2e2; color: #991b1b; }
+.tag-note { background: #fef3c7; color: #b45309; }
+.tag-v { background: #dcfce7; color: #166534; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.back { margin-bottom: 1rem; } .back a { color: #6b7280; font-size: 0.9rem; text-decoration: none; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head><body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — #205 達運 ja-女 20 句（升版重測 + retro）</h1>
+<p class="subtitle">
+原 issue：<a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/205">#205 達運 Lab 測試回報 — 日語女聲（2026-05-14）</a><br>
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 + Qwen3-ASR-1.7B）｜對比日期：2026-05-25<br>
+範圍：5/14 達運 ja-女 20 句、達運 5/15 升版重錄後、5/19 batch 收錄。本次 retro：現用 pipeline 跑 TG 12B vs Qwen-14B int4 v5
+</p>
+
+<div class="card">
+  <h2>結論：5/14 8 個 NG 已 100% 解掉</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">20/20</div><div class="label">TG 12B<br>100%</div></div>
+    <div class="stat"><div class="number">20/20</div><div class="label">Qwen-14B int4 v5<br>100%</div></div>
+    <div class="stat"><div class="number" style="color:#666">12/20 → 20/20</div><div class="label">5/14 → 5/25 進步<br>+8 句（原 8 NG 全解）</div></div>
+  </div>
+  <div class="callout win">
+    <strong>原 5/14 達運 ja-女 報告 8 NG（項 1/3/6/7/9/12/14/20）全部解掉、且兩個 MT 引擎在這 20 句完全平手。</strong>
+    主因：cm yaml 加多條 ja 規則（5/17 補強 Qwen3-ASR mishears、5/18 補 ja-男聲、5/19 補 ja-男「サエ」、5/24 補「高尾駅」），加上達運項 20 重錄。
+  </div>
+</div>
+
+<div class="card">
+  <h2>8 個原 NG 痛點逐個對照</h2>
+  <table>
+    <thead><tr><th>項</th><th>原問題</th><th>ASR raw</th><th>cm 接住後</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td><strong>項 01</strong></td>
+        <td>項 1 高雄駅 + 切符売り場 ASR mishear<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「ガオシャン駅の寄付売り場」/「高山駅のキプ売り場」</span></td>
+        <td><code>こんにちは。高山駅のキプ売り場はどこですか。</code></td>
+        <td><code>こんにちは。高雄駅の切符売り場はどこですか。</code></td>
+        <td>✅ 您好。請問高雄車站的售票處在哪裡？</td>
+        <td>✅ 你好，高雄車站的售票處在哪裡？</td>
+    </tr>
+<tr>
+        <td><strong>項 03</strong></td>
+        <td>項 3 幾點發車 → 從哪裡出發<br><span style="color:#9ca3af;font-size:0.8rem">5/14 達運報告 NG、5/15 yillkid 標待升版重測（疑似 #200 殘留）</span></td>
+        <td><code>この電車は何時に出発しますか。</code></td>
+        <td><code>この電車は何時に出発しますか。</code></td>
+        <td>✅ 這趟列車幾點發車？</td>
+        <td>✅ 這班電車什麼時候發車？</td>
+    </tr>
+<tr>
+        <td><strong>項 06</strong></td>
+        <td>項 6 左營<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「作員」</span></td>
+        <td><code>総院に行きたいですか。どの電車に乗ればいいですか。</code></td>
+        <td><code>左営に行きたいですか。どの電車に乗ればいいですか。</code></td>
+        <td>✅ 您想去左營嗎？應該乘坐哪趟列車呢？</td>
+        <td>✅ 你想去左營嗎？該坐哪一班捷運呢？</td>
+    </tr>
+<tr>
+        <td><strong>項 07</strong></td>
+        <td>項 7 新左營<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「新城+陰雪」/「新造イン浴器」</span></td>
+        <td><code>新造イン浴器のキープはいくらですか。</code></td>
+        <td><code>新左営行きの切符はいくらですか。</code></td>
+        <td>✅ 去新左營的票價是多少？</td>
+        <td>✅ 去新左營的票要多少錢？</td>
+    </tr>
+<tr>
+        <td><strong>項 09</strong></td>
+        <td>項 9 退款語意錯<br><span style="color:#9ca3af;font-size:0.8rem">5/14 達運報告「翻譯語意錯誤」、5/15 標待升版重測</span></td>
+        <td><code>払い戻しをしたいですか。どこへ行けばいいですか。</code></td>
+        <td><code>払い戻しをしたいですか。どこへ行けばいいですか。</code></td>
+        <td>✅ 您想辦理退款嗎？您需要去哪裡辦理呢？</td>
+        <td>✅ 你想退票嗎？要去哪裡辦理呢？</td>
+    </tr>
+<tr>
+        <td><strong>項 12</strong></td>
+        <td>項 12 美麗島<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「メリータ駅」/「メルタ駅」</span></td>
+        <td><code>メルタ駅へ行きたいですか。地下鉄にはど乗り換えればいいですか。</code></td>
+        <td><code>美麗島駅へ行きたいですか。地下鉄にはど乗り換えればいいですか。</code></td>
+        <td>✅ 您想去美麗島站嗎？請問乘坐捷運需要在哪站換乘？</td>
+        <td>✅ 想去美麗島捷運站嗎？要在哪個捷運站轉乘呢？</td>
+    </tr>
+<tr>
+        <td><strong>項 14</strong></td>
+        <td>項 14 ゆっくり typo<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「ゆっきり」/「ゆきり」(微錯)</span></td>
+        <td><code>もう少しゆきり話してもらえませんか。よく聞こえませんので。</code></td>
+        <td><code>もう少しゆっくり話してもらえませんか。よく聞こえませんので。</code></td>
+        <td>✅ 請您再慢一點說，我不太清楚。</td>
+        <td>✅ 可以說慢一點嗎？我聽不太清楚。</td>
+    </tr>
+<tr>
+        <td><strong>項 20</strong></td>
+        <td>項 20 謝謝您的幫忙<br><span style="color:#9ca3af;font-size:0.8rem">達運檔案管理問題、5/15 重錄通過</span></td>
+        <td><code>本当に助かりました。ありがとうございます。</code></td>
+        <td><code>本当に助かりました。ありがとうございます。</code></td>
+        <td>✅ 真的幫了大忙，非常感謝。</td>
+        <td>✅ 真的幫了大忙了，謝謝你。</td>
+    </tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem;color:#6b7280;font-size:0.85rem">
+    所有 ASR mishear（高山駅 / メルタ駅 / 総院 / 新造イン浴器 / ゆきり）都被 cm yaml 接住、轉成 ja canonical 後 MT 翻譯正確。<br>
+    達運 5/15 報告為「升版」後重測案、項 3「幾點發車」、項 9「退款」恢復正確、項 20 重錄已過。
+  </p>
+</div>
+
+<div class="card">
+  <h2>20 case 完整明細</h2>
+  <table>
+    <thead><tr><th>#</th><th>音檔</th><th>中譯期望</th><th>ASR raw</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td>01</td>
+        <td><audio controls preload="none"><source src="audio/01.aac" type="audio/aac"></audio></td>
+        <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+        <td><code>こんにちは。高山駅のキプ売り場はどこですか。</code></td>
+        <td><strong>您好。請問高雄車站的售票處在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>你好，高雄車站的售票處在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>02</td>
+        <td><audio controls preload="none"><source src="audio/02.aac" type="audio/aac"></audio></td>
+        <td><code>我要買一張到台南的車票。</code></td>
+        <td><code>台南行きの切符を一枚お願いします。</code></td>
+        <td><strong>請給我一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>請給我一张到臺南的票。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>03</td>
+        <td><audio controls preload="none"><source src="audio/03.aac" type="audio/aac"></audio></td>
+        <td><code>請問這班車幾點發車?</code></td>
+        <td><code>この電車は何時に出発しますか。</code></td>
+        <td><strong>這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這班電車什麼時候發車？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>04</td>
+        <td><audio controls preload="none"><source src="audio/04.aac" type="audio/aac"></audio></td>
+        <td><code>請問我要去第二月台怎麼走?</code></td>
+        <td><code>2番ホームへどう行けばいいですか。</code></td>
+        <td><strong>請問，如何去2號站臺？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>怎麼去第二月臺？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>05</td>
+        <td><audio controls preload="none"><source src="audio/05.aac" type="audio/aac"></audio></td>
+        <td><code>請問捷運入口在哪裡?</code></td>
+        <td><code>チカテツの入り口はどこですか。</code></td>
+        <td><strong>捷運的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>捷運的入口在哪里？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>06</td>
+        <td><audio controls preload="none"><source src="audio/06.aac" type="audio/aac"></audio></td>
+        <td><code>請問到左營要搭哪一班車?</code></td>
+        <td><code>総院に行きたいですか。どの電車に乗ればいいですか。</code></td>
+        <td><strong>您想去左營嗎？應該乘坐哪趟列車呢？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>你想去左營嗎？該坐哪一班捷運呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>07</td>
+        <td><audio controls preload="none"><source src="audio/07.aac" type="audio/aac"></audio></td>
+        <td><code>一張到新左營的火車票多少錢?</code></td>
+        <td><code>新造イン浴器のキープはいくらですか。</code></td>
+        <td><strong>去新左營的票價是多少？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>去新左營的票要多少錢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>08</td>
+        <td><audio controls preload="none"><source src="audio/08.aac" type="audio/aac"></audio></td>
+        <td><code>請問這裡可以使用電子票證嗎?</code></td>
+        <td><code>ここでは電子チケットを使えますか。</code></td>
+        <td><strong>這裡可以使用電子票嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這裡可以使用電子票嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>09</td>
+        <td><audio controls preload="none"><source src="audio/09.aac" type="audio/aac"></audio></td>
+        <td><code>我想退款，請問要去哪裡?</code></td>
+        <td><code>払い戻しをしたいですか。どこへ行けばいいですか。</code></td>
+        <td><strong>您想辦理退款嗎？您需要去哪裡辦理呢？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>你想退票嗎？要去哪裡辦理呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>10</td>
+        <td><audio controls preload="none"><source src="audio/10.aac" type="audio/aac"></audio></td>
+        <td><code>請問洗手間在哪裡?</code></td>
+        <td><code>トイレはどこですか。</code></td>
+        <td><strong>請問，洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>11</td>
+        <td><audio controls preload="none"><source src="audio/11.aac" type="audio/aac"></audio></td>
+        <td><code>請問置物櫃在幾樓?</code></td>
+        <td><code>コインロッカーは何階にありますか。</code></td>
+        <td><strong>儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>投幣寄物櫃在哪一樓呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>12</td>
+        <td><audio controls preload="none"><source src="audio/12.aac" type="audio/aac"></audio></td>
+        <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+        <td><code>メルタ駅へ行きたいですか。地下鉄にはど乗り換えればいいですか。</code></td>
+        <td><strong>您想去美麗島站嗎？請問乘坐捷運需要在哪站換乘？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>想去美麗島捷運站嗎？要在哪個捷運站轉乘呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>13</td>
+        <td><audio controls preload="none"><source src="audio/13.aac" type="audio/aac"></audio></td>
+        <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+        <td><code>携帯電話をなくしてしまいました。問い合わせ先はどこにありますか。</code></td>
+        <td><strong>我把手機弄丟了。請問諮詢相關事宜的聯絡方式在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我掉了我的手機，該去哪裡詢問？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>14</td>
+        <td><audio controls preload="none"><source src="audio/14.aac" type="audio/aac"></audio></td>
+        <td><code>請說慢一點，我聽不太清楚。</code></td>
+        <td><code>もう少しゆきり話してもらえませんか。よく聞こえませんので。</code></td>
+        <td><strong>請您再慢一點說，我不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>可以說慢一點嗎？我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>15</td>
+        <td><audio controls preload="none"><source src="audio/15.aac" type="audio/aac"></audio></td>
+        <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+        <td><code>ちょっと気持ちが悪いです。駅員さんに読んでもらえませんか。</code></td>
+        <td><strong>我感覺有點不舒服。能請車站工作人員幫我讀一下嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我覺得不太舒服，可以請站員幫我看看嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>16</td>
+        <td><audio controls preload="none"><source src="audio/16.aac" type="audio/aac"></audio></td>
+        <td><code>請問這班車會停台南嗎?</code></td>
+        <td><code>この電車は台南へ行きますか。</code></td>
+        <td><strong>這趟列車是開往臺南的嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這班電車去臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>17</td>
+        <td><audio controls preload="none"><source src="audio/17.aac" type="audio/aac"></audio></td>
+        <td><code>請問出口在哪裡?</code></td>
+        <td><code>出口はどこですか。</code></td>
+        <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>18</td>
+        <td><audio controls preload="none"><source src="audio/18.aac" type="audio/aac"></audio></td>
+        <td><code>請問公車站在哪裡?</code></td>
+        <td><code>このバス停はどこですか。</code></td>
+        <td><strong>這個公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這個公車站是在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>19</td>
+        <td><audio controls preload="none"><source src="audio/19.aac" type="audio/aac"></audio></td>
+        <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+        <td><code>ここでは大型荷物を預けることはできますか。</code></td>
+        <td><strong>請問，這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這裡可以寄放大件行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>20</td>
+        <td><audio controls preload="none"><source src="audio/20.aac" type="audio/aac"></audio></td>
+        <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+        <td><code>本当に助かりました。ありがとうございます。</code></td>
+        <td><strong>真的幫了大忙，非常感謝。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>真的幫了大忙了，謝謝你。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+
+<footer>產生時間：2026-05-25｜20 case × 2 MT｜judge：<code>strict-audit-v3.py</code>｜音檔：5/19 batch（5/14 升版重錄版）</footer>
+</body></html>
