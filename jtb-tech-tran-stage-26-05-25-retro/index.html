@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — 2026-05-25 retro 298 case</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.8rem; font-weight: bold; }
+.stat .number.green { color: #16a34a; }
+.stat .number.amber { color: #d97706; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.88rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+td.green { color: #16a34a; font-weight: bold; }
+td.amber { color: #d97706; }
+td.red { color: #dc2626; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.82rem; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.callout.warn { background: #fef3c7; border-color: #d97706; }
+.callout.crit { background: #fef2f2; border-color: #dc2626; }
+.back { margin-bottom: 1rem; }
+.back a { color: #6b7280; text-decoration: none; font-size: 0.9rem; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head>
+<body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — 2026-05-25 retro 298 case A/B（TG vs Qwen-14B int4）</h1>
+<p class="subtitle">
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 32GB）｜ 測試日期：2026-05-25 PM<br>
+範圍：5/24 真人錄音 119 句 + 5/19 真人錄音 179 句 = <strong>298 句</strong><br>
+同一支 pipeline（同 ASR、同 cm yaml、同硬體）跑 TG 12B 與 Qwen-14B int4 兩邊翻譯<br>
+Qwen-14B prompt 加入「保留疑問句語氣」「捷運不要地鐵」「洗手間不要廁所」等 Taiwan-tuned 規則<br>
+判定：<code>strict-audit-v3.py</code>（code injection / random latin / noise transliteration / 變肯定句）
+</p>
+
+<div class="card">
+  <h2>結論：差距比 119 case 小、但 14B 仍微勝 + 快 4x</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">292/298</div><div class="label">TG 12B<br>97.98%</div></div>
+    <div class="stat"><div class="number green">294/298</div><div class="label">Qwen-14B int4<br>98.65%</div></div>
+    <div class="stat"><div class="number green">+2</div><div class="label">14B 領先<br>+0.67%</div></div>
+    <div class="stat"><div class="number green">1340 → 319ms</div><div class="label">mean 延遲<br><strong>快 4.2x</strong></div></div>
+  </div>
+  <div class="callout warn">
+    <strong>誠實 caveat</strong>：相對 5/24 119 case 看到的 +3 句 / +2.5% 差距，在 298 case 縮到 +2 句 / +0.67%。
+    這代表前一輪「+3 句」的結論部分是小樣本偏誤。但 14B 速度優勢（快 4x）是穩的、不會因樣本擴大消失。
+  </div>
+</div>
+
+<div class="card">
+  <h2>子集分解</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">114/119</div><div class="label">TG 5/24 batch<br>95%</div></div>
+    <div class="stat"><div class="number green">117/119</div><div class="label">14B 5/24 batch<br>98%</div></div>
+    <div class="stat"><div class="number">178/179</div><div class="label">TG 5/19 batch<br>99%</div></div>
+    <div class="stat"><div class="number">177/179</div><div class="label">14B 5/19 batch<br>98%</div></div>
+  </div>
+  <p style="margin-top:0.5rem;font-size:0.88rem;color:#6b7280">
+    <strong>觀察：</strong>5/19 batch 上 TG 反而打贏 14B 1 句（178 vs 177）。14B 的優勢集中在 5/24 batch（多救 3 句蘇蘇/蘇裡維/SPA）。
+  </p>
+</div>
+
+<div class="callout win">
+  <h2 style="margin:0 0 0.5rem">✅ 14B 救起 TG 的 case（5 句）</h2>
+  <table>
+    <thead><tr><th>Case</th><th>TG 12B</th><th>Qwen-14B int4</th><th>TG NG 原因</th></tr></thead>
+    <tbody><tr><td>th-女-達運 #14</td><td>請蘇蘇慢慢說，我不太聽清楚。</td><td>蘇小姐請說慢一點，我聽不太清楚。</td><td><code>['NG: noise: 蘇 transliteration']</code></td></tr>
+<tr><td>th-女-達運 #16</td><td>這趟“蘇裡維”列車會在臺南站停靠嗎？</td><td>這班火車會停靠臺南嗎？</td><td><code>['NG: noise: 蘇 transliteration']</code></td></tr>
+<tr><td>th-女-達運 #18</td><td>公車車站的SPA在哪裡？</td><td>公車站牌在哪裡？</td><td><code>["NG: random latin 'SPA'"]</code></td></tr>
+<tr><td>th-男 #16</td><td>這趟火車停靠在新的臺南站。</td><td>這列火車停靠臺南新營站嗎？</td><td><code>['NG: 變肯定句']</code></td></tr>
+<tr><td>th-男-喬泰 #16</td><td>這趟火車停靠在新的臺南站。</td><td>這列火車停靠臺南新營站嗎？</td><td><code>['NG: 變肯定句']</code></td></tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem">
+    <strong>重點：</strong><code>th-男-喬泰 #16</code>「這列火車停靠臺南新營站<strong>嗎</strong>？」← prompt 加「保留疑問句」後 14B 救回來、撤銷前一輪「5/5 全 NG known limitation」結論。
+  </p>
+</div>
+
+<div class="callout crit">
+  <h2 style="margin:0 0 0.5rem">❌ TG 救起 14B 的 case（3 句）</h2>
+  <table>
+    <thead><tr><th>Case</th><th>TG 12B</th><th>Qwen-14B int4</th><th>14B NG 原因</th></tr></thead>
+    <tbody><tr><td>ja-女 #11</td><td>儲物櫃在幾樓？</td><td>投幣 locker 在哪一樓？</td><td><code>["NG: random latin 'locker'"]</code></td></tr>
+<tr><td>ja-男 #11</td><td>儲物櫃在幾樓？</td><td>投幣 locker 在哪一樓？</td><td><code>["NG: random latin 'locker'"]</code></td></tr>
+<tr><td>ja-男-達運 #11</td><td>儲物櫃在幾樓？</td><td>投幣 locker 在哪一樓？</td><td><code>["NG: random latin 'locker'"]</code></td></tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem">
+    <strong>連犯 3 次的 root cause：</strong>日語 <code>ロッカー</code>（寄物櫃）→ 14B 翻成「投幣 locker」、保留 latin。同樣 prompt 規則「不要 latin 招呼語」沒擋住「latin 名詞」。
+    要上 prompt 加「ロッカー → 寄物櫃；不保留任何英文外來語」或 post-correction 規則。
+  </p>
+</div>
+
+<div class="callout warn">
+  <h2 style="margin:0 0 0.5rem">⚠ 兩邊都 NG（1 句）</h2>
+  <table>
+    <thead><tr><th>Case</th><th>TG</th><th>Qwen-14B</th></tr></thead>
+    <tbody><tr><td>th-女-達運 #17</td><td>S-CHI 的出口在哪裡？</td><td>schien出口在哪裡？</td></tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem">音檔本身有噪音或 ASR 漏掉關鍵詞、兩邊都救不起來、需從 ASR / 錄音端改。</p>
+</div>
+
+<div class="card">
+  <h2>每組對照</h2>
+  <table>
+    <thead><tr><th>批次</th><th>組別</th><th>TG 12B</th><th>Qwen-14B int4</th><th>diff</th></tr></thead>
+    <tbody><tr><td>5/24</td><td>id-女-達運</td><td class='green'>19/19</td><td class='green'>19/19</td><td>+0</td></tr>
+<tr><td>5/24</td><td>id-男-喬泰</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+<tr><td>5/24</td><td>ja-男-達運</td><td class='green'>20/20</td><td class='amber'>19/20</td><td>-1</td></tr>
+<tr><td>5/24</td><td>th-女-喬泰</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+<tr><td>5/24</td><td>th-女-達運</td><td class='red'>16/20</td><td class='amber'>19/20</td><td>+3</td></tr>
+<tr><td>5/24</td><td>th-男-喬泰</td><td class='amber'>19/20</td><td class='green'>20/20</td><td>+1</td></tr>
+<tr><td>5/19</td><td>id-女</td><td class='green'>19/19</td><td class='green'>19/19</td><td>+0</td></tr>
+<tr><td>5/19</td><td>id-男</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+<tr><td>5/19</td><td>ja-女</td><td class='green'>20/20</td><td class='amber'>19/20</td><td>-1</td></tr>
+<tr><td>5/19</td><td>ja-男</td><td class='green'>20/20</td><td class='amber'>19/20</td><td>-1</td></tr>
+<tr><td>5/19</td><td>ko-女</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+<tr><td>5/19</td><td>th-女</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+<tr><td>5/19</td><td>th-男</td><td class='amber'>19/20</td><td class='green'>20/20</td><td>+1</td></tr>
+<tr><td>5/19</td><td>vi-女</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+<tr><td>5/19</td><td>vi-男</td><td class='green'>20/20</td><td class='green'>20/20</td><td>+0</td></tr>
+</tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>延遲對比（298 case 真實量測）</h2>
+  <table>
+    <thead><tr><th>指標</th><th>TG 12B</th><th>Qwen-14B int4</th><th>比值</th></tr></thead>
+    <tbody>
+      <tr><td>Mean</td><td>1340ms</td><td><strong>319ms</strong></td><td><strong>4.19x</strong></td></tr>
+      <tr><td>P50</td><td>1316ms</td><td>313ms</td><td>4.19x</td></tr>
+      <tr><td>P95</td><td>1950ms</td><td>456ms</td><td>4.28x</td></tr>
+      <tr><td>P99</td><td>2245ms</td><td>504ms</td><td>4.45x</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>最終建議</h2>
+  <p style="line-height:1.7;font-size:0.92rem">
+    <strong>1. 數據面仍支持換 Qwen-14B int4</strong>：298 case 雙第一（品質 +2 句、速度 4x），onesmart11~15 與 dev box 同款 5090（machines.yaml 確認），零硬體移植 risk。<br><br>
+    <strong>2. 但部署前要先解 "locker" 問題</strong>：日語 ja-寄物櫃 場景 14B 100% 出 latin "locker"（連犯 3 次）。在切 production 前要：<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;a. 改 prompt 加「外來語不保留 latin」或具體規則 <code>ロッカー → 寄物櫃</code><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;b. 或 ac_term 補規則 <code>locker:寄物櫃</code><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;c. 重跑 retro 確認沒退化<br><br>
+    <strong>3. 切換策略建議</strong>：<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;a. <strong>不要</strong>全機隊一次換 — production 跑 TG 已穩、切換成本 ≠ 零<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;b. 先 onesmart11 pilot（建議閒置時段、不影響旅客）<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;c. 監控 latency p99 + 輸出長度分布（看會不會像 Aya 偶發幻覺）<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;d. 保留 TG sidecar、用 feature flag 切（如果 14B 出包可秒回 TG）<br><br>
+    <strong>4. 5/19 batch 上 TG 反而打贏 14B 1 句</strong>，提醒：14B 不是萬靈丹、各場景表現不一樣。要再蒐集 ko / vi / id 男性場景的更多錄音才有完整把握。
+  </p>
+</div>
+
+<footer>產生時間：2026-05-25｜總 298 case｜判定：<code>strict-audit-v3.py</code>｜GPU：RTX 5090 32GB（dev = prod 同款）</footer>
+</body></html>
