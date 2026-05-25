@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — #203 達運 ko-女 20 句</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.8rem; font-weight: bold; color: #16a34a; }
+.stat .number.amber { color: #d97706; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.78rem; }
+audio { width: 150px; height: 32px; }
+.tag { padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: bold; display: inline-block; margin-top: 0.2rem; }
+.tag-ng { background: #fee2e2; color: #991b1b; }
+.tag-note { background: #fef3c7; color: #b45309; }
+.tag-v { background: #dcfce7; color: #166534; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.callout.warn { background: #fef3c7; border-color: #d97706; }
+.back { margin-bottom: 1rem; } .back a { color: #6b7280; font-size: 0.9rem; text-decoration: none; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head><body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — #203 達運 ko-女 20 句（升版重測 + retro）</h1>
+<p class="subtitle">
+原 issue：<a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/203">#203 達運 Lab 測試回報 — 韓語女聲（2026-05-14）</a><br>
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 + Qwen3-ASR-1.7B）｜對比日期：2026-05-25<br>
+範圍：5/14 達運 ko-女 20 句（達運回報 10 NG）、達運 5/15 升版重錄後（5/19 batch 收錄）。本次 retro：現用 pipeline 跑 TG 12B vs Qwen-14B int4 v5
+</p>
+
+<div class="card">
+  <h2>結論：10 個原 NG TG 全解、14B v5 解 9（剩 1 量化偶發）</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">20/20</div><div class="label">TG 12B<br>100%</div></div>
+    <div class="stat"><div class="number amber">19/20</div><div class="label">Qwen-14B int4 v5<br>95%</div></div>
+    <div class="stat"><div class="number" style="color:#666">10/20 → 20/20</div><div class="label">5/14 → 5/25 進步<br>+10 句（原 10 NG 中 TG 全解）</div></div>
+  </div>
+  <div class="callout win">
+    <strong>10 個原 NG 全部解掉</strong>：3 地名（左營/新左營/美麗島）靠 cm yaml 接 ko ASR mishears、7 個「常翻錯」#200 殘留靠 #200 治本後正常。
+    14B v5 在「項 12 美麗島」量化偶發（cm_out 已含「美麗島」三字但模型 attention 偏差到「美術館」）— TG 沒這問題。
+  </div>
+</div>
+
+<div class="card">
+  <h2>10 個原 NG 痛點逐個對照</h2>
+  <table>
+    <thead><tr><th>項</th><th>原問題</th><th>ASR raw</th><th>cm 接住後</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td><strong>項 02</strong></td>
+        <td>項 2 我要買車票（達運報常翻錯）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「常翻錯」、5/15 標待重測（疑似 #200）；現兩 MT 都正確「請給我一張去臺南的火車票」</span></td>
+        <td><code>타이난까지 가는 기차표 한 장 주세요.</code></td>
+        <td><code>타이난까지 가는 기차표 한 장 주세요.</code></td>
+        <td>✅ 請給我一張去臺南的火車票。</td>
+        <td>✅ 請給我一張去臺南的火車票。</td>
+    </tr>
+<tr>
+        <td><strong>項 04</strong></td>
+        <td>項 4 第二月台（達運報翻錯）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「翻譯錯誤」；現 TG「2號站臺」14B「2號月臺」（14B 用台灣詞更地道）</span></td>
+        <td><code>이분 쌤광장으로 어떻게 가면 되나요?</code></td>
+        <td><code>2번 승강장으로 어떻게 가면 되나요?</code></td>
+        <td>✅ 請問，如何前往2號站臺？</td>
+        <td>✅ 怎麼去2號月臺？</td>
+    </tr>
+<tr>
+        <td><strong>項 06</strong></td>
+        <td>項 6 左營（併入 #204）<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「초인/초행」、cm 加 ko 規則</span></td>
+        <td><code>초행에 가려면 어느 여차를 타야 하나요?</code></td>
+        <td><code>左營에 가려면 어느 여차를 타야 하나요?</code></td>
+        <td>✅ 去左營，應該乘坐哪輛公車車？</td>
+        <td>✅ 要去左營應該搭哪一班捷運？</td>
+    </tr>
+<tr>
+        <td><strong>項 07</strong></td>
+        <td>項 7 新左營（併入 #204）<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「신조인형」、cm 加 ko 規則</span></td>
+        <td><code>신조인형 기사표 한 장 오마예요.</code></td>
+        <td><code>新左營 기차표 한 장 오마예요.</code></td>
+        <td>✅ 一張去新左營的火車票，多少錢呢？</td>
+        <td>✅ 新左營的火車票一張就好了。</td>
+    </tr>
+<tr>
+        <td><strong>項 09</strong></td>
+        <td>項 9 退款（達運報翻錯）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「翻譯錯誤」；現「辦理退款 / 退票」都對</span></td>
+        <td><code>환불하려고 하는데 어디로 가면 되나요?</code></td>
+        <td><code>환불하려고 하는데 어디로 가면 되나요?</code></td>
+        <td>✅ 我想辦理退款，應該去哪裡呢？</td>
+        <td>✅ 我要退票，要去哪裡呢？</td>
+    </tr>
+<tr>
+        <td><strong>項 11</strong></td>
+        <td>項 11 置物櫃（達運報翻錯）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「翻譯錯誤」；現 TG「物品寄存櫃」14B「寄物櫃」皆台灣用語</span></td>
+        <td><code>무품 보관함은 몇 층에 있나요?</code></td>
+        <td><code>물품보관함은 몇 층에 있나요?</code></td>
+        <td>✅ 物品寄存櫃位於幾樓？</td>
+        <td>✅ 寄物櫃在幾樓呢？</td>
+    </tr>
+<tr>
+        <td><strong>項 12</strong></td>
+        <td>項 12 美麗島站（併入 #204）<br><span style="color:#9ca3af;font-size:0.8rem">ASR 聽成「메리타우」、cm 加 ko 規則；14B int4 量化偶發、cm_out 已含「美麗島」但 attention 偏差到「美術館」</span></td>
+        <td><code>메리타우역에 가고 싶은데 지하철은 어떻게 환승하나요?</code></td>
+        <td><code>美麗島站에 가고 싶은데 지하철은 어떻게 환승하나요?</code></td>
+        <td>✅ 我想去美麗島站，請問捷運如何換乘？</td>
+        <td>❌ 美術館站怎麼轉乘捷運才能到？</td>
+    </tr>
+<tr>
+        <td><strong>項 15</strong></td>
+        <td>項 15 站務人員（達運報翻錯）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「翻譯錯誤」；ASR 聽成「요모환」、cm 加「요무완/요모환:역무원」</span></td>
+        <td><code>몸이 좋지 않는데 요모환을 불어 주시겠어요?</code></td>
+        <td><code>몸이 좋지 않는데 역무원을 불어 주시겠어요?</code></td>
+        <td>✅ 我身體不舒服，可以請您叫一下工作人員嗎？</td>
+        <td>✅ 我覺得不太舒服，可以請站員過來一下嗎？</td>
+    </tr>
+<tr>
+        <td><strong>項 16</strong></td>
+        <td>項 16 停台南（達運報翻錯）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「翻譯錯誤」；ASR 聽成「탈남역」、cm 加「탈낭/탈남/탈납:타이난」</span></td>
+        <td><code>이 열차는 탈남역에 정차하나요?</code></td>
+        <td><code>이 열차는 타이난역에 정차하나요?</code></td>
+        <td>✅ 這趟列車會在臺南站停靠嗎？</td>
+        <td>✅ 這列火車會停靠臺南站嗎？</td>
+    </tr>
+<tr>
+        <td><strong>項 20</strong></td>
+        <td>項 20 謝謝（達運報無翻譯輸出）<br><span style="color:#9ca3af;font-size:0.8rem">達運報「無翻譯輸出」(#200 message loss 指紋)；#200 治本後正常</span></td>
+        <td><code>도와주셔서 감사합니다. 즐거운 하루 보내세요.</code></td>
+        <td><code>도와주셔서 감사합니다. 즐거운 하루 보내세요.</code></td>
+        <td>✅ 感謝您的幫助。祝您度過愉快的一天。</td>
+        <td>✅ 感謝您的幫助，祝您有一個愉快的一天。</td>
+    </tr>
+</tbody>
+  </table>
+  <div class="callout warn">
+    <strong>項 12「美麗島→美術館」是 14B v5 在 298 case retro 中唯一一 NG。</strong>
+    現象：cm_out 已含「美麗島站」三個漢字、但 14B int4 量化的 attention 偏差到「美術館」。修法選項：a) accept 99.66% / b) 加 ac_term <code>美術館站:美麗島站</code> 兜底 ko 場景 / c) 用 TG 12B。
+  </div>
+</div>
+
+<div class="card">
+  <h2>20 case 完整明細</h2>
+  <table>
+    <thead><tr><th>#</th><th>音檔</th><th>中譯期望</th><th>ASR raw</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td>01</td>
+        <td><audio controls preload="none"><source src="audio/01.aac" type="audio/aac"></audio></td>
+        <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+        <td><code>안녕하세요. 가오슝 기차역 매표 창구가 어디에 있나요?</code></td>
+        <td><strong>您好。請問，高雄火車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>你好，購票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>02</td>
+        <td><audio controls preload="none"><source src="audio/02.aac" type="audio/aac"></audio></td>
+        <td><code>我要買一張到台南的車票。</code></td>
+        <td><code>타이난까지 가는 기차표 한 장 주세요.</code></td>
+        <td><strong>請給我一張去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>請給我一張去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>03</td>
+        <td><audio controls preload="none"><source src="audio/03.aac" type="audio/aac"></audio></td>
+        <td><code>請問這班車幾點發車?</code></td>
+        <td><code>이 여차는 몇 시에 출발하나요?</code></td>
+        <td><strong>這趟車幾點出發？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這班車是什麼時候發車呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>04</td>
+        <td><audio controls preload="none"><source src="audio/04.aac" type="audio/aac"></audio></td>
+        <td><code>請問我要去第二月台怎麼走?</code></td>
+        <td><code>이분 쌤광장으로 어떻게 가면 되나요?</code></td>
+        <td><strong>請問，如何前往2號站臺？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>怎麼去2號月臺？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>05</td>
+        <td><audio controls preload="none"><source src="audio/05.aac" type="audio/aac"></audio></td>
+        <td><code>請問捷運入口在哪裡?</code></td>
+        <td><code>지하철 입구가 어디에 있나요?</code></td>
+        <td><strong>捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>捷運入口在哪里？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>06</td>
+        <td><audio controls preload="none"><source src="audio/06.aac" type="audio/aac"></audio></td>
+        <td><code>請問到左營要搭哪一班車?</code></td>
+        <td><code>초행에 가려면 어느 여차를 타야 하나요?</code></td>
+        <td><strong>去左營，應該乘坐哪輛公車車？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>要去左營應該搭哪一班捷運？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>07</td>
+        <td><audio controls preload="none"><source src="audio/07.aac" type="audio/aac"></audio></td>
+        <td><code>一張到新左營的火車票多少錢?</code></td>
+        <td><code>신조인형 기사표 한 장 오마예요.</code></td>
+        <td><strong>一張去新左營的火車票，多少錢呢？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>新左營的火車票一張就好了。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>08</td>
+        <td><audio controls preload="none"><source src="audio/08.aac" type="audio/aac"></audio></td>
+        <td><code>請問這裡可以使用電子票證嗎?</code></td>
+        <td><code>여기서 전자 교통 카드를 사용할 수 있나요?</code></td>
+        <td><strong>這裡可以使用電子交通卡嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這裡可以使用電子交通卡嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>09</td>
+        <td><audio controls preload="none"><source src="audio/09.aac" type="audio/aac"></audio></td>
+        <td><code>我想退款，請問要去哪裡?</code></td>
+        <td><code>환불하려고 하는데 어디로 가면 되나요?</code></td>
+        <td><strong>我想辦理退款，應該去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我要退票，要去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>10</td>
+        <td><audio controls preload="none"><source src="audio/10.aac" type="audio/aac"></audio></td>
+        <td><code>請問洗手間在哪裡?</code></td>
+        <td><code>화장실은 어디에 있나요?</code></td>
+        <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>11</td>
+        <td><audio controls preload="none"><source src="audio/11.aac" type="audio/aac"></audio></td>
+        <td><code>請問置物櫃在幾樓?</code></td>
+        <td><code>무품 보관함은 몇 층에 있나요?</code></td>
+        <td><strong>物品寄存櫃位於幾樓？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>寄物櫃在幾樓呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>12</td>
+        <td><audio controls preload="none"><source src="audio/12.aac" type="audio/aac"></audio></td>
+        <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+        <td><code>메리타우역에 가고 싶은데 지하철은 어떻게 환승하나요?</code></td>
+        <td><strong>我想去美麗島站，請問捷運如何換乘？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>美術館站怎麼轉乘捷運才能到？</strong><br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>13</td>
+        <td><audio controls preload="none"><source src="audio/13.aac" type="audio/aac"></audio></td>
+        <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+        <td><code>제 휴대폰이 없어졌는데 어디에 가서 분실 신고를 하면 되나요?</code></td>
+        <td><strong>我的手機丟了，請問我應該去哪裡報失物宣告呢？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我的手機不見了，要去哪裡報失呢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>14</td>
+        <td><audio controls preload="none"><source src="audio/14.aac" type="audio/aac"></audio></td>
+        <td><code>請說慢一點，我聽不太清楚。</code></td>
+        <td><code>천천히 말씀해 주세요. 잘 듣지 못하겠습니다.</code></td>
+        <td><strong>請您慢慢說，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>請慢點說，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>15</td>
+        <td><audio controls preload="none"><source src="audio/15.aac" type="audio/aac"></audio></td>
+        <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+        <td><code>몸이 좋지 않는데 요모환을 불어 주시겠어요?</code></td>
+        <td><strong>我身體不舒服，可以請您叫一下工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我覺得不太舒服，可以請站員過來一下嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>16</td>
+        <td><audio controls preload="none"><source src="audio/16.aac" type="audio/aac"></audio></td>
+        <td><code>請問這班車會停台南嗎?</code></td>
+        <td><code>이 열차는 탈남역에 정차하나요?</code></td>
+        <td><strong>這趟列車會在臺南站停靠嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這列火車會停靠臺南站嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>17</td>
+        <td><audio controls preload="none"><source src="audio/17.aac" type="audio/aac"></audio></td>
+        <td><code>請問出口在哪裡?</code></td>
+        <td><code>추구가 어디에 있나요?</code></td>
+        <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>18</td>
+        <td><audio controls preload="none"><source src="audio/18.aac" type="audio/aac"></audio></td>
+        <td><code>請問公車站在哪裡?</code></td>
+        <td><code>버스 타는 것이 어디에 있나요?</code></td>
+        <td><strong>公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>公車站牌是在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>19</td>
+        <td><audio controls preload="none"><source src="audio/19.aac" type="audio/aac"></audio></td>
+        <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+        <td><code>여기에 큰 짐을 막일 수 있나요?</code></td>
+        <td><strong>請問，這裡可以放置大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這裡可以寄放大件行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>20</td>
+        <td><audio controls preload="none"><source src="audio/20.aac" type="audio/aac"></audio></td>
+        <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+        <td><code>도와주셔서 감사합니다. 즐거운 하루 보내세요.</code></td>
+        <td><strong>感謝您的幫助。祝您度過愉快的一天。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>感謝您的幫助，祝您有一個愉快的一天。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+
+<footer>產生時間：2026-05-25｜20 case × 2 MT｜judge：<code>strict-audit-v3.py</code>｜音檔：5/19 batch（5/14 升版重錄版）</footer>
+</body></html>
