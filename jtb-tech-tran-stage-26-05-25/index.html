@@ -47,19 +47,19 @@
     判定：<code>strict-audit-v3.py</code>（含 code injection / random latin / noise transliteration 偵測）
   </p>
 
-  <div class="pending">
-    ⏳ <strong>Gemma-2-9B-it 與 Qwen2.5-14B-Instruct 下載中</strong>、bench 完成後本報告會更新對應欄位
-  </div>
-
   <div class="card">
-    <h2>當前結果（3 模型已測）</h2>
+    <h2>結論（5 模型 119 句嚴格判定）</h2>
     <div class="stats">
-      <div class="stat"><div class="number">114/119</div><div class="label">TG 12B<br>95%</div></div>
-      <div class="stat"><div class="number green">114/119</div><div class="label">Qwen2.5-7B v3<br>95% — 跟 TG 平手、快 2x</div></div>
+      <div class="stat"><div class="number">114/119</div><div class="label">TG 12B<br>95% baseline</div></div>
+      <div class="stat"><div class="number">114/119</div><div class="label">Qwen-7B v3<br>95% — 跟 TG 平手、快 2x</div></div>
       <div class="stat"><div class="number amber">111/119</div><div class="label">Aya-8B<br>93% — 退步、且非商業</div></div>
-      <div class="stat"><div class="number placeholder">?/119</div><div class="label">Gemma-2-9B-it<br>下載中</div></div>
-      <div class="stat"><div class="number placeholder">?/119</div><div class="label">Qwen2.5-14B<br>下載中</div></div>
+      <div class="stat"><div class="number green">117/119</div><div class="label">Gemma-2-9B<br>98% — <strong>贏 +3</strong>、跟 TG 同速</div></div>
+      <div class="stat"><div class="number green">117/119</div><div class="label">Qwen-14B int4<br>98% — <strong>贏 +3 且快 4x</strong></div></div>
     </div>
+    <p style="margin-top:1rem;font-size:0.9rem;color:#374151;line-height:1.6">
+      <strong>推薦：Qwen2.5-14B-Instruct（int4 nf4）</strong>。比 TG baseline 多救 3 句（th-女-達運 #17 出口、th-女-喬泰 #16 臺南、th-男-喬泰 #17 出口）；mean 延遲 355ms 比 TG 1380ms 快 ~4 倍；Apache 2.0 商用無虞；在這台 5090 上 int4 fit 9.8GB。
+      <br>剩餘 2 句 NG：<code>th-女-達運 #20</code> 「sir，感謝您...」混 latin 招呼語；<code>th-男-喬泰 #16</code> 把「會停臺南嗎？」翻成肯定句。
+    </p>
   </div>
 
   <div class="card">
@@ -67,13 +67,13 @@
     <table>
       <thead><tr><th>組</th><th>TG 12B</th><th>Qwen-7B v3</th><th>Aya-8B</th><th>Gemma-9B</th><th>Qwen-14B</th></tr></thead>
       <tbody>
-<tr><td><strong>ja-男-達運</strong></td><td>20/20</td><td>19/20</td><td>20/20</td><td class='placeholder'>—</td><td class='placeholder'>—</td></tr>
-<tr><td><strong>id-女-達運</strong></td><td>19/19</td><td>19/19</td><td>18/19</td><td class='placeholder'>—</td><td class='placeholder'>—</td></tr>
-<tr><td><strong>id-男-喬泰</strong></td><td>20/20</td><td>20/20</td><td>19/20</td><td class='placeholder'>—</td><td class='placeholder'>—</td></tr>
-<tr><td><strong>th-女-喬泰</strong></td><td>20/20</td><td>19/20</td><td>18/20</td><td class='placeholder'>—</td><td class='placeholder'>—</td></tr>
-<tr><td><strong>th-女-達運</strong></td><td>16/20</td><td>18/20</td><td>18/20</td><td class='placeholder'>—</td><td class='placeholder'>—</td></tr>
-<tr><td><strong>th-男-喬泰</strong></td><td>19/20</td><td>19/20</td><td>18/20</td><td class='placeholder'>—</td><td class='placeholder'>—</td></tr>
-        <tr style="background:#1e293b;color:#fff;font-weight:bold"><td>總</td><td>114/119</td><td>114/119</td><td>111/119</td><td class="placeholder">—</td><td class="placeholder">—</td></tr>
+<tr><td><strong>ja-男-達運</strong></td><td>20/20</td><td>19/20</td><td>20/20</td><td><strong>20/20</strong></td><td><strong>20/20</strong></td></tr>
+<tr><td><strong>id-女-達運</strong></td><td>19/19</td><td>19/19</td><td>18/19</td><td><strong>19/19</strong></td><td><strong>19/19</strong></td></tr>
+<tr><td><strong>id-男-喬泰</strong></td><td>20/20</td><td>20/20</td><td>19/20</td><td><strong>20/20</strong></td><td><strong>20/20</strong></td></tr>
+<tr><td><strong>th-女-喬泰</strong></td><td>20/20</td><td>19/20</td><td>18/20</td><td><strong>20/20</strong></td><td><strong>20/20</strong></td></tr>
+<tr><td><strong>th-女-達運</strong></td><td>16/20</td><td>18/20</td><td>18/20</td><td><strong>19/20</strong></td><td><strong>19/20</strong></td></tr>
+<tr><td><strong>th-男-喬泰</strong></td><td>19/20</td><td>19/20</td><td>18/20</td><td><strong>19/20</strong></td><td><strong>19/20</strong></td></tr>
+        <tr style="background:#1e293b;color:#fff;font-weight:bold"><td>總</td><td>114/119</td><td>114/119</td><td>111/119</td><td>117/119</td><td>117/119</td></tr>
       </tbody>
     </table>
   </div>
@@ -83,8 +83,9 @@
     <table>
       <thead><tr><th>指標</th><th>TG 12B</th><th>Qwen-7B v3</th><th>Aya-8B</th><th>Gemma-9B</th><th>Qwen-14B</th></tr></thead>
       <tbody>
-        <tr><td>Mean</td><td>1382ms</td><td><strong>621ms</strong></td><td>622ms</td><td class="placeholder">—</td><td class="placeholder">—</td></tr>
-        <tr><td>P95</td><td>1908ms</td><td><strong>908ms</strong></td><td>864ms</td><td class="placeholder">—</td><td class="placeholder">—</td></tr>
+        <tr><td>Mean</td><td>1382ms</td><td>621ms</td><td>622ms</td><td>1130ms</td><td><strong>355ms</strong></td></tr>
+        <tr><td>P95</td><td>1908ms</td><td>908ms</td><td>864ms</td><td>1707ms</td><td><strong>475ms</strong></td></tr>
+        <tr><td>量化</td><td>int8</td><td>int8</td><td>int8</td><td>int8 (~9GB)</td><td>int4 nf4 (~10GB)</td></tr>
       </tbody>
     </table>
   </div>
@@ -119,8 +120,8 @@
           <td><strong>您好。請問，高雄車站的售票處在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好。高雄車站的售票處在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>你好，高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>2</td><td><strong>ja-男-達運</strong></td><td>2</td>
@@ -130,8 +131,8 @@
           <td><strong>請給我一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請給我一張臺南的車票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請給我一張往臺南的票。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>臺南一趟車票一張</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請給我一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>3</td><td><strong>ja-男-達運</strong></td><td>3</td>
@@ -141,8 +142,8 @@
           <td><strong>這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車什麼時候出發？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車什麼時候發車？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車什麼時候發車？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>4</td><td><strong>ja-男-達運</strong></td><td>4</td>
@@ -152,8 +153,8 @@
           <td><strong>請問，如何去2號站臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問要去2月臺怎麼走？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您想去二號月臺嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>二號月臺怎麼去？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>怎麼去月臺2呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>5</td><td><strong>ja-男-達運</strong></td><td>5</td>
@@ -163,8 +164,8 @@
           <td><strong>捷運的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>捷運的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>捷運的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>捷運的入口是在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>6</td><td><strong>ja-男-達運</strong></td><td>6</td>
@@ -174,8 +175,8 @@
           <td><strong>我想去左營，請問應該乘坐哪趟列車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問要去左營，應該搭哪一班火車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想去左營，該坐哪班火車呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>想去左營，請問搭乘哪班火車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>想去左營，請問我要搭哪一班火車？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>7</td><td><strong>ja-男-達運</strong></td><td>7</td>
@@ -185,8 +186,8 @@
           <td><strong>去新左營的票多少錢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>新左營的車票是多少？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>新左營方向的車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>新左營的車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>去新左營的火車票要多少錢呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>8</td><td><strong>ja-男-達運</strong></td><td>8</td>
@@ -196,8 +197,8 @@
           <td><strong>這裡可以使用電子票嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以使用電子票券嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>在這裡可以使用電子票券嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這裡可以用電子票嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以使用電子票嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>9</td><td><strong>ja-男-達運</strong></td><td>9</td>
@@ -207,8 +208,8 @@
           <td><strong>我想辦理退款，應該去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>想要辦理退款，請問要去哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想退款，請問我該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問要如何辦理退票？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想辦理退票，應該去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>10</td><td><strong>ja-男-達運</strong></td><td>10</td>
@@ -218,8 +219,8 @@
           <td><strong>請問，洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>洗手間是在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>11</td><td><strong>ja-男-達運</strong></td><td>11</td>
@@ -230,8 +231,8 @@
           <td><strong>Coin羅Locker在哪一層樓？  
 正確翻譯：儲物櫃在哪一層樓？</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>儲物櫃在哪一樓？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>儲物櫃在哪個樓層？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>儲物櫃在哪一樓？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>12</td><td><strong>ja-男-達運</strong></td><td>12</td>
@@ -241,8 +242,8 @@
           <td><strong>我想去美麗島站，請問應該如何換乘捷運？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>要去美麗島車站，搭捷運要怎麼轉乘呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想去美麗島站，請問我該如何轉地鐵？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>想要去美麗島站，搭捷運怎麼轉乘呢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>想去美麗島站，我要怎麼轉乘捷運呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>13</td><td><strong>ja-男-達運</strong></td><td>13</td>
@@ -252,8 +253,8 @@
           <td><strong>我丟失了手機，請問諮詢的聯絡方式在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>遺失了行動電話，請問詢處在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我遺失了手機，請問有什麼地方可以查詢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>手機弄丟了，請問可以請問哪裡可以打電話詢問嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我的手機掉了，我可以向哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>14</td><td><strong>ja-男-達運</strong></td><td>14</td>
@@ -263,8 +264,8 @@
           <td><strong>請您再慢一點說，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請您再慢一點說話，我聽不清楚。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您可以再慢點說嗎？我聽不清楚。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>可以再慢慢說一下嗎？我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>您可以說慢一點嗎？我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>15</td><td><strong>ja-男-達運</strong></td><td>15</td>
@@ -274,8 +275,8 @@
           <td><strong>我感覺不太舒服。請您幫忙叫一下站務員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我覺得不太舒服。可以請車站人員來嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我有點不舒服。請幫我叫來站務人員。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>有點不舒服，可以幫我叫一下站務人員嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我覺得不太舒服，可以叫站員過來嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>16</td><td><strong>ja-男-達運</strong></td><td>16</td>
@@ -285,8 +286,8 @@
           <td><strong>這趟列車是開往臺南的嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車是要去臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這班電車是去臺南的嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車要去臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這火車去臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>17</td><td><strong>ja-男-達運</strong></td><td>17</td>
@@ -296,8 +297,8 @@
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>出口是在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>18</td><td><strong>ja-男-達運</strong></td><td>18</td>
@@ -307,8 +308,8 @@
           <td><strong>這個公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這個公車站是在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這個公車站在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這站公車站是哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這個公車站是哪裡呢。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>19</td><td><strong>ja-男-達運</strong></td><td>19</td>
@@ -318,8 +319,8 @@
           <td><strong>請問，這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>可以在這裡預託大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我可以在這裡寄放大件行李嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這裡可以寄放大件行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>20</td><td><strong>ja-男-達運</strong></td><td>20</td>
@@ -329,8 +330,8 @@
           <td><strong>真的幫了大忙，非常感謝。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您真的幫了我大忙。謝謝您。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您真的幫了我大忙。謝謝您。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>您真的幫了我大忙 謝謝您</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>您真的幫了我大忙，謝謝。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>21</td><td><strong>id-女-達運</strong></td><td>1</td>
@@ -340,8 +341,8 @@
           <td><strong>您好，高雄火車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>你好，高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>哈囉，高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>22</td><td><strong>id-女-達運</strong></td><td>2</td>
@@ -351,8 +352,8 @@
           <td><strong>我想購買去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想買車票去臺南。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想買張到臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要買一張火車票到臺南</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想買去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>23</td><td><strong>id-女-達運</strong></td><td>3</td>
@@ -362,8 +363,8 @@
           <td><strong>請問，這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這班火車幾時開車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車什麼時候開？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>24</td><td><strong>id-女-達運</strong></td><td>4</td>
@@ -373,8 +374,8 @@
           <td><strong>請問，去二號站臺怎麼走？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問如何到達二號月臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，如何前往第二個月臺？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問怎麼到第二月臺？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問怎麼去第二月臺？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>25</td><td><strong>id-女-達運</strong></td><td>5</td>
@@ -384,8 +385,8 @@
           <td><strong>請問，捷運的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，捷運進站口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>26</td><td><strong>id-女-達運</strong></td><td>6</td>
@@ -395,8 +396,8 @@
           <td><strong>請問，我應該乘坐哪趟火車才能去左營？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我要搭哪一班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，我要搭哪班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問我要搭哪班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，我要搭哪一班火車可以去左營？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>27</td><td><strong>id-女-達運</strong></td><td>7</td>
@@ -406,8 +407,8 @@
           <td><strong>一張火車票到新左營多少錢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>新左營的一張火車票價是多少？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>一張去新左營的火車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>去新左營火車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>一張火車票到新左營要多少錢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>28</td><td><strong>id-女-達運</strong></td><td>8</td>
@@ -417,8 +418,8 @@
           <td><strong>請問，這裡可以使用電子卡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，這裡可以使用電子卡嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問這裡可以用電子卡片嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>29</td><td><strong>id-女-達運</strong></td><td>9</td>
@@ -428,8 +429,8 @@
           <td><strong>我想申請退款。我應該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想請問可以退票嗎？我應該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要求退款。我該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要退錢，我該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想申請退票，我應該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>30</td><td><strong>id-女-達運</strong></td><td>10</td>
@@ -439,8 +440,8 @@
           <td><strong>請問，洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問廁所在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>31</td><td><strong>id-女-達運</strong></td><td>11</td>
@@ -450,8 +451,8 @@
           <td><strong>請問，儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>32</td><td><strong>id-女-達運</strong></td><td>12</td>
@@ -461,8 +462,8 @@
           <td><strong>您好，我想去美麗島站。請問如何乘坐捷運換乘？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我要去美麗島車站，怎麼轉乘捷運？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，我想去美麗島車站。如何轉乘捷運？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問，我要搭捷運到美麗島車站，怎麼轉乘？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，我想去美麗島車站。該怎麼轉乘捷運？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>33</td><td><strong>id-女-達運</strong></td><td>14</td>
@@ -472,8 +473,8 @@
           <td><strong>請您稍微慢一點，我不太清楚您在說什麼。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請慢一點說，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>可以稍微說慢一點，我聽不清楚。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>可以稍微慢一點，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請說慢一點，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>34</td><td><strong>id-女-達運</strong></td><td>15</td>
@@ -483,8 +484,8 @@
           <td><strong>我感覺身體不舒服。請幫我叫車站工作人員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我覺得不舒服。請叫車站人員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我感到不舒服。請叫來站務人員。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我身體不舒服，請您叫一下車站工作人員。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我覺得不太舒服。請叫站員過來。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>35</td><td><strong>id-女-達運</strong></td><td>16</td>
@@ -494,8 +495,8 @@
           <td><strong>這趟列車會在臺南站停靠嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車會停在臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車有停臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車會停靠臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車會停在臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>36</td><td><strong>id-女-達運</strong></td><td>17</td>
@@ -505,8 +506,8 @@
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>37</td><td><strong>id-女-達運</strong></td><td>18</td>
@@ -516,8 +517,8 @@
           <td><strong>公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>公車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄車站，請問公車停靠處在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>哪裡有公車站？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>公車月臺在哪裡</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>38</td><td><strong>id-女-達運</strong></td><td>19</td>
@@ -527,8 +528,8 @@
           <td><strong>我可以把這個大行李箱放在這裡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我可以將這件大行李寄存這裡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我可以把這個大行李寄放在這裡嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我可以幫您寄放這件大行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我可以把這個大的行李寄放在這裡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>39</td><td><strong>id-女-達運</strong></td><td>20</td>
@@ -538,8 +539,8 @@
           <td><strong>感謝您的幫助。祝您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您真的幫了我大忙，希望您的日子愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>謝謝您的幫助。祝您有美好的一天。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>謝謝您的幫忙，希望您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>謝謝您的幫助。希望您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>40</td><td><strong>id-男-喬泰</strong></td><td>1</td>
@@ -549,8 +550,8 @@
           <td><strong>您好，請問高雄火車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，高鐵車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>你好，高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>哈囉，高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>41</td><td><strong>id-男-喬泰</strong></td><td>2</td>
@@ -560,8 +561,8 @@
           <td><strong>我想購買去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想買車票去臺南。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想買去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要買一張火車票去臺南</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想買去臺南的火車票。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>42</td><td><strong>id-男-喬泰</strong></td><td>3</td>
@@ -571,8 +572,8 @@
           <td><strong>請問，這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這班火車幾時開車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車什麼時候開？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>43</td><td><strong>id-男-喬泰</strong></td><td>4</td>
@@ -582,8 +583,8 @@
           <td><strong>請問，去二號站臺怎麼走？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問如何到達二號月臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，如何前往第二月臺？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問怎麼到第二月臺？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問怎麼去第二月臺？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>44</td><td><strong>id-男-喬泰</strong></td><td>5</td>
@@ -593,8 +594,8 @@
           <td><strong>請問，捷運的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，捷運進站口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>45</td><td><strong>id-男-喬泰</strong></td><td>6</td>
@@ -604,8 +605,8 @@
           <td><strong>請問，我應該乘坐哪趟火車才能去左營？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我要搭哪一班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，我要搭哪班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問我要搭哪班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，我要搭哪一班火車可以去左營？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>46</td><td><strong>id-男-喬泰</strong></td><td>7</td>
@@ -615,8 +616,8 @@
           <td><strong>一張火車票到新左營多少錢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>新左營的一張火車票價是多少？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>一張去新左營的火車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>去新左營火車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>一張火車票到新左營要多少錢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>47</td><td><strong>id-男-喬泰</strong></td><td>8</td>
@@ -626,8 +627,8 @@
           <td><strong>請問，這裡可以使用電子卡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，這裡可以使用電子卡嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問這裡可以用電子卡片嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>48</td><td><strong>id-男-喬泰</strong></td><td>9</td>
@@ -637,8 +638,8 @@
           <td><strong>我想申請退款。我應該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想請問可以退票嗎？我應該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要求退款。我該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要退錢，我該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想申請退票，我應該去哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>49</td><td><strong>id-男-喬泰</strong></td><td>10</td>
@@ -648,8 +649,8 @@
           <td><strong>請問，洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問廁所在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>50</td><td><strong>id-男-喬泰</strong></td><td>11</td>
@@ -659,8 +660,8 @@
           <td><strong>請問，儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問洗手間在幾樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問工作機會在哪一層樓？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>51</td><td><strong>id-男-喬泰</strong></td><td>12</td>
@@ -670,8 +671,8 @@
           <td><strong>您好，我想去美麗島站。請問如何乘坐捷運換乘？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我要去美麗島車站，怎麼轉乘捷運？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，我想去美麗島站。如何轉捷運？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問，我要搭乘捷運到美麗島站，怎麼轉乘？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，我想去美麗島車站。該怎麼轉乘捷運？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>52</td><td><strong>id-男-喬泰</strong></td><td>13</td>
@@ -681,8 +682,8 @@
           <td><strong>請問，我的手機丟了，應該向哪裡報案呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我的手機不見了，要去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，我的手機丟失了，該向誰報案？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問手機遺失，要報到哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，我的手機掉了，應該向哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>53</td><td><strong>id-男-喬泰</strong></td><td>14</td>
@@ -692,8 +693,8 @@
           <td><strong>請您稍微慢一點，我不太清楚您在說什麼。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請慢一點說，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>可以稍微說慢一點，我聽不清楚。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>可以稍微慢一點，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請說慢一點，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>54</td><td><strong>id-男-喬泰</strong></td><td>15</td>
@@ -703,8 +704,8 @@
           <td><strong>我感覺身體不舒服。請幫我叫車站工作人員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我覺得不舒服。請叫車站人員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我感到不舒服。請叫來站務人員。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我身體不舒服，請您叫一下車站工作人員。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我覺得不太舒服。請叫站員過來。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>55</td><td><strong>id-男-喬泰</strong></td><td>16</td>
@@ -714,8 +715,8 @@
           <td><strong>這趟列車會在臺南停靠嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車會停在臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車有停臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車會停靠臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車會停在臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>56</td><td><strong>id-男-喬泰</strong></td><td>17</td>
@@ -725,8 +726,8 @@
           <td><strong>請問，出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>57</td><td><strong>id-男-喬泰</strong></td><td>18</td>
@@ -736,8 +737,8 @@
           <td><strong>請問，公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問公車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，公車站在那裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問公車停靠站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問公車月臺在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>58</td><td><strong>id-男-喬泰</strong></td><td>19</td>
@@ -747,8 +748,8 @@
           <td><strong>請問，我可以把我的大件行李在這裡寄存嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這裡可以寄放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問，我可以在這裡寄放我的大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問我可以把大行李放在這裡嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>不好意思，我可以把我的大行李寄放在這裡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>59</td><td><strong>id-男-喬泰</strong></td><td>20</td>
@@ -758,8 +759,8 @@
           <td><strong>感謝您的幫助。祝您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您真的幫了我大忙，希望您的日子愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>謝謝您的幫助。祝您有美好的一天。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>謝謝您的幫忙，希望您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>謝謝您的幫助。希望您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>60</td><td><strong>th-女-喬泰</strong></td><td>1</td>
@@ -769,8 +770,8 @@
           <td><strong>您好，高雄火車站的售票窗口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，高雄車站的售票窗口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>高雄火車站的售票窗口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>61</td><td><strong>th-女-喬泰</strong></td><td>2</td>
@@ -780,8 +781,8 @@
           <td><strong>我想要購買一張去臺南的機票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要買一張去臺南的車票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想買一張到臺南的票，請。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要買一張去臺南的票</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>62</td><td><strong>th-女-喬泰</strong></td><td>3</td>
@@ -791,8 +792,8 @@
           <td><strong>這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車幾點開出？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這班火車幾點出發呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車什麼時候發車？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>63</td><td><strong>th-女-喬泰</strong></td><td>4</td>
@@ -802,8 +803,8 @@
           <td><strong>請問，我該如何去二號站臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您要怎麼去二號月臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我如何前往第二個車站呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要怎麼到第二月臺？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要如何去月臺二？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>64</td><td><strong>th-女-喬泰</strong></td><td>5</td>
@@ -813,8 +814,8 @@
           <td><strong>捷運站的入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>捷運入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄捷運站入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>捷運車站入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>捷運月臺的入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>65</td><td><strong>th-女-喬泰</strong></td><td>6</td>
@@ -824,8 +825,8 @@
           <td><strong>請問，如果要去左營，應該乘坐哪趟火車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問一下，要去左營要搭哪一班火車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，如果要去左營，要搭哪班火車呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問要搭乘去左營的火車，要搭乘哪班車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>要去左營要搭哪一班火車？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>66</td><td><strong>th-女-喬泰</strong></td><td>7</td>
@@ -835,8 +836,8 @@
           <td><strong>一張前往新左營的火車票價格是多少？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>火車去新左營一張多少錢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>火車票到新左營一張要多少錢啊？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>新左營火車票一張多少錢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>去新左營的火車票一張多少錢呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>67</td><td><strong>th-女-喬泰</strong></td><td>8</td>
@@ -846,8 +847,8 @@
           <td><strong>請問，這裡可以使用電子車票嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這裡可以使用電子票證嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問這裡可以用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>68</td><td><strong>th-女-喬泰</strong></td><td>9</td>
@@ -857,8 +858,8 @@
           <td><strong>我想申請退款，應該去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我要去哪邊退票呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我要退錢，要去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要退錢要到哪裡去呢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要去哪裡辦理退票呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>69</td><td><strong>th-女-喬泰</strong></td><td>10</td>
@@ -868,8 +869,8 @@
           <td><strong>請問洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>洗手間在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>70</td><td><strong>th-女-喬泰</strong></td><td>11</td>
@@ -879,8 +880,8 @@
           <td><strong>請問一下，寄存櫃位於哪一層？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>儲物櫃在哪一層樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您可以問一下，行李寄存在那個層級？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問寄物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>71</td><td><strong>th-女-喬泰</strong></td><td>12</td>
@@ -890,8 +891,8 @@
           <td><strong>我想去美麗島站，需要如何換乘捷運（MRT）呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您想要去美麗島車站需要換乘捷運嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想去美麗島站，該怎麼搭乘捷運呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>想去美麗島車站要怎麼搭捷運轉乘</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想去美麗島車站，要如何轉乘捷運上去呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>72</td><td><strong>th-女-喬泰</strong></td><td>13</td>
@@ -901,8 +902,8 @@
           <td><strong>我的手機丟了，我應該去哪裡報案呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我的手機不見了要去哪邊報失呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我的手機丟了，我該去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>手機遺失要到哪裡報失</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我的手機掉了，要去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>73</td><td><strong>th-女-喬泰</strong></td><td>14</td>
@@ -912,8 +913,8 @@
           <td><strong>請您慢一點說，我不太清楚。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請慢一點說話我聽不太清楚</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請慢一點說，我聽不很清楚。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請您講慢一點，我聽不太清楚</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請慢點說，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>74</td><td><strong>th-女-喬泰</strong></td><td>15</td>
@@ -923,8 +924,8 @@
           <td><strong>我感覺不舒服，請您幫忙叫一下車站的工作人員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問您感覺不舒服，請問可以請車站的工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我感到不舒服，請幫我叫站務人員一聲吧。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我身體不舒服，請您幫我叫一下車站的工作人員好嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請幫我叫一下站上的工作人員，我感覺不舒服。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>75</td><td><strong>th-女-喬泰</strong></td><td>16</td>
@@ -934,8 +935,8 @@
           <td><strong>這趟火車會在臺南站停靠嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車會停在臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車在這裡停車嗎？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車會停靠臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車停靠臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>76</td><td><strong>th-女-喬泰</strong></td><td>17</td>
@@ -945,8 +946,8 @@
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>出口在哪裡?</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>77</td><td><strong>th-女-喬泰</strong></td><td>18</td>
@@ -956,8 +957,8 @@
           <td><strong>公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>公共汽車站牌在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>郵箱在哪裡呢？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>公車站牌在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>公車站牌在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>78</td><td><strong>th-女-喬泰</strong></td><td>19</td>
@@ -967,8 +968,8 @@
           <td><strong>這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以寄放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以存放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這裡可以寄放大行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以寄放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>79</td><td><strong>th-女-喬泰</strong></td><td>20</td>
@@ -978,8 +979,8 @@
           <td><strong>感謝您的幫助，祝您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您真的幫了我大忙，祝您有一個好日子。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>謝謝您的幫助，祝您有美好的一天。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>謝謝您，祝您今天愉快</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>謝謝您的幫助，祝您有美好的一天。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>80</td><td><strong>th-女-達運</strong></td><td>1</td>
@@ -989,8 +990,8 @@
           <td><strong>您好，請問高雄火車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，高雄車站的售票窗口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>高雄車站的售票窗口在何處呢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>你好，高雄火車站的售票窗口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>81</td><td><strong>th-女-達運</strong></td><td>2</td>
@@ -1000,8 +1001,8 @@
           <td><strong>嗯，我需要購買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我要買票去臺南一趟。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要買一張去臺南的票</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>82</td><td><strong>th-女-達運</strong></td><td>3</td>
@@ -1011,8 +1012,8 @@
           <td><strong>請問，這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車幾點開出？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這班火車幾點出發？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車什麼時候出發呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>83</td><td><strong>th-女-達運</strong></td><td>4</td>
@@ -1022,8 +1023,8 @@
           <td><strong>請問，我該如何到達二號站臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我要怎麼去二號月臺</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>書本我如何在第二班火車上閱讀？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問要去第二月臺怎麼走？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問我要如何去月臺二？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>84</td><td><strong>th-女-達運</strong></td><td>5</td>
@@ -1033,8 +1034,8 @@
           <td><strong>捷運站的入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>火車月臺的進站口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您想知道高雄捷運站（MRT）在哪裡嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>捷運車站的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>捷運月臺的入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>85</td><td><strong>th-女-達運</strong></td><td>6</td>
@@ -1044,8 +1045,8 @@
           <td><strong>請問一下，如果要去左營，應該乘坐哪趟火車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問一下，要去左營要搭哪一班火車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，如果要去左營，要搭哪班火車呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問要搭乘去左營的火車，要搭乘哪班車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問要去左營要搭哪一班火車？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>86</td><td><strong>th-女-達運</strong></td><td>7</td>
@@ -1057,8 +1058,8 @@
           <td><strong>您好，根據您提供的泰語句子「ชีตั๋วรถไฟไป 新左營หนึ่งใบราคาเท่าไหร่」，翻譯成臺灣繁體中文為：
 
 「火車票到新左營一張票的價格是多少？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>新左營火車票一張多少錢</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>火車去新左營的票價是多少？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>87</td><td><strong>th-女-達運</strong></td><td>8</td>
@@ -1068,8 +1069,8 @@
           <td><strong>請問，這裡可以使用電子車票嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以使用悠遊卡嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您在這裡可以使用電子票證嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這裡可以用電子票券嗎</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問一下，這裡可以用電子票卡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>88</td><td><strong>th-女-達運</strong></td><td>9</td>
@@ -1079,8 +1080,8 @@
           <td><strong>“你好，我想申請退款，應該去哪裡？”</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您需要退票應該要去售票窗口。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我需要退款，要去哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>要退錢要到哪裡去</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要去哪裡辦理退票手續？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>89</td><td><strong>th-女-達運</strong></td><td>10</td>
@@ -1090,8 +1091,8 @@
           <td><strong>請問洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您想買哪裡的水龍頭（洗手間）呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>洗手間在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>90</td><td><strong>th-女-達運</strong></td><td>11</td>
@@ -1101,8 +1102,8 @@
           <td><strong>請問，寄存行李的儲物櫃在幾樓呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問儲物櫃在哪一層樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，請問行李寄存處在哪一層？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>儲物櫃在哪一層樓</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問寄物櫃在幾樓呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>91</td><td><strong>th-女-達運</strong></td><td>12</td>
@@ -1112,8 +1113,8 @@
           <td><strong>先生，我想去美麗島站。我需要乘坐捷運（MRT）去火車站，請問怎麼去？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>先生，我要去美麗島車站，怎麼去搭捷運進站？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我要去美麗島站，我該怎麼搭捷運到那裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>先生，我要去美麗島車站，請問搭捷運可以到火車站嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>先生，我要去美麗島車站，要怎麼搭捷運到火車站？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>92</td><td><strong>th-女-達運</strong></td><td>13</td>
@@ -1123,8 +1124,8 @@
           <td><strong>我的手機丟了，我應該去哪裡報案？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>蘇珊的電話不見了，我應該到哪邊報失？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我的手機失靈了，我該告訴誰？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>蘇珊，您的手機遺失了，請問要在哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>蘇珊，我的手機掉了，我要去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>93</td><td><strong>th-女-達運</strong></td><td>14</td>
@@ -1134,8 +1135,8 @@
           <td><strong>請蘇蘇慢慢說，我不太聽清楚。</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>素查 加拉納請說慢一點 我聽不太清楚</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>蘇，你說得有點慢，我聽不很清楚。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請您說慢一點，我聽不太清楚</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>蘇小姐請說慢一點，我聽不太清楚</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>94</td><td><strong>th-女-達運</strong></td><td>15</td>
@@ -1145,8 +1146,8 @@
           <td><strong>我感覺不舒服，請您幫忙叫一下車站的工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問您不舒服，請問可以幫您叫車站的工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我感到不舒服，請幫我叫一聲車站工作人員可以嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問可以幫我叫一下車站工作人員嗎 我不太舒服</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我覺得不太舒服，可以請工作人員過來一下嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>95</td><td><strong>th-女-達運</strong></td><td>16</td>
@@ -1158,8 +1159,8 @@
 原文：สุริว รถไฟขบวนนี้จอดที่臺南ไหม
 中文翻譯：蘇裡，這列火車會在臺南停車嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車停在臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車會到臺南嗎</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車停靠臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>96</td><td><strong>th-女-達運</strong></td><td>17</td>
@@ -1169,8 +1170,8 @@
           <td><strong>S-CHI 的出口在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>出入口在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
+          <td><strong>出口在哪裡?</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>97</td><td><strong>th-女-達運</strong></td><td>18</td>
@@ -1180,8 +1181,8 @@
           <td><strong>公車車站的SPA在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>車站牌在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>火車票在哪裡？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>公車停靠站在哪裡</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>公車站牌在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>98</td><td><strong>th-女-達運</strong></td><td>19</td>
@@ -1191,8 +1192,8 @@
           <td><strong>請問，這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以寄放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這個車站能存放大量行李嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這裡可以寄放大行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>99</td><td><strong>th-女-達運</strong></td><td>20</td>
@@ -1202,8 +1203,8 @@
           <td><strong>謝謝你的幫助，祝你今天一切順利。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您真的幫了我大忙，祝您今天 bucchang 。</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>您真的幫了我大忙，祝您今天過得愉快。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>好的，謝謝您！祝您今天愉快！</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>sir，感謝您的幫助，祝您今天愉快</strong><br><span class="tag tag-ng">NG</span></td>
         </tr>
         <tr>
           <td>100</td><td><strong>th-男-喬泰</strong></td><td>1</td>
@@ -1213,8 +1214,8 @@
           <td><strong>您好，高雄火車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您好，高雄車站的售票窗口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>高雄車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>您好，高雄火車站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>101</td><td><strong>th-男-喬泰</strong></td><td>2</td>
@@ -1224,8 +1225,8 @@
           <td><strong>我需要購買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要買一張去臺南的車票。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我需要買一張到臺南的票。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要買一張去臺南的票</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>102</td><td><strong>th-男-喬泰</strong></td><td>3</td>
@@ -1235,8 +1236,8 @@
           <td><strong>這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這列火車幾點開出？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這班火車幾點出發呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這班火車什麼時候發車？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>103</td><td><strong>th-男-喬泰</strong></td><td>4</td>
@@ -1246,8 +1247,8 @@
           <td><strong>我該如何到達第二站臺？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您要去二號月臺該怎麼走？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我如何再去第二個月臺？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問要去第二月臺怎麼走？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要如何去月臺二？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>104</td><td><strong>th-男-喬泰</strong></td><td>5</td>
@@ -1257,8 +1258,8 @@
           <td><strong>捷運站的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>捷運月臺入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>高雄捷運站入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>捷運站怎麼進去？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>捷運月臺的入口在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>105</td><td><strong>th-男-喬泰</strong></td><td>6</td>
@@ -1268,8 +1269,8 @@
           <td><strong>請問，如果要去左營，應該乘坐哪趟火車？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問要去左營要搭哪一班火車呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問一下，如果要去左營，要搭哪班火車呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問要搭到左營，要搭哪班火車？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>要去左營要搭哪一班火車呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>106</td><td><strong>th-男-喬泰</strong></td><td>7</td>
@@ -1279,8 +1280,8 @@
           <td><strong>一輛前往新左營的火車票價格是多少？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>火車票去新左營一張多少錢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>火車票到新左營一張多少錢請問？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>新左營火車票一張多少錢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>去新左營的火車票一張多少錢呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>107</td><td><strong>th-男-喬泰</strong></td><td>8</td>
@@ -1290,8 +1291,8 @@
           <td><strong>請問，這裡可以使用電子車票嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以使用電子票證嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問這裡可以使用電子票證嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問這裡可以用悠遊卡嗎</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以使用電子票卡嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>108</td><td><strong>th-男-喬泰</strong></td><td>9</td>
@@ -1301,8 +1302,8 @@
           <td><strong>我需要退款，應該去哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要退票應該要去哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我要退錢，請問要去哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我要退錢要到哪裡去呢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我要去哪裡辦理退票呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>109</td><td><strong>th-男-喬泰</strong></td><td>10</td>
@@ -1312,8 +1313,8 @@
           <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>洗手間在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>洗手間在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>110</td><td><strong>th-男-喬泰</strong></td><td>11</td>
@@ -1323,8 +1324,8 @@
           <td><strong>請問，寄存行李的儲物櫃位於哪一層？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>車站的儲物櫃在哪一層樓？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>您可以問一下行李寄存處在哪一層？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請問儲物櫃在哪一層樓？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請問寄物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>111</td><td><strong>th-男-喬泰</strong></td><td>12</td>
@@ -1334,8 +1335,8 @@
           <td><strong>我想去美麗島站，需要如何換乘捷運（MRT）？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想要去美麗島車站要轉乘捷運嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我想去美麗島站，如何搭乘捷運呢？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>想去美麗島車站要怎麼搭捷運轉乘呢？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我想去美麗島車站，要如何轉乘捷運上去呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>112</td><td><strong>th-男-喬泰</strong></td><td>13</td>
@@ -1345,8 +1346,8 @@
           <td><strong>我的手機丟了，我應該去哪裡報案呢？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問我的手機不見了，要去哪邊報失？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我的手機丟了，該去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我的手機不見了，請問要到哪裡去報失？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>我的手機掉了，要去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>113</td><td><strong>th-男-喬泰</strong></td><td>14</td>
@@ -1356,8 +1357,8 @@
           <td><strong>請您慢一點說，我不太清楚您在說什麼。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請慢一點說話，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請稍微慢一點說，我聽不很清楚。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>請您講慢一點好嗎 我聽不太清楚</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請說慢一點好嗎？我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>114</td><td><strong>th-男-喬泰</strong></td><td>15</td>
@@ -1367,8 +1368,8 @@
           <td><strong>我感覺不舒服，請幫我叫一下車站的工作人員。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請問您可以幫我叫一下車站的工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>我感到不舒服，請幫我叫站務人員。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>我身體不適，請問可以麻煩您幫我叫一下車站的工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>請幫我叫一下站上的工作人員，我感覺不舒服。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>115</td><td><strong>th-男-喬泰</strong></td><td>16</td>
@@ -1378,8 +1379,8 @@
           <td><strong>這趟火車停靠在新的臺南站。</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>這列火車停在臺南新站。</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>這列火車停在新的長途車站。</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這班火車停靠臺南車站</strong><br><span class="tag tag-ng">NG</span></td>
+          <td><strong>這班火車停靠臺南新站。</strong><br><span class="tag tag-ng">NG</span></td>
         </tr>
         <tr>
           <td>116</td><td><strong>th-男-喬泰</strong></td><td>17</td>
@@ -1389,8 +1390,8 @@
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>出口在哪裡?</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>117</td><td><strong>th-男-喬泰</strong></td><td>18</td>
@@ -1400,8 +1401,8 @@
           <td><strong>公車車站牌在哪裡？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>公車站牌在哪裡請問一下？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>停車位在哪裡呢？</strong><br><span class="tag tag-ng">NG</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>公車停靠站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>公車站牌在哪裡呢？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>118</td><td><strong>th-男-喬泰</strong></td><td>19</td>
@@ -1411,8 +1412,8 @@
           <td><strong>這裡可以寄存大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以寄放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>這裡可以存放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>這裡可以寄放大行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>這裡可以寄放大型行李嗎？</strong><br><span class="tag tag-v">V</span></td>
         </tr>
         <tr>
           <td>119</td><td><strong>th-男-喬泰</strong></td><td>20</td>
@@ -1422,13 +1423,13 @@
           <td><strong>感謝您的幫助，祝您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>謝謝您的幫助，祝您有一個好的一天。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>謝謝您的幫助，祝您有美好的一天。</strong><br><span class="tag tag-v">V</span></td>
-          <td class="placeholder">下載中...</td>
-          <td class="placeholder">下載中...</td>
+          <td><strong>謝謝您，祝您今天過得愉快</strong><br><span class="tag tag-v">V</span></td>
+          <td><strong>謝謝您的幫助，祝您有美好的一天。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <footer>產生時間：2026-05-25（Gemma + Qwen 14B 下載完後會更新）｜判定：<code>strict-audit-v3.py</code></footer>
+  <footer>產生時間：2026-05-25 完整版（5 模型）｜判定：<code>strict-audit-v3.py</code>｜GPU：RTX 5090 32GB</footer>
 </body>
 </html>
