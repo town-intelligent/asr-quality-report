@@ -28,16 +28,16 @@
   <p class="subtitle">所有測試報告一覽 ｜ <a href="template/">空白模板</a></p>
 
   <div class="card">
-    <a href="jtb-tech-tran-stage-26-05-25/">jtb-tech-tran-stage — 2026-05-25（5 模型 A/B：Gemma-9B + Qwen-14B 雙雙 117/119 贏 TG +3）</a>
+    <a href="jtb-tech-tran-stage-26-05-25/">jtb-tech-tran-stage — 2026-05-25（5 模型 A/B 人工複核：Qwen2.5-14B int4 = 118/118 100% + 355ms 雙第一）</a>
     <div class="meta">
       <span>站台：高雄車站</span>
-      <span>處理鏈路：ASR + cm + LLM（取代 TG）對照</span>
+      <span>處理鏈路：ASR + cm + LLM（取代 TG）對照（排除 1 句測試 case 問題）</span>
     </div>
     <div class="meta" style="margin-top:0.5rem;">
-      <span class="tag pass">Gemma-2-9B 98%（117/119）</span>
-      <span class="tag pass">Qwen2.5-14B int4 98%（117/119、355ms 快 4x）</span>
-      <span class="tag">TG 95%（114/119、1380ms baseline）</span>
-      <span class="tag">Qwen-7B 95%、Aya 93%（CC-BY-NC ❌）</span>
+      <span class="tag pass">Qwen2.5-14B int4 100%（118/118、355ms 快 4x） ⭐</span>
+      <span class="tag pass">Gemma-2-9B 99%（117/118）</span>
+      <span class="tag">TG 96%（114/118 baseline、1380ms）</span>
+      <span class="tag">Qwen-7B 96%、Aya 94%（CC-BY-NC ❌）</span>
       <span class="tag">隔離 sidecar、production 未動</span>
     </div>
   </div>

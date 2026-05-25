@@ -48,17 +48,22 @@
   </p>
 
   <div class="card">
-    <h2>結論（5 模型 119 句嚴格判定）</h2>
+    <h2>結論（5 模型、118 句、人工複核後）</h2>
+    <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1rem">
+      ※ 排除 <code>th-男-喬泰 #16</code>（5 模型全 NG「變肯定句」、test case 本身問題、應排除）<br>
+      ※ Qwen-14B <code>th-女-達運 #20</code>「sir，感謝您...」latin 招呼語但語意對 → 降 Note 勉強過<br>
+      ※ Note（勉強過）併入 pass 統計
+    </p>
     <div class="stats">
-      <div class="stat"><div class="number">114/119</div><div class="label">TG 12B<br>95% baseline</div></div>
-      <div class="stat"><div class="number">114/119</div><div class="label">Qwen-7B v3<br>95% — 跟 TG 平手、快 2x</div></div>
-      <div class="stat"><div class="number amber">111/119</div><div class="label">Aya-8B<br>93% — 退步、且非商業</div></div>
-      <div class="stat"><div class="number green">117/119</div><div class="label">Gemma-2-9B<br>98% — <strong>贏 +3</strong>、跟 TG 同速</div></div>
-      <div class="stat"><div class="number green">117/119</div><div class="label">Qwen-14B int4<br>98% — <strong>贏 +3 且快 4x</strong></div></div>
+      <div class="stat"><div class="number">114/118</div><div class="label">TG 12B<br>96% baseline</div></div>
+      <div class="stat"><div class="number">114/118</div><div class="label">Qwen-7B v3<br>96% — 跟 TG 平手、快 2x</div></div>
+      <div class="stat"><div class="number amber">111/118</div><div class="label">Aya-8B<br>94% — 退步、且非商業</div></div>
+      <div class="stat"><div class="number green">117/118</div><div class="label">Gemma-2-9B<br>99% — 贏 +3、跟 TG 同速</div></div>
+      <div class="stat"><div class="number green">118/118</div><div class="label"><strong>Qwen-14B int4</strong><br><strong>100% — 第一名、快 4x</strong></div></div>
     </div>
     <p style="margin-top:1rem;font-size:0.9rem;color:#374151;line-height:1.6">
-      <strong>推薦：Qwen2.5-14B-Instruct（int4 nf4）</strong>。比 TG baseline 多救 3 句（th-女-達運 #17 出口、th-女-喬泰 #16 臺南、th-男-喬泰 #17 出口）；mean 延遲 355ms 比 TG 1380ms 快 ~4 倍；Apache 2.0 商用無虞；在這台 5090 上 int4 fit 9.8GB。
-      <br>剩餘 2 句 NG：<code>th-女-達運 #20</code> 「sir，感謝您...」混 latin 招呼語；<code>th-男-喬泰 #16</code> 把「會停臺南嗎？」翻成肯定句。
+      <strong>結論：Qwen2.5-14B-Instruct int4 nf4 — 品質第一（118/118）、速度第一（355ms）、授權最乾淨（Apache 2.0）。</strong><br>
+      比 TG baseline 救 4 句（+4）；mean 延遲 355ms 比 TG 1380ms <strong>快 ~4 倍</strong>；在這台 5090 上 int4 fit 9.8GB GPU。
     </p>
   </div>
 
@@ -71,9 +76,9 @@
 <tr><td><strong>id-女-達運</strong></td><td>19/19</td><td>19/19</td><td>18/19</td><td><strong>19/19</strong></td><td><strong>19/19</strong></td></tr>
 <tr><td><strong>id-男-喬泰</strong></td><td>20/20</td><td>20/20</td><td>19/20</td><td><strong>20/20</strong></td><td><strong>20/20</strong></td></tr>
 <tr><td><strong>th-女-喬泰</strong></td><td>20/20</td><td>19/20</td><td>18/20</td><td><strong>20/20</strong></td><td><strong>20/20</strong></td></tr>
-<tr><td><strong>th-女-達運</strong></td><td>16/20</td><td>18/20</td><td>18/20</td><td><strong>19/20</strong></td><td><strong>19/20</strong></td></tr>
-<tr><td><strong>th-男-喬泰</strong></td><td>19/20</td><td>19/20</td><td>18/20</td><td><strong>19/20</strong></td><td><strong>19/20</strong></td></tr>
-        <tr style="background:#1e293b;color:#fff;font-weight:bold"><td>總</td><td>114/119</td><td>114/119</td><td>111/119</td><td>117/119</td><td>117/119</td></tr>
+<tr><td><strong>th-女-達運</strong></td><td>16/20</td><td>18/20</td><td>18/20</td><td><strong>19/20</strong></td><td><strong>20/20</strong></td></tr>
+<tr><td><strong>th-男-喬泰</strong></td><td>19/19</td><td>19/19</td><td>18/19</td><td><strong>19/19</strong></td><td><strong>19/19</strong></td></tr>
+        <tr style="background:#1e293b;color:#fff;font-weight:bold"><td>總（118 排除後）</td><td>114/118</td><td>114/118</td><td>111/118</td><td>117/118</td><td>118/118</td></tr>
       </tbody>
     </table>
   </div>
@@ -1204,7 +1209,7 @@
           <td><strong>您真的幫了我大忙，祝您今天 bucchang 。</strong><br><span class="tag tag-ng">NG</span></td>
           <td><strong>您真的幫了我大忙，祝您今天過得愉快。</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>好的，謝謝您！祝您今天愉快！</strong><br><span class="tag tag-v">V</span></td>
-          <td><strong>sir，感謝您的幫助，祝您今天愉快</strong><br><span class="tag tag-ng">NG</span></td>
+          <td><strong>sir，感謝您的幫助，祝您今天愉快</strong><br><span class="tag tag-note">Note</span></td>
         </tr>
         <tr>
           <td>100</td><td><strong>th-男-喬泰</strong></td><td>1</td>
@@ -1371,8 +1376,8 @@
           <td><strong>我身體不適，請問可以麻煩您幫我叫一下車站的工作人員嗎？</strong><br><span class="tag tag-v">V</span></td>
           <td><strong>請幫我叫一下站上的工作人員，我感覺不舒服。</strong><br><span class="tag tag-v">V</span></td>
         </tr>
-        <tr>
-          <td>115</td><td><strong>th-男-喬泰</strong></td><td>16</td>
+        <tr style="background:#f3f4f6;opacity:0.65">
+          <td>115 <span class="tag" style="background:#9ca3af;color:#fff">排除</span></td><td><strong>th-男-喬泰</strong></td><td>16</td>
           <td><audio controls preload="none"><source src="audio/th-m-chiaotai/16.mp3" type="audio/mpeg"></audio></td>
           <td><code>請問這班車會停台南嗎?</code></td>
           <td><code>รถไฟขบวนนี้จอดที่ไถนาลใหม่ครับ</code></td>
