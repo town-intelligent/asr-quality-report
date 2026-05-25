@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — #202 達運 vi-男 20 句</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.8rem; font-weight: bold; color: #16a34a; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.78rem; }
+audio { width: 150px; height: 32px; }
+.tag { padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: bold; display: inline-block; margin-top: 0.2rem; }
+.tag-ng { background: #fee2e2; color: #991b1b; }
+.tag-note { background: #fef3c7; color: #b45309; }
+.tag-v { background: #dcfce7; color: #166534; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.callout.warn { background: #fef3c7; border-color: #d97706; }
+.back { margin-bottom: 1rem; } .back a { color: #6b7280; font-size: 0.9rem; text-decoration: none; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head><body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — #202 達運 vi-男 20 句</h1>
+<p class="subtitle">
+原 issue：<a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/202">#202 達運 Lab 測試回報 — 越南文男聲（2026-05-14）</a><br>
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 + Qwen3-ASR-1.7B）｜對比日期：2026-05-25<br>
+範圍：5/14 達運 vi-男 20 句、達運 5/15 升版重錄後（5/19 batch 收錄）。本次 retro：現用 pipeline 跑 TG 12B vs Qwen-14B int4 v5
+</p>
+
+<div class="card">
+  <h2>結論：strict audit 兩 MT 都 20/20、無原 NG 殘留</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">20/20</div><div class="label">TG 12B<br>100%（strict audit）</div></div>
+    <div class="stat"><div class="number">20/20</div><div class="label">Qwen-14B int4 v5<br>100%（strict audit）</div></div>
+  </div>
+  <div class="callout win">
+    <strong>本 issue 在 #202 立案時還沒 RD 分析、達運 5/15 升版重錄後問題已解</strong>。<br>
+    所有 #201/#209 觀察過的 vi 男聲痛點（高雄/左營/新左營/美麗島/台南/MRT/電子票證）retro 全部正確。
+  </div>
+</div>
+
+<div class="card">
+  <h2>8 個 #201/#209 觀察過的 vi 男聲痛點對照</h2>
+  <table>
+    <thead><tr><th>項</th><th>原問題（從 #201/#209 累積）</th><th>ASR raw</th><th>cm 接住後</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td><strong>項 01</strong></td>
+        <td>項 1 高雄火車站售票窗口<br><span style="color:#9ca3af;font-size:0.8rem">ASR「ga tàu cao vùng」、5/24 live cm 已加 `cao vùng:Cao Hùng`（commit c993727）；本 retro 用 stale yaml、顯示「高鐵站」(假 NG)；live production 已修</span></td>
+        <td><code>xin chào cho tôi hỏi quầy bán vé ga tàu cao vùng ở đâu</code></td>
+        <td><code>xin chào cho tôi hỏi quầy bán vé ga tàu cao vùng ở đâu</code></td>
+        <td>⚠️ stale yaml 假 NG (live 已修)<br>您好，請問高鐵站的售票窗口在哪裡？</td>
+        <td>⚠️ stale yaml 假 NG (live 已修)<br>你好，請問高鐵售票櫃台在哪裡？</td>
+    </tr>
+<tr>
+        <td><strong>項 02</strong></td>
+        <td>項 2 買台南車票<br><span style="color:#9ca3af;font-size:0.8rem">ASR「Đà Nẵng」(峴港)、cm 已加 `vé đi Đà Nẵng:vé đi Đài Nam`</span></td>
+        <td><code>Tôi muốn mua một vé đi Đà Nẵng.</code></td>
+        <td><code>Tôi muốn mua một vé đi Đài Nam.</code></td>
+        <td>✅<br>我想購買一張去臺南的票。</td>
+        <td>✅<br>我想買一張去臺南的票。</td>
+    </tr>
+<tr>
+        <td><strong>項 05</strong></td>
+        <td>項 5 MRT 縮寫<br><span style="color:#9ca3af;font-size:0.8rem">#201 報「MRT→M.A.T」；現「捷運入口」已對</span></td>
+        <td><code>lối vào tàu điện ngầm MRT ở đâu?</code></td>
+        <td><code>lối vào tàu điện ngầm MRT ở đâu?</code></td>
+        <td>✅<br>捷運站的入口在哪裡？</td>
+        <td>✅<br>捷運月臺入口在哪裡？</td>
+    </tr>
+<tr>
+        <td><strong>項 06</strong></td>
+        <td>項 6 左營<br><span style="color:#9ca3af;font-size:0.8rem">ASR「chùa Yến」(燕寺)、cm 已加 `đến chùa Yến:đến Zuoying`</span></td>
+        <td><code>Tôi nên đi chuyến tàu nào đến chùa Yến?</code></td>
+        <td><code>Tôi nên đi chuyến tàu nào đến Zuoying?</code></td>
+        <td>✅<br>我應該乘坐哪趟列車前往左營？</td>
+        <td>✅<br>我應該坐哪一班火車去左營？</td>
+    </tr>
+<tr>
+        <td><strong>項 07</strong></td>
+        <td>項 7 新左營<br><span style="color:#9ca3af;font-size:0.8rem">ASR「xuyên chuỗi」/「xuyên rủi」、cm 已加 `vé tàu đi xuyên rủi:vé tàu đi Xinzuoying`</span></td>
+        <td><code>vé tàu đi xuyên chuỗi có giá bao nhiêu?</code></td>
+        <td><code>vé tàu đi 新左營 có giá bao nhiêu?</code></td>
+        <td>✅<br>去新左營的火車票多少錢？</td>
+        <td>✅<br>去新左營的火車票要多少錢？</td>
+    </tr>
+<tr>
+        <td><strong>項 08</strong></td>
+        <td>項 8 電子票證<br><span style="color:#9ca3af;font-size:0.8rem">#201 報「電子繪畫」；現「電子票卡」對</span></td>
+        <td><code>Ở đây có thể dùng thẻ vé điện tử không?</code></td>
+        <td><code>Ở đây có thể dùng thẻ vé điện tử không?</code></td>
+        <td>✅<br>這裡可以使用電子票嗎？</td>
+        <td>✅<br>這裡可以使用電子票卡嗎？</td>
+    </tr>
+<tr>
+        <td><strong>項 12</strong></td>
+        <td>項 12 美麗島<br><span style="color:#9ca3af;font-size:0.8rem">ASR「Formosa Oliveira」、cm 已加多語 `Formosa Boulevard/Oliveira:美麗島站`</span></td>
+        <td><code>Tôi muốn đến ga Formosa Oliveira. Tôi cần chuyến chuyển</code></td>
+        <td><code>Tôi muốn đến ga 美麗島站. Tôi cần chuyến chuyển sang tàu đi</code></td>
+        <td>✅<br>我想去美麗島站。我需要乘坐哪條捷運線路才能到達那裡？</td>
+        <td>✅<br>我想去美麗島站。我該如何轉乘捷運？</td>
+    </tr>
+<tr>
+        <td><strong>項 16</strong></td>
+        <td>項 16 停台南<br><span style="color:#9ca3af;font-size:0.8rem">ASR「Đà Nẵng」、cm 已加 `dừng ở Đà Nẵng:dừng ở Đài Nam`</span></td>
+        <td><code>Chuyến tàu này có dừng ở Đà Nẵng không?</code></td>
+        <td><code>Chuyến tàu này có dừng ở Đài Nam không?</code></td>
+        <td>✅<br>這趟列車是否停靠臺南？</td>
+        <td>✅<br>這班火車會停靠臺南嗎？</td>
+    </tr>
+</tbody>
+  </table>
+  <div class="callout warn">
+    <strong>項 1 注意：</strong>本次 retro 用了 GPU host 上 5/24 早上的 stale cm yaml 快照，漏了 5/24 稍晚 commit (`c993727`) 加的 vi `cao vùng:Cao Hùng` 規則，所以 retro 顯示「高鐵站」。<br>
+    用 LIVE k8s ConfigMap 直接驗證 vi-男 #1：ASR 「cao vùng」→ cm 「Cao Hùng」→ TG MT「高雄火車站售票窗口」✅，production 已修。
+  </div>
+</div>
+
+<div class="card">
+  <h2>20 case 完整明細</h2>
+  <table>
+    <thead><tr><th>#</th><th>音檔</th><th>中譯期望</th><th>ASR raw</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td>01</td>
+        <td><audio controls preload="none"><source src="audio/01.m4a" type="audio/mp4"></audio></td>
+        <td><code>您好，請問高雄火車站的售票窗口在哪?</code></td>
+        <td><code>xin chào cho tôi hỏi quầy bán vé ga tàu cao vùng ở</code></td>
+        <td><strong>您好，請問高鐵站的售票窗口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>你好，請問高鐵售票櫃台在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>02</td>
+        <td><audio controls preload="none"><source src="audio/02.m4a" type="audio/mp4"></audio></td>
+        <td><code>我要買一張到台南的車票。</code></td>
+        <td><code>Tôi muốn mua một vé đi Đà Nẵng.</code></td>
+        <td><strong>我想購買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我想買一張去臺南的票。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>03</td>
+        <td><audio controls preload="none"><source src="audio/03.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問這班車幾點發車?</code></td>
+        <td><code>Chuyến tàu này khởi hành lúc mấy giờ?</code></td>
+        <td><strong>這趟列車幾點發車？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這班火車什麼時候開？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>04</td>
+        <td><audio controls preload="none"><source src="audio/04.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問我要去第二月台怎麼走?</code></td>
+        <td><code>Tôi muốn đi đến sân ga số hai thì đi như thế nào?</code></td>
+        <td><strong>我想去二號站臺，應該怎麼走？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我想去第二月臺，該怎麼走？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>05</td>
+        <td><audio controls preload="none"><source src="audio/05.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問捷運入口在哪裡?</code></td>
+        <td><code>lối vào tàu điện ngầm MRT ở đâu?</code></td>
+        <td><strong>捷運站的入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>捷運月臺入口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>06</td>
+        <td><audio controls preload="none"><source src="audio/06.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問到左營要搭哪一班車?</code></td>
+        <td><code>Tôi nên đi chuyến tàu nào đến chùa Yến?</code></td>
+        <td><strong>我應該乘坐哪趟列車前往左營？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我應該坐哪一班火車去左營？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>07</td>
+        <td><audio controls preload="none"><source src="audio/07.m4a" type="audio/mp4"></audio></td>
+        <td><code>一張到新左營的火車票多少錢?</code></td>
+        <td><code>vé tàu đi xuyên chuỗi có giá bao nhiêu?</code></td>
+        <td><strong>去新左營的火車票多少錢？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>去新左營的火車票要多少錢？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>08</td>
+        <td><audio controls preload="none"><source src="audio/08.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問這裡可以使用電子票證嗎?</code></td>
+        <td><code>Ở đây có thể dùng thẻ vé điện tử không?</code></td>
+        <td><strong>這裡可以使用電子票嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這裡可以使用電子票卡嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>09</td>
+        <td><audio controls preload="none"><source src="audio/09.m4a" type="audio/mp4"></audio></td>
+        <td><code>我想退款，請問要去哪裡?</code></td>
+        <td><code>Tôi muốn được hoàn tiền. Tôi cần đến đâu để thực h</code></td>
+        <td><strong>我想申請退款。我需要去哪裡辦理？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我要退票，我該去哪裡辦理？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>10</td>
+        <td><audio controls preload="none"><source src="audio/10.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問洗手間在哪裡?</code></td>
+        <td><code>Nhà vệ sinh ở đâu?</code></td>
+        <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>洗手間在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>11</td>
+        <td><audio controls preload="none"><source src="audio/11.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問置物櫃在幾樓?</code></td>
+        <td><code>tủ gửi đồ ở tầng mấy?</code></td>
+        <td><strong>儲物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>投幣寄物櫃在幾樓？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>12</td>
+        <td><audio controls preload="none"><source src="audio/12.m4a" type="audio/mp4"></audio></td>
+        <td><code>我想去美麗島站，怎麼轉乘捷運?</code></td>
+        <td><code>Tôi muốn đến ga Formosa Oliveira. Tôi cần chuyến c</code></td>
+        <td><strong>我想去美麗島站。我需要乘坐哪條捷運線路才能到達那裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我想去美麗島站。我該如何轉乘捷運？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>13</td>
+        <td><audio controls preload="none"><source src="audio/13.m4a" type="audio/mp4"></audio></td>
+        <td><code>我的手機不見了，請問要去哪裡報失?</code></td>
+        <td><code>Tôi bị mất điện thoại, xin hỏi phải báo mất ở đâu?</code></td>
+        <td><strong>我丟了手機，請問應該去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我手機掉了，請問要去哪裡報失？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>14</td>
+        <td><audio controls preload="none"><source src="audio/14.m4a" type="audio/mp4"></audio></td>
+        <td><code>請說慢一點，我聽不太清楚。</code></td>
+        <td><code>xin hãy nói chậm một chút, tôi nghe không rõ lắm.</code></td>
+        <td><strong>請您慢一點說，我不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>請說慢一點，我聽不太清楚。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>15</td>
+        <td><audio controls preload="none"><source src="audio/15.m4a" type="audio/mp4"></audio></td>
+        <td><code>我的身體不舒服，請幫我叫站務人員。</code></td>
+        <td><code>Tôi thấy không khỏe, xin hãy giúp tôi gọi nhân viê</code></td>
+        <td><strong>我感覺不太舒服，請幫我叫一下車站的工作人員。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>我覺得不舒服，請帮我叫站員過來。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>16</td>
+        <td><audio controls preload="none"><source src="audio/16.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問這班車會停台南嗎?</code></td>
+        <td><code>Chuyến tàu này có dừng ở Đà Nẵng không?</code></td>
+        <td><strong>這趟列車是否停靠臺南？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這班火車會停靠臺南嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>17</td>
+        <td><audio controls preload="none"><source src="audio/17.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問出口在哪裡?</code></td>
+        <td><code>lối ra ở đâu?</code></td>
+        <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>出口在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>18</td>
+        <td><audio controls preload="none"><source src="audio/18.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問公車站在哪裡?</code></td>
+        <td><code>trạm xe buýt ở đâu?</code></td>
+        <td><strong>公車車站在哪裡？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>公車站在哪里？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>19</td>
+        <td><audio controls preload="none"><source src="audio/19.m4a" type="audio/mp4"></audio></td>
+        <td><code>請問這裡可以寄放大型行李嗎?</code></td>
+        <td><code>ở đây có thể gửi hành lý cỡ lớn không?</code></td>
+        <td><strong>這裡可以寄存大件行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>這裡可以寄大件行李嗎？</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>20</td>
+        <td><audio controls preload="none"><source src="audio/20.m4a" type="audio/mp4"></audio></td>
+        <td><code>謝謝您的幫忙，祝您有美好的一天。</code></td>
+        <td><code>Cảm ơn sự giúp đỡ của bạn. Chúc bạn một ngày tốt l</code></td>
+        <td><strong>感謝您的幫助。祝您今天愉快。</strong><br><span class="tag tag-v">V</span></td>
+        <td><strong>謝謝你的幫助，祝你一天好運。</strong><br><span class="tag tag-v">V</span></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+
+<footer>產生時間：2026-05-25｜20 case × 2 MT｜judge：<code>strict-audit-v3.py</code>｜音檔：5/19 batch（5/14 升版重錄版）</footer>
+</body></html>
