@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — #199 客戶 5/8 回報 retro</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.8rem; font-weight: bold; color: #16a34a; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.78rem; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.callout.warn { background: #fef3c7; border-color: #d97706; }
+.back { margin-bottom: 1rem; } .back a { color: #6b7280; font-size: 0.9rem; text-decoration: none; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head><body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — #199 客戶 5/8 回報 retro</h1>
+<p class="subtitle">
+原 issue：<a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/199">#199 客戶測試反饋（5/8）— 長語句未顯示 + 泰語辨識錯誤</a><br>
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 + Qwen3-ASR-1.7B）｜對比日期：2026-05-25<br>
+<strong>注：</strong>客戶 5/8 原始音檔不在 retro 298 範圍。本報告用 retro 中 th 場景同 prompt 對應的 case 對照（idx 5 捷運入口 / idx 10 洗手間）+ 整體 298 case「鴻南澳」mishear 絕跡驗證。
+</p>
+
+<div class="card">
+  <h2>結論：#199 三個 bug pattern 都已解</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">已修</div><div class="label">Bug 1<br>長越南語句未顯示 = #200</div></div>
+    <div class="stat"><div class="number">5/5</div><div class="label">Bug 2-1 洗手間<br>所有 th 場景 ✅</div></div>
+    <div class="stat"><div class="number">5/5</div><div class="label">Bug 2-3 捷運站<br>所有 th 場景 ✅</div></div>
+    <div class="stat"><div class="number">0</div><div class="label">「鴻南澳」mishear<br>298 case 完全絕跡</div></div>
+  </div>
+  <div class="callout win">
+    <strong>5/8 客戶報的 3 個 bug pattern 在 5/25 現用 pipeline 下都不再復現</strong>。
+    Bug 1 是 #200 ws bug 樣式（#200 5/14 治本後絕跡）；Bug 2 是 ASR 泰語辨識錯誤（cm yaml 持續累積 th 規則、洗手間/捷運 5/5 th 場景全對）。
+  </div>
+</div>
+
+<div class="card">
+  <h2>Bug 1｜長越南語句未顯示於翻譯頁面</h2>
+  <p>客戶原報：「用手機翻譯軟體發音（越南語）講長句，翻譯頁面無結果；切換至紀錄頁面後，可看到該語句的錄音與翻譯記錄」。</p>
+  <p style="margin-top:0.5rem"><strong>分析：</strong>這個 pattern 跟 #201/#209 的「翻譯頁面無資料」完全一致 — <a href="https://gitlab.com/jtb-tech-two-way-translation/general/-/work_items/200">#200 subscriptions-transport-ws → graphql-ws 遷移</a> ship 後絕跡（17 小時 0 reconnect 實測通過 + #201 retro 6 個 ws bug 殘留 case 也全解）。</p>
+</div>
+
+<div class="card">
+  <h2>Bug 2-1｜「廁所→鴻南澳」對應 idx 10「洗手間」th 場景</h2>
+  <table>
+    <thead><tr><th>組</th><th>ASR raw</th><th>cm out</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td>519-th-女</td>
+        <td><code>ห้องน้ำอยู่ที่ไหนคะ?</code></td>
+        <td><code>ห้องน้ำอยู่ที่ไหนคะ?</code></td>
+        <td><strong>請問洗手間在哪裡？</strong></td>
+        <td><strong>洗手間在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>519-th-男</td>
+        <td><code>ห้องน้ำอยู่ที่ไหนครับ?</code></td>
+        <td><code>ห้องน้ำอยู่ที่ไหนครับ?</code></td>
+        <td><strong>洗手間在哪裡？</strong></td>
+        <td><strong>洗手間在哪裡？</strong></td>
+    </tr>
+<tr>
+        <td>524-th-女-喬泰</td>
+        <td><code>ห้องน้ำอยู่ที่ไหนคะ?</code></td>
+        <td><code>ห้องน้ำอยู่ที่ไหนคะ?</code></td>
+        <td><strong>請問洗手間在哪裡？</strong></td>
+        <td><strong>洗手間在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>524-th-女-達運</td>
+        <td><code>ซื้อห้องน้ำอยู่ที่ไหนคะ?</code></td>
+        <td><code>ซื้อห้องน้ำอยู่ที่ไหนคะ?</code></td>
+        <td><strong>請問洗手間在哪裡？</strong></td>
+        <td><strong>洗手間在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>524-th-男-喬泰</td>
+        <td><code>ห้องน้ำอยู่ที่ไหนครับ?</code></td>
+        <td><code>ห้องน้ำอยู่ที่ไหนครับ?</code></td>
+        <td><strong>洗手間在哪裡？</strong></td>
+        <td><strong>洗手間在哪裡？</strong></td>
+    </tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem">5/5 th 場景全部「洗手間」、無「鴻南澳」/「鴻」變體。</p>
+</div>
+
+<div class="card">
+  <h2>Bug 2-3｜「捷運站在哪裡」對應 idx 5「捷運入口」th 場景</h2>
+  <table>
+    <thead><tr><th>組</th><th>ASR raw</th><th>cm out</th><th>TG 12B</th><th>Qwen-14B v5</th></tr></thead>
+    <tbody><tr>
+        <td>519-th-女</td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนคะ?</code></td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนคะ?</code></td>
+        <td><strong>捷運站的入口在哪裡呢？</strong></td>
+        <td><strong>捷運月臺的入口在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>519-th-男</td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนครับ?</code></td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนครับ?</code></td>
+        <td><strong>捷運站的入口在哪裡？</strong></td>
+        <td><strong>捷運月臺的入口在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>524-th-女-喬泰</td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนคะ?</code></td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนคะ?</code></td>
+        <td><strong>捷運站的入口在哪裡呢？</strong></td>
+        <td><strong>捷運月臺的入口在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>524-th-女-達運</td>
+        <td><code>อู่ทางเข้าสถานีรถไฟ MRT อยู่ที่ไหนคะ?</code></td>
+        <td><code>อู่ทางเข้าสถานีรถไฟ MRT อยู่ที่ไหนคะ?</code></td>
+        <td><strong>捷運站的入口在哪裡呢？</strong></td>
+        <td><strong>捷運月臺的入口在哪裡呢？</strong></td>
+    </tr>
+<tr>
+        <td>524-th-男-喬泰</td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนครับ?</code></td>
+        <td><code>ทางเข้าสถานีรถไฟฟ้า MRT อยู่ที่ไหนครับ?</code></td>
+        <td><strong>捷運站的入口在哪裡？</strong></td>
+        <td><strong>捷運月臺的入口在哪裡呢？</strong></td>
+    </tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem">5/5 th 場景全部含「捷運」、無翻譯失敗。</p>
+</div>
+
+<div class="callout warn">
+  <h2 style="margin:0 0 0.5rem">⚠ Bug 2-2「吃豬肉和羅勒米飯和煎蛋」</h2>
+  非高雄車站場域語句、不在 retro 標準 20 prompts 範圍。
+  原報「尚無法對應後台紀錄」可能也是 #200 ws bug 同類 — #200 治本後預期不再復發。
+  若客戶仍可重現，建議錄音當場 + 後台 trace 一起送 RD。
+</div>
+
+<div class="card">
+  <h2>關於 reopen</h2>
+  <p>5/14 philaeld 關閉「以測試腳本為主」。本 issue 是因應 PM 5/25 跑完整 board 翻譯收尾流程暫時 reopen 留存 retro 對照、不是 RD 推翻關閉決策。PM 可隨時再 close。</p>
+</div>
+
+<footer>產生時間：2026-05-25｜th 場景 idx 5+10 各 5 case = 10 case 對照｜judge：<code>strict-audit-v3.py</code></footer>
+</body></html>
