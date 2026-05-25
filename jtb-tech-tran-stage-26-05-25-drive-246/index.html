@@ -1,0 +1,754 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — 2026-05-25 達運 Drive 246 真人音檔 clean+noisy</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.6rem; font-weight: bold; }
+.stat .number.green { color: #16a34a; }
+.stat .number.amber { color: #d97706; }
+.stat .number.red { color: #dc2626; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+td.green { color: #16a34a; font-weight: bold; }
+td.red { color: #dc2626; font-weight: bold; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.78rem; }
+.tag { padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: bold; display: inline-block; margin-top: 0.2rem; }
+.tag-ng { background: #fee2e2; color: #991b1b; }
+.tag-v { background: #dcfce7; color: #166534; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.callout.warn { background: #fef3c7; border-color: #d97706; }
+.callout.crit { background: #fef2f2; border-color: #dc2626; }
+.back { margin-bottom: 1rem; } .back a { color: #6b7280; font-size: 0.9rem; text-decoration: none; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head><body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — 2026-05-25 達運 Drive 246 真人音檔 (clean + noisy)</h1>
+<p class="subtitle">
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 + Qwen3-ASR-1.7B）｜對比日期：2026-05-25<br>
+範圍：達運 Lab Google Drive 「達運 Lab 測試」folder 246 個真人音檔 = ja 61 + ko 30 + id-女 19 + id-男 20 + vi 56 + th-女 20 + th-男 20 + <strong>en-女 20</strong><br>
+測試模式：clean (原音) + noisy (混 Standard 0.08 golden background：5 bg_zh + white + pink + echo)<br>
+判定：<code>strict-audit-v3.py</code>（key terms + 高雄 + latin 殘留偵測）
+</p>
+
+<div class="card">
+  <h2>結論：Clean 平手、Noisy 14B 領先 +6（抗噪退化少 7 句）</h2>
+  <div class="stats">
+    <div class="stat"><div class="number">241/246</div><div class="label">TG Clean<br>97%</div></div>
+    <div class="stat"><div class="number">240/246</div><div class="label">14B Clean<br>97%</div></div>
+    <div class="stat"><div class="number amber">166/246</div><div class="label">TG Noisy<br>67%</div></div>
+    <div class="stat"><div class="number green">172/246</div><div class="label">14B Noisy<br>69%</div></div>
+  </div>
+  <div class="callout win">
+    <strong>抗噪能力：14B 退化 68 句 vs TG 退化 75 句、14B 抗噪好 7 句</strong>。
+    Clean 兩邊近乎平手（差 1 句、TG 稍勝、來自 ko-女 #12 美麗島→美術館 14B 量化偶發）。Noisy 場景 14B 翻車少 — 跟 5/24 達運 th 噪音 case 14B 表現一致。
+  </div>
+</div>
+
+<div class="card">
+  <h2>各組 Clean → Noisy 退化對比</h2>
+  <table>
+    <thead>
+      <tr><th>組</th><th>n</th><th>Clean TG</th><th>Clean 14B</th><th>Noisy TG</th><th>Noisy 14B</th><th>TG 退化</th><th>14B 退化</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><strong>en-f</strong></td><td>20</td>
+        <td>16/20</td><td class=''>16/20</td>
+        <td>13/20</td><td class=''>13/20</td>
+        <td>3</td><td>3</td>
+    </tr>
+<tr>
+        <td><strong>id-f</strong></td><td>19</td>
+        <td>19/19</td><td class=''>19/19</td>
+        <td>12/19</td><td class=''>12/19</td>
+        <td>7</td><td>7</td>
+    </tr>
+<tr>
+        <td><strong>id-m</strong></td><td>20</td>
+        <td>20/20</td><td class=''>20/20</td>
+        <td>12/20</td><td class='green'>13/20</td>
+        <td>8</td><td>7</td>
+    </tr>
+<tr>
+        <td><strong>ja</strong></td><td>61</td>
+        <td>61/61</td><td class=''>61/61</td>
+        <td>45/61</td><td class='green'>48/61</td>
+        <td>16</td><td>13</td>
+    </tr>
+<tr>
+        <td><strong>ko</strong></td><td>30</td>
+        <td>30/30</td><td class='red'>28/30</td>
+        <td>18/30</td><td class=''>18/30</td>
+        <td>12</td><td>10</td>
+    </tr>
+<tr>
+        <td><strong>th-f</strong></td><td>20</td>
+        <td>20/20</td><td class=''>20/20</td>
+        <td>14/20</td><td class='red'>13/20</td>
+        <td>6</td><td>7</td>
+    </tr>
+<tr>
+        <td><strong>th-m</strong></td><td>20</td>
+        <td>19/20</td><td class='green'>20/20</td>
+        <td>15/20</td><td class='red'>14/20</td>
+        <td>4</td><td>6</td>
+    </tr>
+<tr>
+        <td><strong>vi</strong></td><td>56</td>
+        <td>56/56</td><td class=''>56/56</td>
+        <td>37/56</td><td class='green'>41/56</td>
+        <td>19</td><td>15</td>
+    </tr>
+
+      <tr style="background:#1e293b;color:#fff;font-weight:bold">
+        <td>總</td><td>246</td>
+        <td>241</td><td>240</td>
+        <td>166</td><td>172</td>
+        <td>75</td><td>68</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>延遲對比（246 真人 × 2 條件 = 492 翻譯）</h2>
+  <table>
+    <thead><tr><th>場景</th><th>TG 12B mean</th><th>14B v5 mean</th><th>比值</th></tr></thead>
+    <tbody>
+      <tr><td>Clean</td><td>1316ms</td><td>318ms</td><td>4.13x</td></tr>
+      <tr><td>Noisy</td><td>1061ms</td><td>258ms</td><td>4.10x</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>共 83 句出現任一 NG 的明細</h2>
+  <p style="color:#9ca3af;font-size:0.85rem">只列任一場景 NG 的 case、V 全通過的不列。</p>
+  <table>
+    <thead>
+      <tr><th>組</th><th>檔名</th><th>Clean TG</th><th>Clean 14B</th><th>Noisy TG</th><th>Noisy 14B</th></tr>
+    </thead>
+    <tbody><tr>
+        <td>en-f</td><td>EN-F-04.m4a</td>
+        <td>我該如何前往Playfon Two？<br><span class="tag tag-ng">NG</span></td>
+        <td>如何去Playfon Two？<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-v">V</span></td>
+        <td>好的。<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-06.m4a</td>
+        <td>我應該乘坐哪趟列車去左營？<br><span class="tag tag-v">V</span></td>
+        <td>我要搭哪一班火車去左營？<br><span class="tag tag-v">V</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-07.m4a</td>
+        <td>一張去新竹的火車票多少錢？<br><span class="tag tag-ng">NG</span></td>
+        <td>去新左彊一張票要幾錢？<br><span class="tag tag-ng">NG</span></td>
+        <td>我很抱歉。<br><span class="tag tag-ng">NG</span></td>
+        <td>對不起。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-12.m4a</td>
+        <td>我想去鳳明大道站。請問我該如何換乘捷運？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去佛美沙 boulevard 捷運站，要如何轉乘捷運？<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-16.m4a</td>
+        <td>這趟火車會在臺中站停靠嗎？<br><span class="tag tag-ng">NG</span></td>
+        <td>這班火車會停靠臺中嗎？<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-17.m4a</td>
+        <td>請問，出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-18.m4a</td>
+        <td>我該如何去公車車站？<br><span class="tag tag-v">V</span></td>
+        <td>如何去公車站？<br><span class="tag tag-v">V</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>en-f</td><td>EN-F-20.m4a</td>
+        <td>感謝您的幫助。祝您今天愉快。<br><span class="tag tag-v">V</span></td>
+        <td>謝謝你的幫助。祝你有美好的一天。<br><span class="tag tag-v">V</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 12.m4a</td>
+        <td>您好，我想去美麗島站。請問如何乘坐捷運換乘？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，我想去美麗島車站。怎麼轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>如何換乘捷運？<br><span class="tag tag-ng">NG</span></td>
+        <td>如何轉乘捷運？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 16.m4a</td>
+        <td>這趟列車會在臺南站停靠嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這列火車會停靠臺南嗎？<br><span class="tag tag-v">V</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 17.m4a</td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>媽媽。<br><span class="tag tag-ng">NG</span></td>
+        <td>媽媽。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 18.m4a</td>
+        <td>公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>公車月臺在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>是的。<br><span class="tag tag-ng">NG</span></td>
+        <td>是的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 20.m4a</td>
+        <td>感謝您的幫助。祝您今天愉快。<br><span class="tag tag-v">V</span></td>
+        <td>謝謝你的幫助，希望你有一個愉快的一天。<br><span class="tag tag-v">V</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 6.m4a</td>
+        <td>請問，我應該乘坐哪趟火車才能去左營？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，我要坐哪一班火車可以去左營？<br><span class="tag tag-v">V</span></td>
+        <td>你好。<br><span class="tag tag-ng">NG</span></td>
+        <td>喂。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-f</td><td>南豐二街126號 7.m4a</td>
+        <td>一張火車票到新左營多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>一張去新左營的火車票多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>你可以看到。<br><span class="tag tag-ng">NG</span></td>
+        <td>你可以看到嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>1.mp3</td>
+        <td>您好，請問高雄火車站的售票窗口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>嗨，購票窗口在哪裡？高雄火車站的售票口是哪個？<br><span class="tag tag-v">V</span></td>
+        <td>如果是在哪裡？
+或者：
+如果是在什麼地方？
+(The best transl<br><span class="tag tag-ng">NG</span></td>
+        <td>哪裡呢<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>12.mp3</td>
+        <td>您好，我想去美麗島站。請問如何乘坐捷運換乘？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，我想去美麗島車站。怎麼轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>16.mp3</td>
+        <td>這趟列車會在臺南停靠嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這列火車會停靠臺南嗎？<br><span class="tag tag-v">V</span></td>
+        <td>你好。<br><span class="tag tag-ng">NG</span></td>
+        <td>喂。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>17.mp3</td>
+        <td>請問，出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>你好。<br><span class="tag tag-ng">NG</span></td>
+        <td>喂。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>18.mp3</td>
+        <td>請問，公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，公車月臺在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>20.mp3</td>
+        <td>感謝您的幫助。祝您今天愉快。<br><span class="tag tag-v">V</span></td>
+        <td>謝謝你的幫助，希望你有一個愉快的一天。<br><span class="tag tag-v">V</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>6.mp3</td>
+        <td>請問，我應該乘坐哪趟火車才能去左營？<br><span class="tag tag-v">V</span></td>
+        <td>不好意思，我要坐哪一班火車才能去左營？<br><span class="tag tag-v">V</span></td>
+        <td>你好。<br><span class="tag tag-ng">NG</span></td>
+        <td>喂。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>id-m</td><td>7.mp3</td>
+        <td>一張火車票到新左營多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>一張去新左營的火車票多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>沒有。<br><span class="tag tag-ng">NG</span></td>
+        <td>沒有<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>06-左營電車.m4a</td>
+        <td>我想去左營，請問應該乘坐哪趟列車？<br><span class="tag tag-v">V</span></td>
+        <td>我想去左營，應該坐哪一班捷運？<br><span class="tag tag-v">V</span></td>
+        <td>是的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>07-新左營票價.m4a</td>
+        <td>去新左營的票多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的票要多少錢呢。<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>12-美麗島.m4a</td>
+        <td>我想去美麗島站，請問應該如何換乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島捷運站，要怎麼換乘捷運才能到呢？<br><span class="tag tag-v">V</span></td>
+        <td>是的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>16-有到台南嗎.m4a</td>
+        <td>這趟列車是開往臺南的嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這班電車去臺南嗎？<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>17-出口.m4a</td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>18-公車亭.m4a</td>
+        <td>這個公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>這個公車站是在哪裡呢。<br><span class="tag tag-v">V</span></td>
+        <td>是的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>20-感謝.m4a</td>
+        <td>真的幫了大忙，非常感謝。<br><span class="tag tag-v">V</span></td>
+        <td>真的幫了大忙了，謝謝你。<br><span class="tag tag-v">V</span></td>
+        <td>是的。<br><span class="tag tag-ng">NG</span></td>
+        <td>好的。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語 女聲 12.aac</td>
+        <td>您想去美麗島站嗎？請問乘坐捷運需要在哪站換乘？<br><span class="tag tag-v">V</span></td>
+        <td>想去美麗島捷運站嗎？要在哪個捷運站轉乘呢？<br><span class="tag tag-v">V</span></td>
+        <td>我想去Semitar站，請問應該如何換乘？<br><span class="tag tag-ng">NG</span></td>
+        <td>想去半塹塹站的時候也要怎麼轉乘呢？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語 女聲 6.aac</td>
+        <td>您想去左營嗎？應該乘坐哪趟列車呢？<br><span class="tag tag-v">V</span></td>
+        <td>你想去左營嗎？該坐哪一班捷運呢？<br><span class="tag tag-v">V</span></td>
+        <td>是英語一對一的課程嗎？如果是這樣，我應該去找那位老師嗎？<br><span class="tag tag-ng">NG</span></td>
+        <td>你要找的是那位英文老師嗎？見到她就可以了嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語 女聲 7.aac</td>
+        <td>去新左營的票價是多少？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的票要多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>今天早上伊豆的氣溫是多少？<br><span class="tag tag-ng">NG</span></td>
+        <td>今天伊豆的气温是多少。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語-女-項次10.aac</td>
+        <td>請問，洗手間在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>洗手間在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>廁所怎麼樣？<br><span class="tag tag-ng">NG</span></td>
+        <td>洗手間在哪裡？<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語-女-項次12.aac</td>
+        <td>您想去美麗島站嗎？請問乘坐捷運需要在哪站換乘？<br><span class="tag tag-v">V</span></td>
+        <td>想去美麗島捷運站嗎？要在哪個捷運站轉乘呢？<br><span class="tag tag-v">V</span></td>
+        <td>我想去成田站，請問計程車應該停在哪裡？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去成田車站，但 taxis 在哪裡叫呢？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語-女-項次18.aac</td>
+        <td>這個公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>這個公車站是在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>這個籃球在哪裡？<br><span class="tag tag-ng">NG</span></td>
+        <td>這班公車在哪裡？<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語-女-項次3.aac</td>
+        <td>這趟列車幾點發車？<br><span class="tag tag-v">V</span></td>
+        <td>這班電車什麼時候發車？<br><span class="tag tag-v">V</span></td>
+        <td>我參加了“Ad Tension Lunch”活動。<br><span class="tag tag-ng">NG</span></td>
+        <td>參加了午餐會。<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語-女-項次6.aac</td>
+        <td>您想去左營嗎？應該乘坐哪趟列車呢？<br><span class="tag tag-v">V</span></td>
+        <td>你想去左營嗎？該坐哪一班捷運呢？<br><span class="tag tag-v">V</span></td>
+        <td>您是想表達這個意思嗎？關於這一點，您已經確定不再考慮了嗎？<br><span class="tag tag-ng">NG</span></td>
+        <td>你意思是說你想去嗎？那個地方真的還想再去嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ja</td><td>日語-女-項次7.aac</td>
+        <td>去新左營的票價是多少？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的票要多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>如何前往新小林站？<br><span class="tag tag-ng">NG</span></td>
+        <td>新小林站怎麼去？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 12.aac</td>
+        <td>我想去美麗島站，請問捷運如何換乘？<br><span class="tag tag-v">V</span></td>
+        <td>美術館站怎麼轉乘捷運才能到？<br><span class="tag tag-ng">NG</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 16.aac</td>
+        <td>這趟列車會在臺南站停靠嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這列火車會停靠臺南站嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這些女性總是穿著衣服。<br><span class="tag tag-ng">NG</span></td>
+        <td>這些女人都總是穿衣服。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 17.aac</td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 18.aac</td>
+        <td>公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>公車站牌是在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 20.aac</td>
+        <td>感謝您的幫助。祝您度過愉快的一天。<br><span class="tag tag-v">V</span></td>
+        <td>感謝您的幫助，祝您有一個愉快的一天。<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 6.aac</td>
+        <td>去左營，應該乘坐哪輛公車車？<br><span class="tag tag-v">V</span></td>
+        <td>要去左營應該搭哪一班捷運？<br><span class="tag tag-v">V</span></td>
+        <td>但是。<br><span class="tag tag-ng">NG</span></td>
+        <td>不過呢。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語 女聲 7.aac</td>
+        <td>一張去新左營的火車票，多少錢呢？<br><span class="tag tag-v">V</span></td>
+        <td>新左營的火車票一張就好了。<br><span class="tag tag-v">V</span></td>
+        <td>一次就好。
+或者：
+只此一次。<br><span class="tag tag-ng">NG</span></td>
+        <td>一次就好<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語-女-項次12.aac</td>
+        <td>我想去美麗島站，請問捷運如何換乘？<br><span class="tag tag-v">V</span></td>
+        <td>美術館站怎麼轉乘捷運才能到？<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語-女-項次16.aac</td>
+        <td>這趟列車會在臺南站停靠嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這列火車會停靠臺南站嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這六位女演員都出演了這部作品。<br><span class="tag tag-ng">NG</span></td>
+        <td>這六位女演員會出現。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語-女-項次20.aac</td>
+        <td>感謝您的幫助。祝您度過愉快的一天。<br><span class="tag tag-v">V</span></td>
+        <td>感謝您的幫助，祝您有一個愉快的一天。<br><span class="tag tag-v">V</span></td>
+        <td>啊。<br><span class="tag tag-ng">NG</span></td>
+        <td>嗯。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語-女-項次6.aac</td>
+        <td>去左營，應該乘坐哪輛公車車？<br><span class="tag tag-v">V</span></td>
+        <td>要去左營應該搭哪一班捷運？<br><span class="tag tag-v">V</span></td>
+        <td>但是。<br><span class="tag tag-ng">NG</span></td>
+        <td>不過呢。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>ko</td><td>韓語-女-項次7.aac</td>
+        <td>一張去新左營的火車票，多少錢呢？<br><span class="tag tag-v">V</span></td>
+        <td>新左營的火車票一張就好了。<br><span class="tag tag-v">V</span></td>
+        <td>但是。<br><span class="tag tag-ng">NG</span></td>
+        <td>不過呢。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W12.mp3</td>
+        <td>我想去美麗島站，需要如何換乘捷運（MRT）呢？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島車站，要如何轉乘捷運呢？<br><span class="tag tag-v">V</span></td>
+        <td>我想去福爾默斯多勒瓦特車站，請問我應該如何換乘到銀行？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去フォルモサドレウォ station 要在銀行站轉乘嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W16.mp3</td>
+        <td>這趟火車會在臺南站停靠嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這班火車停靠臺南嗎？<br><span class="tag tag-v">V</span></td>
+        <td>車子到了這個區域，停在了新的水站。<br><span class="tag tag-ng">NG</span></td>
+        <td>車稍後會到達這裡，在新水塔站停靠。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W17.mp3</td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>出口在哪里？<br><span class="tag tag-v">V</span></td>
+        <td>其他新聞。<br><span class="tag tag-ng">NG</span></td>
+        <td>有其他的嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W18.mp3</td>
+        <td>公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>公車站牌在哪裡呢？<br><span class="tag tag-v">V</span></td>
+        <td>我的檔案。<br><span class="tag tag-ng">NG</span></td>
+        <td>您的物品在哪裡呢？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W2.mp3</td>
+        <td>我想要購買一張去臺南的機票。<br><span class="tag tag-v">V</span></td>
+        <td>我要買一張去臺南的票。<br><span class="tag tag-v">V</span></td>
+        <td>我需要購買一個配方，價值一百萬泰銖。<br><span class="tag tag-v">V</span></td>
+        <td>我想要買一百萬的配方vangst（原文中的「ค่า」在這個上下文中可能指的是<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W6.mp3</td>
+        <td>請問，如果要去左營，應該乘坐哪趟火車？<br><span class="tag tag-v">V</span></td>
+        <td>要去左營要搭哪一班火車？<br><span class="tag tag-v">V</span></td>
+        <td>稍等一下，因為如果要去喝酒，需要乘坐火車，而且車票很貴。<br><span class="tag tag-ng">NG</span></td>
+        <td>等一下，因為如果要去喝酒就得買高額的火車票了<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-f</td><td>W7.mp3</td>
+        <td>一張前往新左營的火車票價格是多少？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的火車票一張多少錢呢？<br><span class="tag tag-v">V</span></td>
+        <td>整輛火車的價格是多少？<br><span class="tag tag-ng">NG</span></td>
+        <td>買火車票到目的地的價格是多少呢？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-m</td><td>M12.mp3</td>
+        <td>我想去美麗島站，需要如何換乘捷運（MRT）？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島車站，要如何轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>我想去福馬斯奎伯瓦車站，請問我需要在哪個車站換票？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去フォーミュラキュービック station，要在哪個車站換票呢？  <br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-m</td><td>M16.mp3</td>
+        <td>這趟火車停靠在新的臺南站。<br><span class="tag tag-ng">NG</span></td>
+        <td>這班火車停靠臺南新營站嗎？<br><span class="tag tag-v">V</span></td>
+        <td>建築公司。<br><span class="tag tag-ng">NG</span></td>
+        <td>建築公司<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-m</td><td>M18.mp3</td>
+        <td>公車車站牌在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>公車站牌在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>我們去手機上看看吧。
+或者：
+我們去手機上看看吧。 (更口語化)<br><span class="tag tag-ng">NG</span></td>
+        <td>看一下手機吧<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-m</td><td>M4.mp3</td>
+        <td>我該如何到達第二站臺？<br><span class="tag tag-v">V</span></td>
+        <td>我怎麼去月台二？<br><span class="tag tag-v">V</span></td>
+        <td>我該如何到達二號候車室？<br><span class="tag tag-v">V</span></td>
+        <td>我怎麼去捷運橘線chyai2 cha2 la1 (柴柴拉，這是音 trans<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-m</td><td>M6.mp3</td>
+        <td>請問，如果要去左營，應該乘坐哪趟火車？<br><span class="tag tag-v">V</span></td>
+        <td>請問要去左營要搭哪一班火車？<br><span class="tag tag-v">V</span></td>
+        <td>他好像在問，如果要去某個地方，應該乘坐哪趟火車。<br><span class="tag tag-ng">NG</span></td>
+        <td>他問說要去那個地方應該搭哪一班火車呢？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>th-m</td><td>M7.mp3</td>
+        <td>一輛前往新左營的火車票價格是多少？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的火車票一張多少錢呢？<br><span class="tag tag-v">V</span></td>
+        <td>乘坐火車是遊覽韋奇的亮點。<br><span class="tag tag-ng">NG</span></td>
+        <td>乘火车将是游览的重点<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>男聲 10.m4a</td>
+        <td>洗手間在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>洗手間在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>廁所在哪裡？<br><span class="tag tag-ng">NG</span></td>
+        <td>洗手間在哪裡。<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>男聲 12.m4a</td>
+        <td>我想去美麗島站。我需要乘坐哪條捷運線路才能到達那裡？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島站。我該如何轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>我想去科莫薩·索列瓦車站，請問我應該如何換乘捷運？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去高雄左營火車站，我需要如何轉乘捷運？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>男聲 17.m4a</td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>從哪裡拿出來的？<br><span class="tag tag-ng">NG</span></td>
+        <td>在哪裡取東西<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>男聲 18.m4a</td>
+        <td>公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>公車站在哪里？<br><span class="tag tag-v">V</span></td>
+        <td>“陷阱車”在哪裡？
+或者：
+“陷阱車”是指什麼？在哪裡可以找到？<br><span class="tag tag-ng">NG</span></td>
+        <td>芒果車（應該是指芒果口味的冰淇淋車或販賣車）在哪裡？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>男聲 6.m4a</td>
+        <td>我應該乘坐哪趟列車前往左營？<br><span class="tag tag-v">V</span></td>
+        <td>我應該坐哪一班火車去左營？<br><span class="tag tag-v">V</span></td>
+        <td>我應該乘坐哪趟火車去“chuối”？<br><span class="tag tag-ng">NG</span></td>
+        <td>我應該搭乘哪一班火車去旗後？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>男聲 7.m4a</td>
+        <td>去新左營的火車票多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的火車票要多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>關於這趟列車，據說有些車廂鋪有天鵝絨。<br><span class="tag tag-ng">NG</span></td>
+        <td>去機場有沒有直達的火車？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南 女聲 12.aac</td>
+        <td>我想去美麗島站，請問我應該如何換乘捷運（MRT）？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島站，請問我要如何轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>我想去Taman Selayang火車站，請問我該如何換乘捷運（MRT）？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去達曼色萊昂火車站，請問我該如何轉乘捷運MRT？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南 女聲 16.aac</td>
+        <td>這趟列車是否停靠臺南？<br><span class="tag tag-v">V</span></td>
+        <td>這班火車會停靠臺南嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這趟列車會在大南站停靠嗎？<br><span class="tag tag-ng">NG</span></td>
+        <td>這班火車會停高雄嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南 女聲 17.aac</td>
+        <td>請問，出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>請問出口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>商品、家居用品、餐具。<br><span class="tag tag-ng">NG</span></td>
+        <td>票款、家用品、筷子<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南 女聲 18.aac</td>
+        <td>請問，公車車站在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>請問公車站牌在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>問題在於：應該在哪裡提問？<br><span class="tag tag-ng">NG</span></td>
+        <td>想問一下在哪裡<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南 女聲 7.aac</td>
+        <td>火車票到新左營多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的火車票要多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>乘坐輕軌前往左營，順路去商店逛逛。<br><span class="tag tag-ng">NG</span></td>
+        <td>去左營的火車在哪搭票？按照店走可以到嗎？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-女-項次12.m4a</td>
+        <td>我想去美麗島站，請問我應該如何換乘捷運（MRT）？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島站，請問我要如何轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>我想去科莫託波車站，請問我該如何換乘捷運（MRT）？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去高鐵左營站，請問我要如何轉乘捷運？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-女-項次16.m4a</td>
+        <td>這趟列車是否停靠臺南？<br><span class="tag tag-v">V</span></td>
+        <td>這班火車會停靠臺南嗎？<br><span class="tag tag-v">V</span></td>
+        <td>這趟列車的發車地點是大南縣昇陽。<br><span class="tag tag-ng">NG</span></td>
+        <td>這班火車在大南昇平縣發車。<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-女-項次5.m4a</td>
+        <td>捷運站的入口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>捷運月臺入口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>電動汽車（EMT）附近有哪些捷運站入口？<br><span class="tag tag-ng">NG</span></td>
+        <td>捷運月臺的入口在哪裡？<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-男-項次1.m4a</td>
+        <td>您好，請問高雄火車站的售票窗口在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>你好，請問高雄車站的售票處在哪裡？<br><span class="tag tag-v">V</span></td>
+        <td>您好，請問一下，周邦先生，請問“ Châu Vùng 火車站”在哪裡？<br><span class="tag tag-ng">NG</span></td>
+        <td>你好，請問高雄車站的月臺是哪裡？<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-男-項次11.m4a</td>
+        <td>儲物櫃在幾樓？<br><span class="tag tag-v">V</span></td>
+        <td>投幣寄物櫃在幾樓？<br><span class="tag tag-v">V</span></td>
+        <td>請告訴我您想翻譯的具體內容。 "tụ người đồ tầng mấy" <br><span class="tag tag-ng">NG</span></td>
+        <td>您說的是哪一層的失物招領？<br><span class="tag tag-v">V</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-男-項次12.m4a</td>
+        <td>我想去美麗島站。我需要乘坐哪條捷運線路才能到達那裡？<br><span class="tag tag-v">V</span></td>
+        <td>我想去美麗島站。我該如何轉乘捷運？<br><span class="tag tag-v">V</span></td>
+        <td>我想去科莫卡站，請問我應該如何換乘捷運？<br><span class="tag tag-ng">NG</span></td>
+        <td>我想去高科大學捷運站，我需要怎麼轉乘捷運？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-男-項次6.m4a</td>
+        <td>我應該乘坐哪趟列車前往左營？<br><span class="tag tag-v">V</span></td>
+        <td>我應該坐哪一班火車去左營？<br><span class="tag tag-v">V</span></td>
+        <td>我應該乘坐哪趟火車去“chuối”？<br><span class="tag tag-ng">NG</span></td>
+        <td>我應該搭乘哪一班火車去旗後？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+<tr>
+        <td>vi</td><td>越南語-男-項次7.m4a</td>
+        <td>去新左營的火車票多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>去新左營的火車票要多少錢？<br><span class="tag tag-v">V</span></td>
+        <td>去蘇伊的火車票多少錢？<br><span class="tag tag-ng">NG</span></td>
+        <td>去-suối的火車票價是多少？<br><span class="tag tag-ng">NG</span></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>對 MT decision 的累計影響</h2>
+  <p style="line-height:1.7;font-size:0.92rem">
+    <strong>到 5/25 為止累計樣本：</strong><br>
+    <table style="margin-top:0.5rem">
+      <thead><tr><th>樣本</th><th>n</th><th>TG</th><th>Qwen-14B v5</th><th>14B 領先</th></tr></thead>
+      <tbody>
+        <tr><td>真人 298 retro (5/24 達運+喬泰 119 + 5/19 179)</td><td>298</td><td>292 (97.99%)</td><td>297 (99.66%)</td><td>+5</td></tr>
+        <tr><td>達運 Drive 246 clean</td><td>246</td><td>241 (98%)</td><td>240 (98%)</td><td>-1</td></tr>
+        <tr><td>達運 Drive 246 noisy (Standard 0.08)</td><td>246</td><td>166 (67%)</td><td>172 (70%)</td><td>+6</td></tr>
+        <tr><td>TTS 384 (DeepL 偏差源)</td><td>384</td><td>177 (46%)</td><td>197 (51%)</td><td>+20</td></tr>
+        <tr style="background:#f1f5f9;font-weight:bold"><td>累計</td><td>1174</td><td>876</td><td>906</td><td>+30</td></tr>
+      </tbody>
+    </table>
+    <br>
+    <strong>結論延伸</strong>：14B 抗噪性比 TG 強的證據在 noisy 384 + drive-246-noisy 兩個獨立樣本累計確認。Clean 場景兩邊接近平手。
+  </p>
+</div>
+
+<footer>產生時間：2026-05-25｜246 真人 × 2 (clean+noisy) = 492 翻譯｜judge：<code>strict-audit-v3.py</code>｜LIVE cm ConfigMap</footer>
+</body></html>
