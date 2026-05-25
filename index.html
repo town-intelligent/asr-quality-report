@@ -28,17 +28,17 @@
   <p class="subtitle">所有測試報告一覽 ｜ <a href="template/">空白模板</a></p>
 
   <div class="card">
-    <a href="jtb-tech-tran-stage-26-05-25-retro/">jtb-tech-tran-stage — 2026-05-25 retro（298 case 加大：14B 294/298 vs TG 292/298、差距縮到 +2）</a>
+    <a href="jtb-tech-tran-stage-26-05-25-retro/">jtb-tech-tran-stage — 2026-05-25 retro（298 case + prompt-v5 修 locker：14B 297/298 = 99.66%、5/24 全對）</a>
     <div class="meta">
       <span>站台：高雄車站</span>
       <span>處理鏈路：ASR + cm + (TG / Qwen-14B int4) 並排</span>
     </div>
     <div class="meta" style="margin-top:0.5rem;">
-      <span class="tag pass">Qwen-14B int4: 294/298 (98.66%)</span>
+      <span class="tag pass">Qwen-14B v5: 297/298 (99.66%) ⭐</span>
+      <span class="tag pass">5/24 batch: 14B v5 119/119 (100%)</span>
       <span class="tag">TG 12B: 292/298 (97.99%)</span>
-      <span class="tag">差距 +2 句 +0.67%（樣本擴大後變小）</span>
-      <span class="tag pass">14B 速度 320ms / TG 1341ms（快 4x）</span>
-      <span class="tag fail">14B 連犯 3 次 ja「locker」要先解才能 deploy</span>
+      <span class="tag pass">14B 速度 320ms / TG 1341ms（快 4.2x）</span>
+      <span class="tag">剩 1 NG: ko-女 #12 美麗島量化偶發</span>
     </div>
   </div>
 
