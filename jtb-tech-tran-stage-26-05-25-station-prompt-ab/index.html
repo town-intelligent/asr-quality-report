@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASR 品質測試報告 — 2026-05-25 #212 STATION_PROMPT A/B</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; color: #333; padding: 2rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 1rem; }
+.subtitle { color: #666; margin-bottom: 2rem; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stats { display: flex; gap: 1rem; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 150px; padding: 0.75rem; background: #f9fafb; border-radius: 6px; }
+.stat .number { font-size: 1.8rem; font-weight: bold; }
+.stat .number.green { color: #16a34a; }
+.stat .number.red { color: #dc2626; }
+.stat .label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th { background: #1e293b; color: #fff; padding: 0.5rem; text-align: left; }
+td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+td.green { color: #16a34a; font-weight: bold; }
+td.red { color: #dc2626; font-weight: bold; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.78rem; }
+.callout { padding: 1rem; border-left: 4px solid; margin: 1rem 0; font-size: 0.9rem; line-height: 1.6; }
+.callout.warn { background: #fef3c7; border-color: #d97706; }
+.callout.win { background: #f0fdf4; border-color: #16a34a; }
+.callout.crit { background: #fef2f2; border-color: #dc2626; }
+pre { background: #1e293b; color: #e5e7eb; padding: 0.75rem; border-radius: 4px; overflow-x: auto; font-size: 0.75rem; white-space: pre-wrap; }
+.back { margin-bottom: 1rem; } .back a { color: #6b7280; font-size: 0.9rem; text-decoration: none; }
+footer { margin-top: 2rem; color: #9ca3af; font-size: 0.8rem; }
+</style></head><body>
+<div class="back"><a href="../">&larr; 回索引</a></div>
+<h1>ASR 品質測試報告 — 2026-05-25 #212 STATION_PROMPT A/B</h1>
+<p class="subtitle">
+測試機器：<code>jtb-tech-tran-stage</code>（RTX 5090 + Qwen3-ASR-1.7B）｜ 測試日期：2026-05-25 PM<br>
+範圍：298 句真人音檔（5/24 119 + 5/19 179），純 ASR 層 A/B（NOT cm、NOT LLM）<br>
+3 種 STATION_PROMPT 對同份音檔跑 3 次、量化「ASR raw 含 mishear」case 數
+</p>
+
+<div class="card">
+  <h2>結論：current（現用 STATION_PROMPT）是甜蜜點、擴充反而退化</h2>
+  <div class="stats">
+    <div class="stat"><div class="number red">20/298</div><div class="label">none (空 prompt)<br>6.7% 誤判</div></div>
+    <div class="stat"><div class="number green">13/298</div><div class="label"><strong>current</strong><br>4.4% 誤判 ⭐</div></div>
+    <div class="stat"><div class="number">16/298</div><div class="label">extended (擴充版)<br>5.4% 誤判</div></div>
+  </div>
+  <div class="callout crit">
+    <strong>extended 不只沒贏 current、反而退化 3 句</strong>。<br>
+    救起 5 句（新左營 ja / 臺南 vi 等）、但退化 8 句（美麗島 → ASR 直接吐 "Formosa Boulevard" latin）。
+  </div>
+</div>
+
+<div class="card">
+  <h2>各地名 mishear 數對照</h2>
+  <table>
+    <thead><tr><th>地名</th><th>none</th><th>current</th><th>extended</th><th>ext - none</th></tr></thead>
+    <tbody><tr><td>高雄</td><td>6</td><td><strong>1</strong></td><td class='green'>1</td><td class='green'>-5</td></tr>
+<tr><td>左營</td><td>2</td><td><strong>2</strong></td><td class='green'>0</td><td class='green'>-2</td></tr>
+<tr><td>新左營</td><td>4</td><td><strong>4</strong></td><td class='green'>2</td><td class='green'>-2</td></tr>
+<tr><td>美麗島</td><td>4</td><td><strong>4</strong></td><td class='red'>10</td><td class='red'>+6</td></tr>
+<tr><td>臺南</td><td>3</td><td><strong>1</strong></td><td class='green'>2</td><td class='green'>-1</td></tr>
+<tr><td>出口</td><td>1</td><td><strong>1</strong></td><td class=''>1</td><td class=''>+0</td></tr>
+</tbody>
+  </table>
+</div>
+
+<div class="callout win">
+  <h2 style="margin:0 0 0.5rem">✅ extended 救起 current 的 case（5 句）</h2>
+  <table>
+    <thead><tr><th>Case</th><th>current ASR raw</th><th>extended ASR raw</th></tr></thead>
+    <tbody><tr><td>524-ja-男-達運 #07</td><td><code>新左へ行きの切符はいくらですが。</code></td><td><code>新左營行きの切符はいくらですが。</code></td></tr>
+<tr><td>524-id-男-喬泰 #06</td><td><code>Permisi, saya harus naik kereta yang mana untuk pergi k</code></td><td><code>Permisi, saya harus naik kereta yang mana untuk pergi k</code></td></tr>
+<tr><td>519-id-男 #06</td><td><code>Permisi, saya harus naik kereta yang mana untuk pergi k</code></td><td><code>Permisi, saya harus naik kereta yang mana untuk pergi k</code></td></tr>
+<tr><td>519-ja-男 #07</td><td><code>新左へ行きの切符はいくらですが。</code></td><td><code>新左營行きの切符はいくらですが。</code></td></tr>
+<tr><td>519-vi-男 #02</td><td><code>Tôi muốn mua một vé đi Đà Nẵng.</code></td><td><code>Tôi muốn mua một vé đi Đài Nam.</code></td></tr>
+</tbody>
+  </table>
+</div>
+
+<div class="callout crit">
+  <h2 style="margin:0 0 0.5rem">❌ extended 退化（current 對、extended 錯）的 case（8 句）</h2>
+  <table>
+    <thead><tr><th>Case</th><th>current ASR raw</th><th>extended ASR raw</th></tr></thead>
+    <tbody><tr><td>524-id-男-喬泰 #02</td><td><code>Saya ingin membeli tiket kereta api ke Taianan.</code></td><td><code>Saya ingin membeli tiket kereta api ke Taipan.</code></td></tr>
+<tr><td>524-th-女-喬泰 #12</td><td><code>ฉันอยากไปสถานีฟอร์โมเซโบลาวัดต้องเปลี่ยนไปขึ้น MRT อย่า</code></td><td><code>ฉันอยากไปสถานี Formosa Boulevard ต้องเปลี่ยนไปขึ้น MRT </code></td></tr>
+<tr><td>524-th-女-達運 #12</td><td><code>เซอร์ ฉันต้องการไปสถานีฟอร์โมซาบูเลวัต ฉันต้องไปขึ้นสถา</code></td><td><code>เซอร์ ฉันต้องการไปสถานี Formosa Boulevard ฉันต้องไปขึ้น</code></td></tr>
+<tr><td>524-th-男-喬泰 #12</td><td><code>ผมอยากไปสถานีฟอร์มูสบุลวาร์ต้องเปลี่ยนไปขึ้น MRT อย่างไ</code></td><td><code>ผมอยากไปสถานี Formosa Boulevard ต้องเปลี่ยนไปขึ้น MRT อ</code></td></tr>
+<tr><td>519-id-男 #02</td><td><code>Saya ingin membeli tiket kereta api ke Taianan.</code></td><td><code>Saya ingin membeli tiket kereta api ke Taipan.</code></td></tr>
+<tr><td>519-th-女 #12</td><td><code>ฉันอยากไปสถานีฟอร์โมเซโบลาวัดต้องเปลี่ยนไปขึ้น MRT อย่า</code></td><td><code>ฉันอยากไปสถานี Formosa Boulevard ต้องเปลี่ยนไปขึ้น MRT </code></td></tr>
+<tr><td>519-th-男 #12</td><td><code>ผมอยากไปสถานีฟอร์มูสบุลวาร์ต้องเปลี่ยนไปขึ้น MRT อย่างไ</code></td><td><code>ผมอยากไปสถานี Formosa Boulevard ต้องเปลี่ยนไปขึ้น MRT อ</code></td></tr>
+<tr><td>519-vi-女 #12</td><td><code>Tôi muốn đến ga Fomosa Boulevard, xin hỏi tôi có thể ch</code></td><td><code>Tôi muốn đến ga Formosa Boulevard, xin hỏi tôi có thể c</code></td></tr>
+</tbody>
+  </table>
+  <p style="margin-top:0.5rem">
+    <strong>關鍵教訓：</strong>把「Formosa Boulevard」「Taipan」等 latin 別名寫進 prompt → Qwen3-ASR 把它當「優先候選 token」、直接吐到輸出。
+    Whisper/Qwen 的 initial_prompt 是「告訴模型『接下來會聽到這些字』」、不是「告訴模型『這些字是正確答案』」。寫太多 latin 噪音字進去 → 過擬合。
+  </p>
+</div>
+
+<div class="card">
+  <h2>3 種 STATION_PROMPT 內容</h2>
+  <h3 style="font-size:0.95rem;margin-top:0.5rem">none</h3>
+  <pre>(空、不傳 initial_prompt 給 ASR)</pre>
+  <h3 style="font-size:0.95rem;margin-top:0.5rem">current（線上 production 現用）</h3>
+  <pre>高雄車站 Kaohsiung Railway Station 高雄駅 가오슝 기차역 สถานีรถไฟเกาสง Ga tàu Cao Hùng Stasiun kereta api Kaohsiung</pre>
+  <h3 style="font-size:0.95rem;margin-top:0.5rem">extended（這次測試的擴充版）</h3>
+  <pre>高雄車站 Kaohsiung 高雄駅 가오슝역 ไถหนาน Cao Hùng Stasiun Kaohsiung
+左營 Zuoying 左営 좌영 จั่วยิง Tả Doanh
+新左營 Xinzuoying 新左営 신좌영 ซินจั่วยิง Tân Tả Doanh Sinzuoying
+美麗島 Formosa Boulevard 美麗島 메이리다오 เกาะฟอร์โมซา Mỹ Lệ Đảo Pulau Formosa
+臺南 Tainan 台南 타이난 ไถหนาน Đài Nam Tainan
+售票窗口 月台 出口 入口 洗手間 公車站 寄物櫃 站務人員 退票
+ticket counter platform exit entrance restroom bus stop locker station staff</pre>
+</div>
+
+<div class="card">
+  <h2>對 #212 的結論</h2>
+  <p style="line-height:1.7;font-size:0.92rem">
+    <strong>1. 「擴 STATION_PROMPT」直覺方案不可行。</strong>把站名 + latin 別名 + 站務詞全塞進去、整體誤判率 4.4% → 5.4%、淨退化。<br><br>
+    <strong>2. 現用 STATION_PROMPT 已經是局部最優。</strong>只有「高雄車站 7 語」反而比加更多 hotwords 表現好（4.4% 誤判 vs none 6.7%）。<br><br>
+    <strong>3. 真正能改善的方向是「精細設計」、不是「加更多」：</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;a. 不要把 latin 別名（Formosa Boulevard / Taipan）寫進 prompt — Qwen3-ASR 會優先吐這些<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;b. per-language prompt：日語場景只塞日語、不混 latin<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;c. 站名只用「目標語言寫法」、不用拼音<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;d. 站務詞分開測試、不要跟站名一起塞<br><br>
+    <strong>4. 維運成本面：</strong>cm rules 已把 13 句 ASR mishear 接住 12 句（從 retro 298 case 看、user-facing 99.66%）。再花時間設計 "extended-v2 prompt" 的 ROI 偏低。<br><br>
+    <strong>建議：</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;a. <strong>#212 可以 close</strong>（current STATION_PROMPT 已是局部最優、naive 擴充無效）<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;b. 未來如果要做、要另開 issue 寫「per-language hotwords 精細設計」、不要叫做「擴充 STATION_PROMPT」<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;c. cm rules 維運繼續是主路徑
+  </p>
+</div>
+
+<footer>產生時間：2026-05-25 PM｜298 case × 3 prompts = 894 ASR call｜GPU：RTX 5090 32GB</footer>
+</body></html>
